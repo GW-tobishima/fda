@@ -76,6 +76,13 @@ cargo run -- status --artifacts artifacts/runs/<run_id>
 cargo run -- status --artifacts artifacts/runs/<run_id> --json
 ```
 
+`ui` は全 run を横断する read-only の Mission Control（local HTTP、127.0.0.1 固定）です。Decision Inbox / AI Repair Lane / run 状態を 1 画面に集約し、UI からの状態変更はできません。設計は `docs/v1/mission_control_uiux.md` を参照します。
+
+```bash
+cargo run -- ui --open
+cargo run -- ui --json
+```
+
 ### Architecture gate
 
 `src/main.rs` は CLI bootstrap に限定し、抽出済み module の依存境界は軽量 gate で確認します。

@@ -8,4 +8,5 @@ pub(crate) mod paths;
 pub(crate) mod process;
 pub(crate) mod slack;
 pub(crate) mod smtp;
+pub(crate) mod ui_server;
 pub(crate) mod yaml;

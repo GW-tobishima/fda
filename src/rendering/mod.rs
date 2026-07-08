@@ -4,6 +4,7 @@ pub(crate) mod implement;
 pub(crate) mod intake;
 pub(crate) mod inventory;
 pub(crate) mod merge;
+pub(crate) mod mission_control;
 pub(crate) mod notify;
 pub(crate) mod output_hub;
 pub(crate) mod repair;

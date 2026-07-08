@@ -13,4 +13,5 @@ pub(crate) mod review;
 pub(crate) mod runtime;
 pub(crate) mod start;
 pub(crate) mod status;
+pub(crate) mod ui;
 pub(crate) mod validate;

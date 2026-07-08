@@ -20,6 +20,20 @@ pub(crate) fn list_file_names(path: &Path) -> Result<Vec<String>, String> {
     Ok(files)
 }
 
+pub(crate) fn list_dir_names(path: &Path) -> Result<Vec<String>, String> {
+    let mut dirs = Vec::new();
+    for entry in fs::read_dir(path)
+        .map_err(|e| format!("failed to read runs dir {}: {e}", path.display()))?
+    {
+        let entry = entry.map_err(|e| e.to_string())?;
+        if entry.path().is_dir() {
+            dirs.push(entry.file_name().to_string_lossy().to_string());
+        }
+    }
+    dirs.sort();
+    Ok(dirs)
+}
+
 impl ArtifactStore for FsArtifactStore {
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, String> {
         fs::canonicalize(path).map_err(|e| e.to_string())

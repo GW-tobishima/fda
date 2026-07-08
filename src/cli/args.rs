@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 pub(crate) use crate::application::ports::AtoConfig;
+pub(crate) use crate::application::ui::UiConfig;
 use crate::domain::entities::CodexLiveStatus;
 use crate::domain::value_objects::IntakeMode;
 use crate::{DEFAULT_ARTIFACT_DIR, DEFAULT_MODEL_CONTRACT_DIRS, DEFAULT_SCHEMA_DIR};
@@ -18,6 +19,7 @@ pub(crate) enum Command {
     Open(OpenConfig),
     Status(StatusConfig),
     NotifyTest(NotifyConfig),
+    Ui(UiConfig),
     ValidateArtifacts(ValidateConfig),
 }
 
@@ -243,6 +245,9 @@ pub(crate) fn parse_args(args: Vec<String>) -> Result<Command, String> {
     }
     if command == "notify" {
         return parse_notify_args(&args[1..]);
+    }
+    if command == "ui" {
+        return parse_ui_args(&args[1..]);
     }
     if command != "validate-artifacts" {
         crate::cli::output::print_help();
@@ -921,6 +926,50 @@ fn parse_status_args(args: &[String]) -> Result<Command, String> {
         repo_root,
         artifact_dir,
         ato,
+        print_json,
+    }))
+}
+
+fn parse_ui_args(args: &[String]) -> Result<Command, String> {
+    let mut repo_root = PathBuf::from(".");
+    let mut runs_root = PathBuf::from("artifacts/runs");
+    let mut port: u16 = 4870;
+    let mut open_browser = false;
+    let mut print_json = false;
+
+    let mut index = 0;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--repo-root" => {
+                index += 1;
+                repo_root = PathBuf::from(expect_value(args, index, "--repo-root")?);
+            }
+            "--artifacts-root" => {
+                index += 1;
+                runs_root = PathBuf::from(expect_value(args, index, "--artifacts-root")?);
+            }
+            "--port" => {
+                index += 1;
+                port = expect_value(args, index, "--port")?
+                    .parse()
+                    .map_err(|e| format!("--port must be a number: {e}"))?;
+            }
+            "--open" => {
+                open_browser = true;
+            }
+            "--json" => {
+                print_json = true;
+            }
+            other => return Err(format!("unknown option `{other}`")),
+        }
+        index += 1;
+    }
+
+    Ok(Command::Ui(UiConfig {
+        repo_root,
+        runs_root,
+        port,
+        open_browser,
         print_json,
     }))
 }

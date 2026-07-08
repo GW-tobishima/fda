@@ -2,7 +2,7 @@ use serde::Serialize;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
-use crate::application::{decide, design, plan, start, status, validate};
+use crate::application::{decide, design, plan, start, status, ui, validate};
 use crate::cli::args::{parse_args, AtoConfig, Command};
 use crate::cli::output::{
     print_continue_summary, print_decide_summary, print_design_summary, print_implement_summary,
@@ -200,6 +200,19 @@ pub fn run(args: Vec<String>) -> Result<bool, String> {
                 print_ato_summary(ato_receipt.as_ref());
             }
             Ok(result.verdict == "pass" && ato_ok(ato_receipt.as_ref()))
+        }
+        Command::Ui(config) => {
+            // read-only projection。ATO 同期は行わない（何も状態変更しないため）。
+            if config.print_json {
+                let snapshot = ui::mission_control_snapshot(&config)?;
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&snapshot).map_err(|e| e.to_string())?
+                );
+                return Ok(true);
+            }
+            crate::ui_serve(&config)?;
+            Ok(true)
         }
         Command::ValidateArtifacts(config) => {
             let report = validate::validate(&config)?;

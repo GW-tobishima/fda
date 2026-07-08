@@ -115,8 +115,16 @@ fda merge --execute --merge-method squash ...
 
 # 9) 状態確認 / 成果物閲覧
 fda status --artifacts <run_dir>
-fda open --artifacts <run_dir>        # output_hub.html / decision_inbox.html
+fda open --artifacts <run_dir>        # output_hub.html / decision_inbox.html（run 単体）
+
+# 10) Mission Control（全 run 横断の read-only ダッシュボード）
+fda ui --open                          # http://127.0.0.1:4870/ を開く
+fda ui --json                          # スナップショット JSON を一度出力（機械可読）
 ```
+
+`fda ui` は判断待ち（Decision Inbox）・AI Repair・run 状態を 1 画面に集約する
+read-only projection で、UI から状態変更は一切できない
+（設計: `docs/v1/mission_control_uiux.md`）。
 
 ## 5. Epic 継続ループ（Claude Code がオーケストレーター）
 

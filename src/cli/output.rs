@@ -22,6 +22,7 @@ pub(crate) fn print_help() {
     println!("fda open [--artifacts <dir>] [--out <dir>] [--repo-root <path>] [--json]");
     println!("fda status [--artifacts <dir>] [--repo-root <path>] [--json]");
     println!("fda notify test [--artifacts <dir>] [--out <dir>] [--channel slack|email|codex-app] [--to <recipient>] [--live] [--repo-root <path>] [--json]");
+    println!("fda ui [--artifacts-root <dir>] [--port <n>] [--open] [--repo-root <path>]  # read-only Mission Control (127.0.0.1)");
     println!("fda validate-artifacts [--repo-root <path>] [--schemas <dir>] [--artifacts <dir>] [--model-contracts <dir>] [--out <path>] [--json]");
     println!("共通ATO連携: [--ato-sync] [--ato-task <key>] [--ato-run-id <run>] [--ato-backend <backend>] [--ato-db <path>] [--ato-cli <path>]");
 }

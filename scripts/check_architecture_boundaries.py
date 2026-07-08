@@ -69,6 +69,10 @@ ALLOWED_APPLICATION_INFRA_USES = {
         "use crate::infra::fs_store::{list_file_names, FsArtifactStore};",
         "use crate::infra::json_file::{read_json_value, write_json_file};",
     },
+    "src/application/ui.rs": {
+        "use crate::infra::clock::system_unix_seconds;",
+        "use crate::infra::fs_store::{list_dir_names, list_file_names, FsArtifactStore};",
+    },
     "src/application/validate.rs": {
         "use crate::infra::clock::SystemClock;",
         "use crate::infra::fs_store::FsArtifactStore;",
@@ -190,6 +194,9 @@ ALLOWED_INFRA_APPLICATION_USES = {
     },
     "src/infra/process.rs": {
         "use crate::application::ports::{CodexProcessPort, ProcessOutput};",
+    },
+    "src/infra/ui_server.rs": {
+        "use crate::application::ui::{mission_control_snapshot, UiConfig};",
     },
     "src/infra/yaml.rs": {
         "use crate::application::ports::{ArtifactStore, CheckError, YamlValidator};",

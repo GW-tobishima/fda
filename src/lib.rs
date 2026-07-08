@@ -70,6 +70,10 @@ use cli::args::AtoConfig;
 #[cfg(test)]
 use std::path::PathBuf;
 
+pub(crate) fn ui_serve(config: &application::ui::UiConfig) -> Result<(), String> {
+    infra::ui_server::serve(config)
+}
+
 fn single_line(value: &str) -> String {
     value.split_whitespace().collect::<Vec<_>>().join(" ")
 }
