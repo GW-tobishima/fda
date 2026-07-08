@@ -95,12 +95,46 @@ pub(crate) fn query_codex_live_tool(
     }
 }
 
+/// Windows では npm install された CLI (codex 等) が .cmd / .ps1 shim で提供され、
+/// CreateProcess は拡張子なし名を .exe しか解決しないため spawn に失敗する。
+/// PATH 上に <name>.exe が無く <name>.cmd がある場合は .cmd のフルパスへ解決する。
+#[cfg(windows)]
+pub(crate) fn resolve_program_for_spawn(program: &str) -> String {
+    use std::path::Path as StdPath;
+    if StdPath::new(program).extension().is_some()
+        || program.contains('\\')
+        || program.contains('/')
+    {
+        return program.to_string();
+    }
+    let path_var = env::var_os("PATH").unwrap_or_default();
+    let dirs: Vec<std::path::PathBuf> = env::split_paths(&path_var).collect();
+    if dirs
+        .iter()
+        .any(|dir| dir.join(format!("{program}.exe")).is_file())
+    {
+        return program.to_string();
+    }
+    for dir in &dirs {
+        let cmd_shim = dir.join(format!("{program}.cmd"));
+        if cmd_shim.is_file() {
+            return cmd_shim.display().to_string();
+        }
+    }
+    program.to_string()
+}
+
+#[cfg(not(windows))]
+pub(crate) fn resolve_program_for_spawn(program: &str) -> String {
+    program.to_string()
+}
+
 fn query_codex_live_tool_inner(
     cwd: &Path,
     prompt: &str,
     timeout: Duration,
 ) -> Result<CodexLiveInvocationResult, CodexLiveInvocationError> {
-    let mut process = ProcessCommand::new("codex");
+    let mut process = ProcessCommand::new(resolve_program_for_spawn("codex"));
     process
         .arg("mcp-server")
         .current_dir(cwd)
@@ -250,7 +284,7 @@ fn query_mcp_tools_list_inner(command: &[String], cwd: &Path) -> Result<Vec<Stri
     let program = command
         .first()
         .ok_or_else(|| "MCP server command is empty".to_string())?;
-    let mut process = ProcessCommand::new(program);
+    let mut process = ProcessCommand::new(resolve_program_for_spawn(program));
     process
         .args(&command[1..])
         .current_dir(cwd)
@@ -528,6 +562,15 @@ fn shell_arg(value: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn resolve_program_for_spawn_returns_input_when_no_shim_applies() {
+        assert_eq!(resolve_program_for_spawn("program.exe"), "program.exe");
+        assert_eq!(
+            resolve_program_for_spawn("fda-nonexistent-program-xyz"),
+            "fda-nonexistent-program-xyz"
+        );
+    }
 
     #[test]
     fn wait_for_mcp_response_fails_fast_on_approval_prompt() {

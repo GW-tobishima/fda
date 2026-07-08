@@ -1,0 +1,87 @@
+{
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "program_id": "FDA-V1",
+  "tasks": [
+    {
+      "execution": {
+        "branch": null,
+        "owner_agent": "implementer",
+        "pr_number": null,
+        "run_id": null
+      },
+      "forge": {
+        "case_id": "CASE-FDA-V1-DESIGN-001",
+        "claim_ids": [
+          "CLM-FDA-V1-DESIGN-001"
+        ],
+        "epic_id": "EPIC-FDA-V1-INTAKE",
+        "program_id": "FDA-V1",
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "human": {
+        "decision_packet_id": null,
+        "decision_required": false
+      },
+      "parent_id": "CASE-FDA-V1-DESIGN-001",
+      "parent_type": "case",
+      "status": "ready_to_work",
+      "task_id": "TASK-FDA-V1-IMPLEMENT-001",
+      "title": "Implementer MCP handoff を作る"
+    },
+    {
+      "execution": {
+        "branch": null,
+        "owner_agent": "functional_qa",
+        "pr_number": null,
+        "run_id": null
+      },
+      "forge": {
+        "case_id": "CASE-FDA-V1-DESIGN-001",
+        "claim_ids": [
+          "CLM-FDA-V1-DESIGN-001"
+        ],
+        "epic_id": "EPIC-FDA-V1-INTAKE",
+        "program_id": "FDA-V1",
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "human": {
+        "decision_packet_id": null,
+        "decision_required": false
+      },
+      "parent_id": "CASE-FDA-V1-DESIGN-001",
+      "parent_type": "case",
+      "status": "ready_to_work",
+      "task_id": "TASK-FDA-V1-FQA-001",
+      "title": "Functional QA brief に基づいて実装PRを検証する"
+    },
+    {
+      "execution": {
+        "branch": null,
+        "owner_agent": "security_qa",
+        "pr_number": null,
+        "run_id": null
+      },
+      "forge": {
+        "case_id": "CASE-FDA-V1-DESIGN-001",
+        "claim_ids": [
+          "CLM-FDA-V1-DESIGN-001"
+        ],
+        "epic_id": "EPIC-FDA-V1-INTAKE",
+        "program_id": "FDA-V1",
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "human": {
+        "decision_packet_id": null,
+        "decision_required": false
+      },
+      "parent_id": "CASE-FDA-V1-DESIGN-001",
+      "parent_type": "case",
+      "status": "ready_to_work",
+      "task_id": "TASK-FDA-V1-SQA-001",
+      "title": "Security QA brief に基づいて実装PRを検証する"
+    }
+  ]
+}

@@ -3,9 +3,12 @@
 日本語で応答し、ドキュメントも日本語で書くこと。
 
 このリポジトリは FDA (forge-delivery-agent) の GW-tobishima フォークであり、
-**Claude Code を「current AI CLI」（人間が開いた現在の AI CLI セッション）として運用する**。
-V1 正本（`docs/v1/codex_cli_primary_architecture.md`）の "current Codex CLI" は、
-このフォークでは Claude Code セッションが等価に担う。役割境界・gate・成果物契約は一切変えない。
+**Claude Code と Codex CLI のどちらも「current AI CLI」（人間が開いた現在の AI CLI
+セッション）として運用できる**。V1 正本（`docs/v1/codex_cli_primary_architecture.md`）の
+"current Codex CLI" は、このフォークでは「いま人間が開いている AI CLI」と読む
+（`.fda/agent_roles.yaml` の executor は汎用値 `current_ai_cli` / `ai_subagent`）。
+役割境界・gate・成果物契約は一切変えない。Codex CLI セッション向けの同内容の指示は
+`AGENTS.md` にある。
 
 正本ドキュメント:
 

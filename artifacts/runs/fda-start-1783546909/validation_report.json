@@ -1,14 +1,14 @@
 {
   "schema_version": "fda.validation_report.v0",
   "verdict": "pass",
-  "generated_at_unix_seconds": 1783546909,
+  "generated_at_unix_seconds": 1783552199,
   "repo_root": ".",
   "schema_dir": "docs/standards/delivery-artifacts-v0/schemas",
   "artifact_dir": "artifacts/runs/fda-start-1783546909",
   "summary": {
-    "passed": 63,
+    "passed": 69,
     "failed": 0,
-    "skipped": 45
+    "skipped": 39
   },
   "checks": [
     {
@@ -126,16 +126,10 @@
     {
       "check_id": "artifact:ato_state_receipt",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/ato_state_receipt.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/ato_state_receipt.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `ato_state_receipt`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "schema:autonomy_contract",
@@ -148,16 +142,10 @@
     {
       "check_id": "artifact:autonomy_contract",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/autonomy_contract.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/autonomy_contract.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `autonomy_contract`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "schema:case_graph",
@@ -170,16 +158,10 @@
     {
       "check_id": "artifact:case_graph",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/case_graph.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `case_graph`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "schema:coding_agent_thread_state",
@@ -346,16 +328,10 @@
     {
       "check_id": "artifact:forge_projection",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/forge_projection.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `forge_projection`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "schema:forge_promotion_receipt",
@@ -626,16 +602,10 @@
     {
       "check_id": "artifact:planned_prs",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/planned_prs.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `planned_prs`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "schema:pull_request",
@@ -1038,16 +1008,10 @@
     {
       "check_id": "artifact:task_graph",
       "kind": "json_schema_validation",
-      "status": "skipped",
+      "status": "pass",
       "schema_path": "docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json",
       "artifact_path": "artifacts/runs/fda-start-1783546909/task_graph.json",
-      "errors": [
-        {
-          "message": "no matching example JSON for schema `task_graph`",
-          "instance_path": null,
-          "schema_path": null
-        }
-      ]
+      "errors": []
     },
     {
       "check_id": "yaml:model_contracts/implementer.contract.yaml",

@@ -1,7 +1,7 @@
-# FDA Claude Code Primary Runbook（普段使い運用正本）
+# FDA Current AI CLI Runbook（普段使い運用正本 / Claude Code・Codex CLI 両対応）
 
-作成日: 2026-07-09
-対象: GW-tobishima/fda フォーク（Windows 11 + Claude Code + ローカル ATO CLI 環境）
+作成日: 2026-07-09（2026-07-09 Codex CLI 両対応に改訂）
+対象: GW-tobishima/fda フォーク（Windows 11 + Claude Code / Codex CLI + ローカル ATO CLI 環境）
 
 ## 1. 位置づけ
 
@@ -10,12 +10,14 @@ Work Protocol として動かす」ことである（`docs/v1/codex_cli_primary_
 上流の正本は Codex CLI をその実行主体としているが、この設計の本質は
 **特定ベンダーの CLI ではなく「current AI CLI」という役割**にある。
 
-このフォークでは Claude Code を current AI CLI として運用する。
+このフォークでは **Claude Code と Codex CLI のどちらを開いていても current AI CLI**
+として同じジャーニーを回す。AI CLI への指示ファイルは Claude Code = `CLAUDE.md`、
+Codex CLI = `AGENTS.md`（内容は同契約）。
 
 ```text
 Human
-  -> Claude Code（current AI CLI）
-  -> FDA Skill Pack / Work Protocol（fda CLI + .claude/skills/fda-delivery）
+  -> current AI CLI（Claude Code または Codex CLI）
+  -> FDA Skill Pack / Work Protocol（fda CLI + CLAUDE.md / AGENTS.md + skills）
   -> current repo / target repo
 ```
 
@@ -32,13 +34,14 @@ Human
 
 `.fda/agent_roles.yaml` の executor は次の等価クラスで読む
 （schema: `docs/standards/fda-v1/schemas/repository-profile/agent_roles_yaml.schema.json`）。
+**このフォーク（この repo 自身の profile）は汎用値 `current_ai_cli` / `ai_subagent` を使う**。
+Codex 専用 repo / Claude 専用 repo ではベンダー明示値を選んでもよい。
 
-| 等価クラス | Codex 運用 | Claude Code 運用（このフォーク） | 意味 |
-|---|---|---|---|
-| current CLI | `current_codex_cli` | `current_claude_code` | 人間が開いた現在の AI CLI セッション。Orchestrator / Implementer / Merge Manager |
-| subagent | `codex_subagent` | `claude_subagent` | current CLI が起動する read-only レビュー/QA サブエージェント |
-| 汎用 | `current_ai_cli` / `ai_subagent` | 同左 | CLI 非依存に書きたい repo 用の汎用値 |
-| 外部 | `external_adapter` | 同左 | MCP 等の外部実行層（V1.5 optional automation） |
+| 等価クラス | 汎用値（この repo） | Codex 明示値 | Claude 明示値 | 意味 |
+|---|---|---|---|---|
+| current CLI | `current_ai_cli` | `current_codex_cli` | `current_claude_code` | 人間が開いた現在の AI CLI セッション。Orchestrator / Implementer / Merge Manager |
+| subagent | `ai_subagent` | `codex_subagent` | `claude_subagent` | current CLI が起動する read-only レビュー/QA サブエージェント |
+| 外部 | `external_adapter` | 同左 | 同左 | MCP 等の外部実行層（V1.5 optional automation） |
 
 ## 3. セットアップ（Windows）
 
@@ -63,12 +66,16 @@ $env:FDA_ATO_BACKEND = "local"
 $env:FDA_ATO_DB_PATH = "C:\Tools\ATO\data\ato.db"
 ```
 
+Codex CLI を current AI CLI / `implement --live` に使う場合は、`codex` が PATH に
+あること（npm グローバル install の `.cmd` shim でよい。FDA が spawn 時に自動解決する）。
+
 動作確認:
 
 ```powershell
 fda status --artifacts artifacts/runs/<run_id>
-cargo test        # 173 tests / Windows green
+cargo test        # Windows green
 python3 scripts/check_architecture_boundaries.py
+codex --version   # Codex CLI 併用時
 ```
 
 ## 4. 普段使いジャーニー（1 依頼 = 1 run ディレクトリ）
@@ -94,11 +101,14 @@ fda design --artifacts <run_dir> --ato-sync ...
 # 4) Implementation handoff（target repo は変更されない）
 fda implement --dry-run --target-repo <path> --artifacts <run_dir>
 
-# 5) Claude Code が Implementer に role switch して実装
+# 5) current AI CLI（Claude Code / Codex CLI）が Implementer に role switch して実装
 #    - current_codex_cli_handoff.json / implementation_handoff.md を読む
 #    - ATO checkpoint（role switch）を残す
 #    - approved scope 内で実装・テスト・PR 作成
 #    - external_pr_receipt.json を run ディレクトリに残す
+#    ※ Codex CLI 環境では `fda implement --live`（codex mcp-server 経由の自動実装、
+#      V1.5 optional automation）も選択可。Windows の npm 版 codex（.cmd shim）は
+#      FDA が自動解決する
 
 # 6) Review Agent Gate: read-only subagent 3役（+条件役）でレビュー
 fda review --artifacts <run_dir> --target-repo <path>
@@ -126,12 +136,12 @@ fda ui --json                          # スナップショット JSON を一度
 read-only projection で、UI から状態変更は一切できない
 （設計: `docs/v1/mission_control_uiux.md`）。
 
-## 5. Epic 継続ループ（Claude Code がオーケストレーター）
+## 5. Epic 継続ループ（current AI CLI がオーケストレーター）
 
 `fda continue` は単発の Repair Loop Gate であり、Epic 全体の「次 PR 選択」は
 V1 ではランタイム化されていない（V1.5 スコープ。`docs/v1/fda_v1_next_phase_v1_5.md`）。
-V1 思想では current AI CLI がオーケストレーターなので、Claude Code が次の手順で
-上位ループを回す。
+V1 思想では current AI CLI がオーケストレーターなので、Claude Code / Codex CLI が
+次の手順で上位ループを回す。
 
 1. `planned_prs.json` と各 PR の `external_pr_receipt.json` / merge receipt を読む。
 2. 未解決 Human Decision があれば止まり、`fda decide` の resume command を人間に提示する。
@@ -149,7 +159,7 @@ V1 思想では current AI CLI がオーケストレーターなので、Claude 
 | gate script が `python3 not found` | `FDA_PYTHON` を設定するか `python` / `py -3` を導入（Rust 側は自動フォールバックする） |
 | PoC テスト（aicx）で zoneinfo エラー | `python3 -m pip install tzdata` |
 | Slack 通知が failed | `FDA_SLACK_WEBHOOK_URL` 未設定。fail-closed（成功扱いにしない）仕様 |
-| `fda implement --live` が codex を要求 | `--live` は Codex MCP 依存の V1.5 optional automation。Claude Code 運用では `--dry-run` + role switch 実装が主経路 |
+| `fda implement --live` が codex を要求 | `--live` は Codex MCP 依存の V1.5 optional automation。Codex CLI 導入済みなら利用可（Windows の npm 版 .cmd shim は自動解決）。Claude Code のみの環境では `--dry-run` + role switch 実装が主経路 |
 
 ## 7. 変更履歴
 

@@ -1,0 +1,61 @@
+{
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "planned_prs": [
+    {
+      "acceptance_criteria": [
+        "Given resolved Human Decision, When fda design runs, Then Design Gate artifacts are generated.",
+        "Given generated JSON artifacts, When validate-artifacts runs, Then schema validation passes."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V1-DESIGN-001",
+      "claim_ids": [
+        "CLM-FDA-V1-DESIGN-001"
+      ],
+      "expected_files": [
+        "implementation_handoff.md",
+        "mcp_agent_invocation_plan.json"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PPR-FDA-V1-IMPLEMENT-001",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "Design Gate JSON artifact が schema validation を通る。",
+          "expected_evidence": [
+            "validation_report.json"
+          ],
+          "proof_id": "PROOF-FDA-V1-DESIGN-001",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "Design Gate で定義された最小実装 slice を Codex MCP dry-run へ渡せる形にする。",
+      "risk": {
+        "level": "medium",
+        "mitigations": [
+          "PR-V1-005 で MCP tools/list と cwd / approval policy を検証する"
+        ],
+        "summary": "実装 agent の capability は後続 dry-run まで未検証。"
+      },
+      "scope": {
+        "in": [
+          "Implementation handoff を作れる契約",
+          "Functional QA と Security QA の証跡要求"
+        ],
+        "out": [
+          "MCP live execution",
+          "PR merge approval",
+          "通知送信"
+        ]
+      },
+      "sequence": 1,
+      "title": "Implement approved Design Gate slice"
+    }
+  ],
+  "program_id": "FDA-V1",
+  "schema_version": "forge_delivery.planned_prs.v0",
+  "source_requirements": [
+    "requirements_definition.md",
+    "basic_design.md",
+    "detailed_design.md"
+  ]
+}

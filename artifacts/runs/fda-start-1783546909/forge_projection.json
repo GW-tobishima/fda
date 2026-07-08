@@ -1,0 +1,55 @@
+{
+  "claim_contracts": [
+    {
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "claim_id": "CLM-FDA-V1-DESIGN-001",
+      "planned_pr_ids": [
+        "PPR-FDA-V1-IMPLEMENT-001"
+      ],
+      "proof_obligations": [
+        "PROOF-FDA-V1-DESIGN-001"
+      ],
+      "statement": "Design Gate は Scope、AC、risk、QA brief、Planned PR、Forge proof を実装前に固定する。",
+      "type": "contract"
+    }
+  ],
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "gate_requirements": [
+    "Scope In / Out",
+    "Given / When / Then AC",
+    "OPEN_QUESTIONS",
+    "Risk mitigation",
+    "Functional QA brief",
+    "Security QA brief"
+  ],
+  "program_id": "FDA-V1",
+  "promotion_readiness": {
+    "evaluated_at": null,
+    "gate_inputs_ready": true,
+    "reason": "Design Gate artifact は生成済みだが implementation proof は後続 PR で回収する。",
+    "verdict": "hold"
+  },
+  "proof_obligations": [
+    {
+      "blocking": true,
+      "claim_id": "CLM-FDA-V1-DESIGN-001",
+      "owner_agent": "forge-delivery-agent",
+      "proof_id": "PROOF-FDA-V1-DESIGN-001",
+      "required_evidence": [
+        "validation_report.json"
+      ],
+      "type": "schema_validation",
+      "validation_method": "cargo run -- validate-artifacts --artifacts <design-output>"
+    }
+  ],
+  "schema_version": "forge_projection.v0",
+  "source_artifacts": [
+    "basic_design.md",
+    "detailed_design.md",
+    "planned_prs.json",
+    "autonomy_contract.json"
+  ]
+}
