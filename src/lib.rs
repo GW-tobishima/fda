@@ -1684,7 +1684,8 @@ MERGE_APPROVAL: not_granted\n\n\
         config
     }
 
-    fn github_merge_success_command() -> Vec<String> {
+    #[cfg(unix)]
+    fn github_merge_success_command(_base: &Path) -> Vec<String> {
         vec![
             "sh".to_string(),
             "-c".to_string(),
@@ -1692,7 +1693,8 @@ MERGE_APPROVAL: not_granted\n\n\
         ]
     }
 
-    fn github_merge_failure_command() -> Vec<String> {
+    #[cfg(unix)]
+    fn github_merge_failure_command(_base: &Path) -> Vec<String> {
         vec![
             "sh".to_string(),
             "-c".to_string(),
@@ -1700,12 +1702,50 @@ MERGE_APPROVAL: not_granted\n\n\
         ]
     }
 
-    fn github_merge_receipt_collection_failure_command() -> Vec<String> {
+    #[cfg(unix)]
+    fn github_merge_receipt_collection_failure_command(_base: &Path) -> Vec<String> {
         vec![
             "sh".to_string(),
             "-c".to_string(),
             "printf '%s\n' '{\"status\":\"receipt_collection_failed\",\"actual_pr_url\":\"https://github.com/msamunetogetoge/example/pull/123\",\"failure_reason\":\"gh pr view returned incomplete JSON\",\"receipt_collection_command\":\"gh pr view https://github.com/msamunetogetoge/example/pull/123 --json mergeCommit,mergedAt,mergedBy,url\"}'".to_string(),
         ]
+    }
+
+    // Windows has no `sh`, so the mock GitHub merge commands are materialized
+    // as .cmd scripts inside the test base directory instead.
+    #[cfg(windows)]
+    fn mock_merge_command_script(base: &Path, name: &str, body: &str) -> Vec<String> {
+        fs::create_dir_all(base).unwrap();
+        let path = base.join(name);
+        fs::write(&path, body).unwrap();
+        vec![path.display().to_string()]
+    }
+
+    #[cfg(windows)]
+    fn github_merge_success_command(base: &Path) -> Vec<String> {
+        mock_merge_command_script(
+            base,
+            "mock-merge-success.cmd",
+            "@echo off\r\necho {\"merge_sha\":\"merge-sha-123\",\"merged_at\":\"2026-06-28T00:00:00Z\",\"actor\":\"test-actor\",\"actual_pr_url\":\"https://github.com/msamunetogetoge/example/pull/123\"}\r\n",
+        )
+    }
+
+    #[cfg(windows)]
+    fn github_merge_failure_command(base: &Path) -> Vec<String> {
+        mock_merge_command_script(
+            base,
+            "mock-merge-failure.cmd",
+            "@echo off\r\necho merge denied by mock 1>&2\r\nexit /b 2\r\n",
+        )
+    }
+
+    #[cfg(windows)]
+    fn github_merge_receipt_collection_failure_command(base: &Path) -> Vec<String> {
+        mock_merge_command_script(
+            base,
+            "mock-merge-receipt-collection-failure.cmd",
+            "@echo off\r\necho {\"status\":\"receipt_collection_failed\",\"actual_pr_url\":\"https://github.com/msamunetogetoge/example/pull/123\",\"failure_reason\":\"gh pr view returned incomplete JSON\",\"receipt_collection_command\":\"gh pr view https://github.com/msamunetogetoge/example/pull/123 --json mergeCommit,mergedAt,mergedBy,url\"}\r\n",
+        )
     }
 
     #[test]
@@ -3560,7 +3600,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out.clone(),
             target,
-            github_merge_success_command(),
+            github_merge_success_command(&base),
         ))
         .unwrap();
 
@@ -3638,7 +3678,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out.clone(),
             target,
-            github_merge_failure_command(),
+            github_merge_failure_command(&base),
         ))
         .unwrap();
 
@@ -3708,7 +3748,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out.clone(),
             target,
-            github_merge_receipt_collection_failure_command(),
+            github_merge_receipt_collection_failure_command(&base),
         ))
         .unwrap();
 
@@ -3783,7 +3823,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out.clone(),
             target,
-            github_merge_failure_command(),
+            github_merge_failure_command(&base),
         ))
         .unwrap();
 
@@ -3827,7 +3867,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out,
             target,
-            github_merge_success_command(),
+            github_merge_success_command(&base),
         ))
         .unwrap();
 
@@ -3868,7 +3908,7 @@ MERGE_APPROVAL: not_granted\n\n\
             artifacts,
             out,
             target,
-            github_merge_success_command(),
+            github_merge_success_command(&base),
         ))
         .unwrap();
 

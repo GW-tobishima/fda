@@ -55,7 +55,7 @@ ALLOWED_APPLICATION_INFRA_USES = {
         "use crate::infra::json_file::{read_json_value, write_json_file};",
         "use crate::infra::json_schema::JsonSchemaArtifactValidator;",
         "use crate::infra::paths::canonicalize_existing_or_parent;",
-        "use crate::infra::process::run_process_command;",
+        "use crate::infra::process::{python_launcher, run_process_command};",
         "use crate::infra::yaml::SerdeYamlValidator;",
     },
     "src/application/notify.rs": {

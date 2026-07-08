@@ -22,7 +22,7 @@ use crate::infra::fs_store::FsArtifactStore;
 use crate::infra::json_file::{read_json_value, write_json_file};
 use crate::infra::json_schema::JsonSchemaArtifactValidator;
 use crate::infra::paths::canonicalize_existing_or_parent;
-use crate::infra::process::run_process_command;
+use crate::infra::process::{python_launcher, run_process_command};
 use crate::infra::yaml::SerdeYamlValidator;
 use crate::rendering::merge::*;
 use crate::support::paths::{display_path, resolve_path};
@@ -1203,12 +1203,12 @@ fn validate_review_agent_gate_packet_with_checker(
     if !content.contains("## REVIEW_AGENT_GATE") {
         return Err("REVIEW_AGENT_GATE section is missing".to_string());
     }
-    let command = vec![
-        "python3".to_string(),
+    let mut command = python_launcher();
+    command.extend([
         "scripts/check_review_agent_gate.py".to_string(),
         "--pr-number".to_string(),
         pr_number.to_string(),
-    ];
+    ]);
     match run_process_command(&command, repo_root) {
         Ok(output) if output.success => Ok(()),
         Ok(output) => Err(single_line(&format!(
@@ -1456,7 +1456,10 @@ fn push_unique(values: &mut Vec<String>, value: String) {
 
 fn verified_artifact_evidence_path(artifact_dir: &Path, evidence: &str) -> Result<PathBuf, String> {
     let evidence_path = Path::new(evidence);
+    // has_root() also rejects rooted unix-style paths (e.g. /etc/passwd),
+    // which is_absolute() alone does not catch on Windows.
     if evidence_path.is_absolute()
+        || evidence_path.has_root()
         || evidence_path
             .components()
             .any(|component| matches!(component, Component::ParentDir | Component::Prefix(_)))

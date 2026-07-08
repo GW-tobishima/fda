@@ -588,7 +588,7 @@ fn run_command_with_timeout(
         } else {
             "failed"
         };
-        let redacted_error = redact_process_error(&error.to_string());
+        let redacted_error = redact_process_error(&error);
         AtoProcessFailure {
             status: status.to_string(),
             stderr_summary: Some(redacted_error.clone()),
@@ -603,7 +603,7 @@ fn run_command_with_timeout(
         match child.try_wait() {
             Ok(Some(_status)) => {
                 return child.wait_with_output().map_err(|error| {
-                    let redacted_error = redact_process_error(&error.to_string());
+                    let redacted_error = redact_process_error(&error);
                     AtoProcessFailure {
                         status: "failed".to_string(),
                         stderr_summary: Some(redacted_error.clone()),
@@ -625,7 +625,7 @@ fn run_command_with_timeout(
             }
             Ok(None) => thread::sleep(Duration::from_millis(50)),
             Err(error) => {
-                let redacted_error = redact_process_error(&error.to_string());
+                let redacted_error = redact_process_error(&error);
                 return Err(AtoProcessFailure {
                     status: "failed".to_string(),
                     stderr_summary: Some(redacted_error.clone()),
@@ -1203,8 +1203,14 @@ fn redacted_failure_reason(exit_code: Option<i32>, stderr: &str) -> String {
     }
 }
 
-fn redact_process_error(error: &str) -> String {
-    if error.contains("No such file") || error.contains("not found") {
+fn redact_process_error(error: &std::io::Error) -> String {
+    // Match on the error kind first: OS error strings are localized on
+    // Windows, so message probing alone misclassifies missing binaries.
+    let message = error.to_string();
+    if error.kind() == ErrorKind::NotFound
+        || message.contains("No such file")
+        || message.contains("not found")
+    {
         "ATO CLI adapter unavailable".to_string()
     } else {
         "ATO CLI process error redacted".to_string()
@@ -1232,6 +1238,7 @@ fn sanitize_id(value: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(unix)]
     use std::os::unix::fs::PermissionsExt;
     use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -1245,6 +1252,9 @@ mod tests {
         path
     }
 
+    // fake-ato fixtures are bash scripts; Windows coverage is provided by the
+    // cross-platform tests below plus real `ato.exe` runtime evidence.
+    #[cfg(unix)]
     fn fake_ato_script(dir: &Path) -> PathBuf {
         let path = dir.join("fake-ato");
         fs::write(
@@ -1274,6 +1284,7 @@ fi
         path
     }
 
+    #[cfg(unix)]
     fn logging_fake_ato_script(dir: &Path) -> (PathBuf, PathBuf) {
         let path = dir.join("logging-fake-ato");
         let log_path = dir.join("fake-ato-args.log");
@@ -1304,6 +1315,7 @@ fi
         (path, log_path)
     }
 
+    #[cfg(unix)]
     fn failing_ato_script(dir: &Path) -> PathBuf {
         let path = dir.join("failing-ato");
         fs::write(
@@ -1321,6 +1333,7 @@ exit 9
         path
     }
 
+    #[cfg(unix)]
     fn sleeping_ato_script(dir: &Path) -> PathBuf {
         let path = dir.join("sleeping-ato");
         fs::write(
@@ -1338,6 +1351,7 @@ printf '{"checkpoint":{"checkpoint_id":"CP-FDA"}}'
         path
     }
 
+    #[cfg(unix)]
     fn checkpoint_without_id_ato_script(dir: &Path) -> PathBuf {
         let path = dir.join("checkpoint-no-id-ato");
         fs::write(
@@ -1360,6 +1374,7 @@ fi
         path
     }
 
+    #[cfg(unix)]
     #[test]
     fn start_sync_creates_receipt_without_raw_output() {
         let dir = temp_dir("fda-ato-start-sync");
@@ -1421,6 +1436,7 @@ fi
                 == Some("ato_state_receipt")));
     }
 
+    #[cfg(unix)]
     #[test]
     fn start_sync_preserves_recommended_option_and_reason() {
         let dir = temp_dir("fda-ato-start-decision-reason");
@@ -1470,6 +1486,7 @@ fi
         assert!(block_line.contains("--option manual_review"));
     }
 
+    #[cfg(unix)]
     #[test]
     fn plan_sync_preserves_packet_reason_and_recommended_option() {
         let dir = temp_dir("fda-ato-plan-packet-reason");
@@ -1557,6 +1574,7 @@ fi
         assert!(!receipt.raw_output_stored);
     }
 
+    #[cfg(unix)]
     #[test]
     fn decide_sync_reuses_previous_task_run_and_receipt_evidence() {
         let dir = temp_dir("fda-ato-decide-sync");
@@ -1647,6 +1665,7 @@ fi
         assert_eq!(receipt.decision_mappings[0].status, "applied");
     }
 
+    #[cfg(unix)]
     #[test]
     fn start_retry_skips_existing_decision_mapping() {
         let dir = temp_dir("fda-ato-start-retry");
@@ -1703,6 +1722,7 @@ fi
         assert_eq!(receipt.decision_mappings.len(), 1);
     }
 
+    #[cfg(unix)]
     #[test]
     fn start_retry_recreates_sync_failed_decision_mapping() {
         let dir = temp_dir("fda-ato-start-retry-sync-failed");
@@ -1764,6 +1784,7 @@ fi
         assert_eq!(receipt.decision_mappings[0].status, "open");
     }
 
+    #[cfg(unix)]
     #[test]
     fn explicit_task_override_does_not_reuse_previous_run_or_mappings() {
         let dir = temp_dir("fda-ato-task-override");
@@ -1815,6 +1836,7 @@ fi
             .any(|command| command.command_kind == "work_begin"));
     }
 
+    #[cfg(unix)]
     #[test]
     fn explicit_run_override_does_not_reuse_previous_mappings() {
         let dir = temp_dir("fda-ato-run-override");
@@ -1877,6 +1899,7 @@ fi
         );
     }
 
+    #[cfg(unix)]
     #[test]
     fn decide_without_mapping_fails_closed() {
         let dir = temp_dir("fda-ato-decide-missing-mapping");
@@ -1923,6 +1946,7 @@ fi
             .all(|command| command.command_kind != "decision_answer"));
     }
 
+    #[cfg(unix)]
     #[test]
     fn receipt_command_args_redact_decision_answer() {
         let dir = temp_dir("fda-ato-command-redaction");
@@ -1977,6 +2001,7 @@ fi
         assert!(serialized.contains("<redacted>"));
     }
 
+    #[cfg(unix)]
     #[test]
     fn normal_stage_does_not_reopen_human_decision_packet() {
         let dir = temp_dir("fda-ato-no-reopen-design");
@@ -2024,6 +2049,7 @@ fi
             .all(|command| command.command_kind != "work_block"));
     }
 
+    #[cfg(unix)]
     #[test]
     fn different_output_dir_can_reuse_previous_artifact_receipt() {
         let dir = temp_dir("fda-ato-previous-artifacts");
@@ -2078,6 +2104,7 @@ fi
         assert!(design_dir.join("ato_state_receipt.json").exists());
     }
 
+    #[cfg(unix)]
     #[test]
     fn ato_cli_timeout_is_fail_closed() {
         let dir = temp_dir("fda-ato-timeout");
@@ -2121,6 +2148,7 @@ fi
         assert!(receipt.resume_command.is_some());
     }
 
+    #[cfg(unix)]
     #[test]
     fn checkpoint_without_id_fails_closed() {
         let dir = temp_dir("fda-ato-checkpoint-no-id");
@@ -2194,6 +2222,7 @@ fi
         assert!(resume.contains(&format!("--ato-cli '{}'", ato_cli.display())));
     }
 
+    #[cfg(unix)]
     #[test]
     fn stderr_summary_is_redacted_on_failure() {
         let dir = temp_dir("fda-ato-redacted-stderr");

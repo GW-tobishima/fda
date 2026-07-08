@@ -360,6 +360,35 @@ pub(crate) fn run_process_command(command: &[String], cwd: &Path) -> Result<Proc
     })
 }
 
+/// Resolve the Python launcher used for gate scripts.
+///
+/// Windows installs usually expose `python` or `py -3` but not `python3`,
+/// so the launcher is resolved as: `FDA_PYTHON` (whitespace-separated
+/// command), then the first of `python3` / `python` / `py -3` that answers
+/// `--version`. Falls back to `python3` so failures stay explicit.
+pub(crate) fn python_launcher() -> Vec<String> {
+    if let Ok(value) = env::var("FDA_PYTHON") {
+        let parts: Vec<String> = value.split_whitespace().map(str::to_string).collect();
+        if !parts.is_empty() {
+            return parts;
+        }
+    }
+    for candidate in [&["python3"][..], &["python"][..], &["py", "-3"][..]] {
+        let responds = ProcessCommand::new(candidate[0])
+            .args(&candidate[1..])
+            .arg("--version")
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status()
+            .map(|status| status.success())
+            .unwrap_or(false);
+        if responds {
+            return candidate.iter().map(|part| part.to_string()).collect();
+        }
+    }
+    vec!["python3".to_string()]
+}
+
 pub(crate) fn git_head_sha(repo: &Path) -> String {
     ProcessCommand::new("git")
         .arg("-C")

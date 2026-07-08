@@ -1017,7 +1017,7 @@ fn dry_run_target_repo_arg(
         .map(|target_repo| {
             display_path(
                 repo_root,
-                &resolve_path(repo_root, &PathBuf::from(target_repo)),
+                &canonical_or_resolved(store, repo_root, &target_repo),
             )
         })
 }
@@ -1039,11 +1039,23 @@ fn live_target_repo_arg(
         {
             return Some(display_path(
                 repo_root,
-                &resolve_path(repo_root, &PathBuf::from(target_repo)),
+                &canonical_or_resolved(store, repo_root, &target_repo),
             ));
         }
     }
     None
+}
+
+/// Resolve a receipt path and canonicalize it when it exists so that
+/// `strip_prefix` against the canonicalized repo root works on Windows,
+/// where receipts may carry 8.3 short paths while the repo root is verbatim.
+fn canonical_or_resolved(
+    store: &impl ArtifactStore,
+    repo_root: &Path,
+    receipt_path: &str,
+) -> PathBuf {
+    let resolved = resolve_path(repo_root, &PathBuf::from(receipt_path));
+    store.canonicalize(&resolved).unwrap_or(resolved)
 }
 
 fn is_github_pull_url(url: &str) -> bool {
