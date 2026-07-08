@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/review_agent_gate.schema.json",
+  "title": "Review Agent Gate",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "gate_id",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "reviewed_planned_pr_id",
+    "status",
+    "actual_pr_url",
+    "required_reviewers",
+    "conditional_reviewers",
+    "source_mutation_allowed",
+    "merge_approval_granted",
+    "evidence_links",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.review_agent_gate.v0" },
+    "gate_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "reviewed_planned_pr_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["passed", "failed", "blocked", "needs_human"] },
+    "actual_pr_url": { "type": ["string", "null"] },
+    "required_reviewers": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "$ref": "#/$defs/reviewer" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "role": { "const": "pr_reviewer" } },
+            "required": ["role"]
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "role": { "const": "functional_qa" } },
+            "required": ["role"]
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": { "role": { "const": "security_qa" } },
+            "required": ["role"]
+          },
+          "minContains": 1
+        }
+      ]
+    },
+    "conditional_reviewers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reviewer" }
+    },
+    "source_mutation_allowed": { "type": "boolean", "const": false },
+    "merge_approval_granted": { "type": "boolean", "const": false },
+    "evidence_links": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "next_action": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "reviewer": {
+      "type": "object",
+      "required": [
+        "role",
+        "required",
+        "status",
+        "workspace_policy",
+        "source_mutation_allowed",
+        "evidence",
+        "not_applicable_reason"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "pr_reviewer",
+            "functional_qa",
+            "security_qa",
+            "forge_reviewer",
+            "design_qa",
+            "qax2",
+            "orchestrator"
+          ]
+        },
+        "required": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["passed", "failed", "blocked", "needs_human", "not_applicable"] },
+        "workspace_policy": { "type": "string", "const": "read_only" },
+        "source_mutation_allowed": { "type": "boolean", "const": false },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "not_applicable_reason": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "required": { "const": true } },
+            "required": ["required"]
+          },
+          "then": {
+            "properties": {
+              "status": { "enum": ["passed", "failed", "blocked", "needs_human"] },
+              "not_applicable_reason": { "type": "null" }
+            },
+            "required": ["status", "not_applicable_reason"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "not_applicable" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "required": { "const": false },
+              "not_applicable_reason": { "type": "string", "minLength": 1 }
+            },
+            "required": ["required", "not_applicable_reason"]
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

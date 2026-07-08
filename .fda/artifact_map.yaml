@@ -1,0 +1,26 @@
+artifact_map:
+  run_root: artifacts/runs
+  review_packet_root: artifacts/review_packets
+  handoff_root: handoffs/records
+  sandbox_root: artifacts/sandbox
+  docs:
+    v1_architecture: docs/standards/fda-v1/architecture.md
+    codex_cli_primary_architecture: docs/v1/codex_cli_primary_architecture.md
+    repository_profile: docs/standards/fda-v1/repository_profile.md
+    output_hub: docs/standards/fda-v1/output_hub.md
+  standard_run_artifacts:
+    - requirements_definition.md
+    - human_decision_packet.md
+    - basic_design.md
+    - detailed_design.md
+    - planned_prs.json
+    - implementation_handoff.md
+    - review_receipt.json
+    - merge_receipt.json
+    - output_hub.html
+    - status.json
+  evidence_policy:
+    store_raw_stdout_stderr: false
+    prefer_artifact_links: true
+    require_verdict: true
+    require_freshness: true

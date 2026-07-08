@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/slack_delivery_receipt.schema.json",
+  "title": "AICX Slack Delivery Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "delivery_receipt_id",
+    "message_id",
+    "quiz_set_id",
+    "generated_for_date",
+    "delivery_channel",
+    "mode",
+    "status",
+    "slack_used",
+    "target_channel_env",
+    "posted_at_unix_seconds",
+    "env_readiness",
+    "slack_response",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.slack_delivery_receipt.v0" },
+    "delivery_receipt_id": { "type": "string", "minLength": 1 },
+    "message_id": { "type": "string", "minLength": 1 },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "generated_for_date": { "type": "string", "format": "date" },
+    "delivery_channel": { "type": "string", "const": "slack" },
+    "mode": { "type": "string", "enum": ["dry-run", "live"] },
+    "status": {
+      "type": "string",
+      "enum": ["dry_run_ready", "blocked_missing_env_or_sdk", "sent", "send_failed"]
+    },
+    "slack_used": { "type": "boolean" },
+    "target_channel_env": { "type": "string", "const": "SLACK_CHANNEL_ID" },
+    "posted_at_unix_seconds": { "type": ["integer", "null"], "minimum": 0 },
+    "env_readiness": {
+      "type": "object",
+      "required": [
+        "bot_token_present",
+        "channel_id_present",
+        "slack_sdk_available",
+        "required_env",
+        "missing_env"
+      ],
+      "properties": {
+        "bot_token_present": { "type": "boolean" },
+        "channel_id_present": { "type": "boolean" },
+        "slack_sdk_available": { "type": "boolean" },
+        "required_env": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["SLACK_BOT_TOKEN", "SLACK_CHANNEL_ID"] },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "missing_env": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["SLACK_BOT_TOKEN", "SLACK_CHANNEL_ID"] }
+        }
+      },
+      "additionalProperties": false
+    },
+    "dispatch_timing_status": {
+      "type": ["string", "null"],
+      "enum": ["due", "late_dispatched", "late_window_expired", "not_due", null]
+    },
+    "scheduled_at": { "type": ["string", "null"] },
+    "late_by_seconds": { "type": ["integer", "null"], "minimum": 0 },
+    "late_window_hours": { "type": ["integer", "null"], "minimum": 1 },
+    "slack_response": {
+      "type": ["object", "null"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "channel": { "type": ["string", "null"] },
+        "ts": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false
+}

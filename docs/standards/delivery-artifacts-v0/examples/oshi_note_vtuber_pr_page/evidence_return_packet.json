@@ -1,0 +1,86 @@
+{
+  "schema_version": "evidence_return_packet.v0",
+  "packet_id": "ERP-ON-VPR-PR506-20260627",
+  "source_packet_id": "PPEP-ON-VPR-001",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "evidence_items": [
+    {
+      "surface": "github_pr",
+      "id": "https://github.com/hrkk7t/oshi-note/pull/506",
+      "verdict": "pass",
+      "summary": "oshi-note PR #506 was merged into develop on 2026-06-26T05:21:51Z with merge commit b0ef34d61a81748a6bcfcc3a5b8012507bc14440."
+    },
+    {
+      "surface": "github_ci",
+      "id": "https://github.com/hrkk7t/oshi-note/actions/runs/28218792489",
+      "verdict": "pass",
+      "summary": "PR Gate completed successfully for pr-template-check and quality jobs."
+    },
+    {
+      "surface": "review_packet",
+      "id": "https://github.com/hrkk7t/oshi-note/blob/74ecdaea9a546c0393a4692ef23727def65e877a/artifacts/review_packets/pr-506.md",
+      "verdict": "pass",
+      "summary": "Review packet records production-disabled flag, publishable campaign gate, profile attribution privacy guard, QA verdicts, validation evidence, rollback plan, and scope-out items."
+    },
+    {
+      "surface": "runtime_evidence",
+      "id": "https://github.com/hrkk7t/oshi-note/blob/74ecdaea9a546c0393a4692ef23727def65e877a/artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-sandbox/runtime-evidence.json",
+      "verdict": "pass",
+      "summary": "Runtime evidence packet records local and CI validation used for PR #506 readiness."
+    },
+    {
+      "surface": "scope_disposition",
+      "id": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/external_pr_receipt.json#scope_disposition",
+      "verdict": "informational",
+      "summary": "The external receipt explicitly records that PR #506 exceeds PPEP-ON-VPR-001's policy-only scope and must not auto-close PR-ON-VPR-001."
+    }
+  ],
+  "human_decisions_applied": [
+    {
+      "human_decision_id": "HDP-ON-VPR-001",
+      "applied": true,
+      "evidence": "PR #506 publishable campaign gate requires verified_status=verified."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-002",
+      "applied": true,
+      "evidence": "PR #506 does not add creator aggregation dashboard; low-count threshold remains documented for future dashboard work."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-003",
+      "applied": true,
+      "evidence": "PR #506 stores only low-cardinality referral tokens and does not expose normal memo content to referral partners."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-004",
+      "applied": true,
+      "evidence": "PR #506 keeps public comments out of MVP scope."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-005",
+      "applied": true,
+      "evidence": "PR #506 does not implement moderation because public comments remain out of scope."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-006",
+      "applied": true,
+      "evidence": "PR #506 supports PR / provided-by disclosure on the VTuber referral page and share-kit text."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-007",
+      "applied": true,
+      "evidence": "PR #506 publishable campaign gate requires material_permission_status=permitted and documents material permission rules."
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-008",
+      "applied": true,
+      "evidence": "PR #506 documents that YouTube / Twitch API Data is not used in the MVP."
+    }
+  ],
+  "open_risks": [
+    "Scope deviation remains for FDA planning: PR #506 bundled runtime implementation that PPEP-ON-VPR-001 scoped out. Planning artifacts should be split or backfilled before closing PR-ON-VPR-001, PR-ON-VPR-002, or PR-ON-VPR-006."
+  ],
+  "ready_for_review": true,
+  "notes": "This evidence packet completes the structured evidence return expected by PPEP-ON-VPR-001, while preserving the scope-deviation warning. ready_for_review means the returned evidence is ready for manual delivery-tracking review, not that PR-ON-VPR-001 should be auto-closed."
+}

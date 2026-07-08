@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/end_to_end_receipt.schema.json",
+  "title": "End-to-end Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "status",
+    "generated_at_unix_seconds",
+    "summary",
+    "required_for_operational_v1",
+    "representative_runs",
+    "stage_gates",
+    "output_hub_proof",
+    "blocking_issues",
+    "evidence_links",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.end_to_end_receipt.v0" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["succeeded", "blocked", "failed"] },
+    "generated_at_unix_seconds": { "type": "integer", "minimum": 0 },
+    "summary": { "type": "string", "minLength": 1 },
+    "required_for_operational_v1": { "type": "boolean" },
+    "representative_runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["run_id", "kind", "status", "summary", "fixture_used", "evidence_links"],
+        "properties": {
+          "run_id": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "implementation",
+              "repair",
+              "research",
+              "uiux",
+              "design_only",
+              "notification",
+              "merge",
+              "status",
+              "output_hub",
+              "ato_state",
+              "forge_gate"
+            ]
+          },
+          "status": { "type": "string", "enum": ["passed", "blocked", "failed", "skipped"] },
+          "summary": { "type": "string", "minLength": 1 },
+          "fixture_used": { "type": ["boolean", "null"] },
+          "test_status": {
+            "type": "string",
+            "enum": ["pass", "passed", "success", "block", "blocked", "fail", "failed", "skipped"]
+          },
+          "scope_disposition": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["within_scope", "out_of_scope", "unknown"]
+              },
+              "summary": { "type": "string", "minLength": 1 },
+              "evidence_links": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 }
+              }
+            },
+            "additionalProperties": false
+          },
+          "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stage_gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["gate_id", "status", "summary", "evidence_links"],
+        "properties": {
+          "gate_id": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "enum": ["pass", "block", "fail", "skip"] },
+          "summary": { "type": "string", "minLength": 1 },
+          "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "output_hub_proof": {
+      "type": "object",
+      "required": [
+        "verdict",
+        "output_hub_path",
+        "decision_inbox_path",
+        "execution_status_path",
+        "output_hub_receipt_path",
+        "status_summary_path"
+      ],
+      "properties": {
+        "verdict": { "type": "string", "enum": ["pass", "block", "fail"] },
+        "output_hub_path": { "type": "string", "minLength": 1 },
+        "decision_inbox_path": { "type": "string", "minLength": 1 },
+        "execution_status_path": { "type": "string", "minLength": 1 },
+        "output_hub_receipt_path": { "type": "string", "minLength": 1 },
+        "status_summary_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "blocking_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["issue_id", "severity", "summary", "evidence_links"],
+        "properties": {
+          "issue_id": { "type": "string", "minLength": 1 },
+          "severity": { "type": "string", "enum": ["blocker", "major", "minor"] },
+          "summary": { "type": "string", "minLength": 1 },
+          "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "next_action": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "blocked" } } },
+      "then": { "properties": { "blocking_issues": { "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "succeeded" } } },
+      "then": { "properties": { "blocking_issues": { "maxItems": 0 } } }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/mcp_agent_invocation_plan.schema.json",
+  "title": "MCP Agent Invocation Plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "plan_id",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "status",
+    "human_decision_guard",
+    "role_policy_ref",
+    "invocations",
+    "expected_global_receipts"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.mcp_agent_invocation_plan.v0" },
+    "plan_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["draft", "ready", "blocked", "superseded"] },
+    "human_decision_guard": {
+      "type": "object",
+      "required": ["unresolved_decision_ids", "non_approval_decision_ids", "gate_verdict"],
+      "properties": {
+        "unresolved_decision_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "non_approval_decision_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "gate_verdict": { "type": "string", "enum": ["clear", "blocked"] }
+      },
+      "additionalProperties": false
+    },
+    "role_policy_ref": { "type": "string", "minLength": 1 },
+    "invocations": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "invocation_id",
+          "role",
+          "agent_provider",
+          "mcp_server",
+          "tool_name",
+          "thread_policy",
+          "workspace_policy",
+          "source_mutation_allowed",
+          "cwd",
+          "prompt_artifact",
+          "input_artifacts",
+          "allowed_tools",
+          "forbidden_actions",
+          "expected_receipts"
+        ],
+        "properties": {
+          "invocation_id": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "enum": ["implementer", "functional_qa", "security_qa"] },
+          "agent_provider": { "type": "string", "enum": ["codex", "claude", "other"] },
+          "mcp_server": {
+            "type": "object",
+            "required": ["command", "transport", "tools_list_required"],
+            "properties": {
+              "command": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+              "transport": { "type": "string", "enum": ["stdio"] },
+              "tools_list_required": { "type": "boolean", "const": true }
+            },
+            "additionalProperties": false
+          },
+          "tool_name": { "type": "string", "minLength": 1 },
+          "thread_policy": { "type": "string", "enum": ["new_thread", "continue_existing", "stateless"] },
+          "workspace_policy": { "type": "string", "enum": ["write", "read_only"] },
+          "source_mutation_allowed": { "type": "boolean" },
+          "cwd": { "type": "string", "minLength": 1 },
+          "prompt_artifact": { "type": "string", "minLength": 1 },
+          "input_artifacts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "allowed_tools": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "forbidden_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "expected_receipts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "role": { "enum": ["functional_qa", "security_qa"] } },
+              "required": ["role"]
+            },
+            "then": {
+              "properties": {
+                "workspace_policy": { "const": "read_only" },
+                "source_mutation_allowed": { "const": false }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "role": { "const": "implementer" } },
+              "required": ["role"]
+            },
+            "then": {
+              "properties": {
+                "workspace_policy": { "const": "write" },
+                "source_mutation_allowed": { "const": true }
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "allOf": [
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "implementer" } }, "required": ["role"] },
+          "minContains": 1
+        },
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "functional_qa" } }, "required": ["role"] },
+          "minContains": 1
+        },
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "security_qa" } }, "required": ["role"] },
+          "minContains": 1
+        }
+      ]
+    },
+    "expected_global_receipts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "human_decision_guard": {
+            "properties": { "gate_verdict": { "const": "blocked" } },
+            "required": ["gate_verdict"]
+          }
+        },
+        "required": ["human_decision_guard"]
+      },
+      "then": {
+        "properties": { "status": { "const": "blocked" } },
+        "required": ["status"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "human_decision_guard": {
+            "properties": { "unresolved_decision_ids": { "minItems": 1 } },
+            "required": ["unresolved_decision_ids"]
+          }
+        },
+        "required": ["human_decision_guard"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "blocked" },
+          "human_decision_guard": {
+            "properties": { "gate_verdict": { "const": "blocked" } },
+            "required": ["gate_verdict"]
+          }
+        },
+        "required": ["status", "human_decision_guard"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "human_decision_guard": {
+            "properties": { "non_approval_decision_ids": { "minItems": 1 } },
+            "required": ["non_approval_decision_ids"]
+          }
+        },
+        "required": ["human_decision_guard"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "blocked" },
+          "human_decision_guard": {
+            "properties": { "gate_verdict": { "const": "blocked" } },
+            "required": ["gate_verdict"]
+          }
+        },
+        "required": ["status", "human_decision_guard"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,115 @@
+{
+  "contract_id": "AUTO-ON-VPR-6A",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "status": "draft",
+  "applies_to": [
+    "PoC-6A High-risk Epic Planning",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/**"
+  ],
+  "expires_at": null,
+  "allowed_actions": [
+    "Planning-only artifact authoring",
+    "Schema-aligned JSON example creation",
+    "Validation command execution for local artifacts",
+    "git diff --check",
+    "Existing tests that do not mutate oshi-note implementation code"
+  ],
+  "forbidden_actions": [
+    "Modify oshi-note implementation code",
+    "Create GitHub pull requests",
+    "Run ATO CLI",
+    "Run Forge real evaluation",
+    "Call YouTube, Twitch, Stripe, GA4, or Ads APIs",
+    "Expose normal memo body, user identifiers, email addresses, raw logs, or free-form URLs to VTuber-facing artifacts",
+    "Treat unresolved legal, privacy, PR disclosure, material permission, or API Data questions as AI-approved"
+  ],
+  "escalation_rules": [
+    {
+      "trigger": "A downstream task wants to implement referral pages, DB schema, dashboard, comments, cards, or analytics",
+      "required_action": "Resolve human_decision_packet.json or split unresolved items into typed human decisions",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "Any design exposes normal memos, low-count aggregates, raw logs, direct identifiers, or free-form URLs to VTuber-facing surfaces",
+      "required_action": "Block implementation and run privacy review",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "Any card or SNS template removes PR / provided-by disclosure for compensated promotion",
+      "required_action": "Block release and route to legal / compliance owner",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "YouTube or Twitch API Data is proposed for title, thumbnail, ranking, or card display",
+      "required_action": "Resolve API Data usage decision and retention proof before implementation",
+      "human_decision_packet_required": true
+    }
+  ],
+  "auto_merge_policy": {
+    "allowed": false,
+    "conditions": [],
+    "forbidden": [
+      "High-risk privacy / compliance / IP surfaces are in scope",
+      "Human decisions are unresolved",
+      "Planning-only PoC explicitly forbids GitHub PR creation"
+    ]
+  },
+  "evidence_policy": {
+    "citations_required": true,
+    "source_trace_required": true,
+    "verification_required": true,
+    "summary_update_required": true
+  },
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-ON-VPR-001",
+      "CLM-ON-VPR-002",
+      "CLM-ON-VPR-003",
+      "CLM-ON-VPR-004",
+      "CLM-ON-VPR-005",
+      "CLM-ON-VPR-006",
+      "CLM-ON-VPR-007"
+    ],
+    "proof_obligations": [
+      "PRF-ON-VPR-001",
+      "PRF-ON-VPR-002",
+      "PRF-ON-VPR-003",
+      "PRF-ON-VPR-004",
+      "PRF-ON-VPR-005"
+    ],
+    "human_decision_points": [
+      "HDP-ON-VPR-001",
+      "HDP-ON-VPR-002",
+      "HDP-ON-VPR-003",
+      "HDP-ON-VPR-004",
+      "HDP-ON-VPR-005",
+      "HDP-ON-VPR-006",
+      "HDP-ON-VPR-007",
+      "HDP-ON-VPR-008"
+    ],
+    "ato_task_graph": [
+      "TASK-ON-VPR-001",
+      "TASK-ON-VPR-002",
+      "TASK-ON-VPR-003",
+      "TASK-ON-VPR-004",
+      "TASK-ON-VPR-005",
+      "TASK-ON-VPR-006"
+    ],
+    "planned_prs": [
+      "PR-ON-VPR-001",
+      "PR-ON-VPR-002",
+      "PR-ON-VPR-003",
+      "PR-ON-VPR-004",
+      "PR-ON-VPR-005",
+      "PR-ON-VPR-006"
+    ],
+    "gate_requirements": [
+      "Human Decision Gate",
+      "Privacy Gate",
+      "Compliance Gate",
+      "Material Permission Gate",
+      "Planning-only Gate"
+    ]
+  }
+}

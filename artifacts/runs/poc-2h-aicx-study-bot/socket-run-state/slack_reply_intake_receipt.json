@@ -1,0 +1,37 @@
+{
+  "schema_version": "aicx.slack_reply_intake_receipt.v0",
+  "intake_receipt_id": "SLACKREPLYINTAKE-QUIZ-ASB-2026-06-21-DRY-RUN",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "generated_for_date": "2026-06-21",
+  "delivery_channel": "slack",
+  "mode": "dry-run",
+  "status": "received_graded_and_sent",
+  "socket_mode_used": false,
+  "slack_used": false,
+  "target_channel_env": "SLACK_CHANNEL_ID",
+  "target_app_token_env": "SLACK_APP_TOKEN",
+  "started_at_unix_seconds": 1782096366,
+  "completed_at_unix_seconds": 1782096366,
+  "timeout_seconds": null,
+  "env_readiness": {
+    "bot_token_present": false,
+    "channel_id_present": false,
+    "slack_sdk_available": false,
+    "required_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID",
+      "SLACK_APP_TOKEN"
+    ],
+    "missing_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID",
+      "SLACK_APP_TOKEN"
+    ],
+    "app_token_present": false,
+    "socket_mode_sdk_available": false
+  },
+  "received_reply_event_id": "SLACKREPLY-QUIZ-ASB-2026-06-21-EV-QUIZ-ASB-2026-06-21-FIXTURE",
+  "grading_response_id": "SLACKGRADING-QUIZ-ASB-2026-06-21",
+  "slack_response": null,
+  "errors": []
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/forge_promotion_receipt.schema.json",
+  "title": "Forge Promotion Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "status",
+    "promotion_decision",
+    "merge_allowed",
+    "claim_ids",
+    "proof_obligations",
+    "blocking_issues",
+    "evidence_links"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.forge_promotion_receipt.v0" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "actual_pr_url": { "type": ["string", "null"] },
+    "status": {
+      "type": "string",
+      "enum": ["promote", "hold", "reject", "not_evaluated", "missing", "adapter_unavailable"]
+    },
+    "promotion_decision": {
+      "type": "string",
+      "enum": ["promote", "hold", "reject", "not_evaluated", "missing"]
+    },
+    "merge_allowed": { "type": "boolean" },
+    "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "blocking_issues": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "additionalProperties": false
+}

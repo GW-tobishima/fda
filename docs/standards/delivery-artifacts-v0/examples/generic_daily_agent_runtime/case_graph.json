@@ -1,0 +1,49 @@
+{
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "cases": [
+    {
+      "case_id": "CASE-GDAR-001",
+      "purpose": "Runtime Artifact Contractsとしてrun_state、receipt、runner_explanation、artifact_inventory、validation evidenceの契約を固定する。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-GDAR-001",
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-001",
+      "risk": "medium",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-GDAR-002",
+      "purpose": "Generic Command Boundaryとしてdispatch、maintain、status、event intake、catch-upの責務境界を定義する。",
+      "depends_on": [
+        "CASE-GDAR-001"
+      ],
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-003",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-002",
+      "risk": "medium",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-GDAR-003",
+      "purpose": "AICX Study Bot runnerをgeneric runtime boundaryへ移す計画と互換性QA、failure recovery runbookを定義する。",
+      "depends_on": [
+        "CASE-GDAR-002"
+      ],
+      "claim_ids": [
+        "CLM-GDAR-003",
+        "CLM-GDAR-004",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-003",
+      "risk": "high",
+      "state": "planned"
+    }
+  ]
+}

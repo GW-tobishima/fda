@@ -1,0 +1,87 @@
+{
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "cases": [
+    {
+      "case_id": "CASE-ASB-001",
+      "purpose": "PoC-0 の Human Input Spec、Requirements、Epic Delivery Plan、Environment Readiness、Task Graph を作る。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-ASB-001"
+      ],
+      "planned_pr": "PR-ASB-001",
+      "risk": "low",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-ASB-002",
+      "purpose": "PDF source、page extraction、topic map の ingest 境界を作る。",
+      "depends_on": [
+        "CASE-ASB-001"
+      ],
+      "claim_ids": [
+        "CLM-ASB-002",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-002",
+      "risk": "medium",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-ASB-003",
+      "purpose": "4:30 scheduler と当日範囲の問題生成 dry-run を作る。",
+      "depends_on": [
+        "CASE-ASB-002"
+      ],
+      "claim_ids": [
+        "CLM-ASB-002",
+        "CLM-ASB-003"
+      ],
+      "planned_pr": "PR-ASB-003",
+      "risk": "medium",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-ASB-004",
+      "purpose": "Slack-first adapter 境界と回答取り込みを実装する。",
+      "depends_on": [
+        "CASE-ASB-003"
+      ],
+      "claim_ids": [
+        "CLM-ASB-003",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-004",
+      "risk": "medium",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-ASB-005",
+      "purpose": "回答取り込み、採点、弱点 topic、推奨ページ返却を実装する。",
+      "depends_on": [
+        "CASE-ASB-004"
+      ],
+      "claim_ids": [
+        "CLM-ASB-004"
+      ],
+      "planned_pr": "PR-ASB-005",
+      "risk": "medium",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-ASB-006",
+      "purpose": "日次 run log、dry-run evidence、secret/PDF safety gate を整える。",
+      "depends_on": [
+        "CASE-ASB-005"
+      ],
+      "claim_ids": [
+        "CLM-ASB-003",
+        "CLM-ASB-004",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-006",
+      "risk": "medium",
+      "state": "planned"
+    }
+  ]
+}

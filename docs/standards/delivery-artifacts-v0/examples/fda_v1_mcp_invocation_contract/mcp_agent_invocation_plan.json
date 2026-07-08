@@ -1,0 +1,101 @@
+{
+  "schema_version": "fda.mcp_agent_invocation_plan.v0",
+  "plan_id": "MCP-FDA-V1-PLAN-001",
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-MCP",
+  "planned_pr_id": "PR-V1-005",
+  "status": "ready",
+  "human_decision_guard": {
+    "unresolved_decision_ids": [],
+    "non_approval_decision_ids": [],
+    "gate_verdict": "clear"
+  },
+  "role_policy_ref": "agent_role_policy.json",
+  "invocations": [
+    {
+      "invocation_id": "INV-FDA-V1-IMPLEMENTER-001",
+      "role": "implementer",
+      "agent_provider": "codex",
+      "mcp_server": {
+        "command": ["codex", "mcp-server"],
+        "transport": "stdio",
+        "tools_list_required": true
+      },
+      "tool_name": "codex",
+      "thread_policy": "new_thread",
+      "workspace_policy": "write",
+      "source_mutation_allowed": true,
+      "cwd": "/workspace/target-repo",
+      "prompt_artifact": "codex_prompt.md",
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "implementation_handoff.md"
+      ],
+      "allowed_tools": ["codex", "codex-reply"],
+      "forbidden_actions": [
+        "merge",
+        "release",
+        "scope_change_without_human_decision"
+      ],
+      "expected_receipts": ["mcp_tool_call_receipt.json"]
+    },
+    {
+      "invocation_id": "INV-FDA-V1-FQA-001",
+      "role": "functional_qa",
+      "agent_provider": "claude",
+      "mcp_server": {
+        "command": ["claude", "mcp", "serve"],
+        "transport": "stdio",
+        "tools_list_required": true
+      },
+      "tool_name": "claude",
+      "thread_policy": "new_thread",
+      "workspace_policy": "read_only",
+      "source_mutation_allowed": false,
+      "cwd": "/workspace/target-repo",
+      "prompt_artifact": "functional_qa_prompt.md",
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "external_pr_receipt.json"
+      ],
+      "allowed_tools": ["claude", "codex"],
+      "forbidden_actions": [
+        "source_mutation",
+        "security_exception_approval",
+        "merge"
+      ],
+      "expected_receipts": ["functional_qa_receipt.json"]
+    },
+    {
+      "invocation_id": "INV-FDA-V1-SQA-001",
+      "role": "security_qa",
+      "agent_provider": "codex",
+      "mcp_server": {
+        "command": ["codex", "mcp-server"],
+        "transport": "stdio",
+        "tools_list_required": true
+      },
+      "tool_name": "codex",
+      "thread_policy": "new_thread",
+      "workspace_policy": "read_only",
+      "source_mutation_allowed": false,
+      "cwd": "/workspace/target-repo",
+      "prompt_artifact": "security_qa_prompt.md",
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "external_pr_receipt.json"
+      ],
+      "allowed_tools": ["codex"],
+      "forbidden_actions": [
+        "source_mutation",
+        "functional_qa_copy_paste",
+        "risk_self_approval"
+      ],
+      "expected_receipts": ["security_qa_receipt.json"]
+    }
+  ],
+  "expected_global_receipts": [
+    "mcp_tool_call_receipt.json",
+    "coding_agent_thread_state.json"
+  ]
+}

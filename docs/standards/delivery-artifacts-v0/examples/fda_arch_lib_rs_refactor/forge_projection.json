@@ -1,0 +1,227 @@
+{
+  "schema_version": "forge_projection.v0",
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json",
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/planned_prs.json",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68"
+  ],
+  "claim_contracts": [
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "contract",
+      "statement": "lib.rs は crate public surface、module export、最小 facade に限定される。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006"
+      ],
+      "planned_pr_ids": [
+        "PR-FDA-ARCH-FU-001",
+        "PR-FDA-ARCH-FU-002",
+        "PR-FDA-ARCH-FU-004",
+        "PR-FDA-ARCH-FU-005",
+        "PR-FDA-ARCH-FU-006"
+      ],
+      "proof_obligations": [
+        "PRF-FDA-ARCH-FU-001",
+        "PRF-FDA-ARCH-FU-002",
+        "PRF-FDA-ARCH-FU-004",
+        "PRF-FDA-ARCH-FU-005",
+        "PRF-FDA-ARCH-FU-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-002",
+      "type": "functional",
+      "statement": "cli::runner は全 command を application use case へ dispatch する。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005"
+      ],
+      "planned_pr_ids": [
+        "PR-FDA-ARCH-FU-002",
+        "PR-FDA-ARCH-FU-004",
+        "PR-FDA-ARCH-FU-005"
+      ],
+      "proof_obligations": [
+        "PRF-FDA-ARCH-FU-002",
+        "PRF-FDA-ARCH-FU-004",
+        "PRF-FDA-ARCH-FU-005"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-003",
+      "type": "non_functional",
+      "statement": "domain、rendering、application の責務境界は移動後も architecture gate で守られる。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006"
+      ],
+      "planned_pr_ids": [
+        "PR-FDA-ARCH-FU-001",
+        "PR-FDA-ARCH-FU-002",
+        "PR-FDA-ARCH-FU-004",
+        "PR-FDA-ARCH-FU-005",
+        "PR-FDA-ARCH-FU-006"
+      ],
+      "proof_obligations": [
+        "PRF-FDA-ARCH-FU-001",
+        "PRF-FDA-ARCH-FU-002",
+        "PRF-FDA-ARCH-FU-004",
+        "PRF-FDA-ARCH-FU-005",
+        "PRF-FDA-ARCH-FU-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-004",
+      "type": "operational",
+      "statement": "process IO と filesystem IO は ports/infra 境界へ集約される。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-ARCH-FU-003"
+      ],
+      "planned_pr_ids": [
+        "PR-FDA-ARCH-FU-003"
+      ],
+      "proof_obligations": [
+        "PRF-FDA-ARCH-FU-003"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-005",
+      "type": "contract",
+      "statement": "source architecture docs と architecture gate は完了状態で一致する。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "planned_pr_ids": [
+        "PR-FDA-ARCH-FU-006",
+        "PR-FDA-ARCH-FU-007"
+      ],
+      "proof_obligations": [
+        "PRF-FDA-ARCH-FU-006",
+        "PRF-FDA-ARCH-FU-007"
+      ]
+    }
+  ],
+  "proof_obligations": [
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-001",
+      "claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "compile_and_test",
+      "required_evidence": [
+        "cargo test",
+        "cargo clippy -- -D warnings",
+        "python3 scripts/check_architecture_boundaries.py"
+      ],
+      "blocking": true,
+      "owner_agent": "implementer",
+      "validation_method": "local command evidence in PR body and review packet"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-002",
+      "claim_id": "CLM-FDA-ARCH-FU-002",
+      "type": "behavior_preserving_move",
+      "required_evidence": [
+        "implement dry-run/live tests",
+        "artifact schema validation",
+        "architecture boundary check"
+      ],
+      "blocking": true,
+      "owner_agent": "implementer",
+      "validation_method": "cargo test plus architecture gate"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-003",
+      "claim_id": "CLM-FDA-ARCH-FU-004",
+      "type": "process_boundary_test",
+      "required_evidence": [
+        "approval prompt fail-close unit tests",
+        "process adapter code review",
+        "architecture boundary check"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "unit tests and source boundary review"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-004",
+      "claim_id": "CLM-FDA-ARCH-FU-002",
+      "type": "gate_behavior_regression",
+      "required_evidence": [
+        "review gate tests",
+        "repair loop tests",
+        "merge gate tests"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "cargo test review/continue/merge paths"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-005",
+      "claim_id": "CLM-FDA-ARCH-FU-003",
+      "type": "output_artifact_regression",
+      "required_evidence": [
+        "open_output_hub tests",
+        "notify_test tests",
+        "architecture boundary check"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "cargo test and HTML/notice artifact review"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-006",
+      "claim_id": "CLM-FDA-ARCH-FU-005",
+      "type": "architecture_gate_negative_check",
+      "required_evidence": [
+        "lib.rs facade gate",
+        "documented allowlist",
+        "architecture boundary check output"
+      ],
+      "blocking": true,
+      "owner_agent": "architecture_qa",
+      "validation_method": "python3 scripts/check_architecture_boundaries.py"
+    },
+    {
+      "proof_id": "PRF-FDA-ARCH-FU-007",
+      "claim_id": "CLM-FDA-ARCH-FU-005",
+      "type": "docs_gate_consistency",
+      "required_evidence": [
+        "docs review",
+        "validation_report.json",
+        "issue #68 checklist alignment"
+      ],
+      "blocking": true,
+      "owner_agent": "contract_qa",
+      "validation_method": "manual docs review plus validate-artifacts"
+    }
+  ],
+  "promotion_readiness": {
+    "verdict": "not_evaluated",
+    "reason": "planning artifact only; each planned PR must supply fresh evidence before promotion",
+    "evaluated_at": null,
+    "gate_inputs_ready": false
+  },
+  "gate_requirements": [
+    "Each planned PR keeps CLI behavior compatible unless a separate human spec decision approves behavior change.",
+    "python3 scripts/check_architecture_boundaries.py must pass before review.",
+    "cargo test and cargo clippy -- -D warnings must pass before review.",
+    "Review packet must map changed files to PR-FDA-ARCH-FU-* and CLM-FDA-ARCH-FU-* IDs.",
+    "Merge approval remains human-only."
+  ]
+}

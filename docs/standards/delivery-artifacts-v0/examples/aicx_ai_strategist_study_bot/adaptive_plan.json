@@ -1,0 +1,299 @@
+{
+  "schema_version": "aicx.adaptive_plan.v0",
+  "adaptive_plan_id": "ADAPTIVE-ASB-2026-06-22",
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "generated_for_date": "2026-06-22",
+  "next_quiz_date": "2026-06-22",
+  "timezone": "Asia/Tokyo",
+  "source_grading_report_ids": [
+    "GRADING-QUIZ-ASB-2026-06-21"
+  ],
+  "weak_topic_threshold": 0.8,
+  "question_count": 10,
+  "study_window": {
+    "week_id": "WEEK-ASB-2026-06-17",
+    "date_from": "2026-06-17",
+    "date_to": "2026-06-23",
+    "study_pages": [
+      {
+        "from": 258,
+        "to": 368
+      }
+    ],
+    "focus_topics": [
+      "条件分岐",
+      "コンテキストエンジニアリング",
+      "組織設計",
+      "KPI",
+      "チェック"
+    ]
+  },
+  "topic_results": [
+    {
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0,
+      "is_weak": false,
+      "source_grading_report_ids": [
+        "GRADING-QUIZ-ASB-2026-06-21"
+      ]
+    },
+    {
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "label": "チェック / ワークフロー検証",
+      "page_ranges": [
+        {
+          "from": 289,
+          "to": 311
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0,
+      "is_weak": false,
+      "source_grading_report_ids": [
+        "GRADING-QUIZ-ASB-2026-06-21"
+      ]
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "total": 2,
+      "correct": 0,
+      "accuracy": 0.0,
+      "is_weak": true,
+      "source_grading_report_ids": [
+        "GRADING-QUIZ-ASB-2026-06-21"
+      ]
+    },
+    {
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "label": "導入設計 / 運用統制",
+      "page_ranges": [
+        {
+          "from": 328,
+          "to": 350
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0,
+      "is_weak": false,
+      "source_grading_report_ids": [
+        "GRADING-QUIZ-ASB-2026-06-21"
+      ]
+    },
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "total": 2,
+      "correct": 0,
+      "accuracy": 0.0,
+      "is_weak": true,
+      "source_grading_report_ids": [
+        "GRADING-QUIZ-ASB-2026-06-21"
+      ]
+    }
+  ],
+  "weak_topics": [
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "accuracy": 0.0,
+      "recommended_question_count": 3
+    },
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "accuracy": 0.0,
+      "recommended_question_count": 4
+    }
+  ],
+  "topic_allocations": [
+    {
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "question_count": 1,
+      "basis": "maintenance",
+      "accuracy": 1.0
+    },
+    {
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "label": "チェック / ワークフロー検証",
+      "page_ranges": [
+        {
+          "from": 289,
+          "to": 311
+        }
+      ],
+      "question_count": 1,
+      "basis": "maintenance",
+      "accuracy": 1.0
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "question_count": 3,
+      "basis": "weak_topic_boost",
+      "accuracy": 0.0
+    },
+    {
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "label": "導入設計 / 運用統制",
+      "page_ranges": [
+        {
+          "from": 328,
+          "to": 350
+        }
+      ],
+      "question_count": 1,
+      "basis": "maintenance",
+      "accuracy": 1.0
+    },
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "question_count": 4,
+      "basis": "weak_topic_boost",
+      "accuracy": 0.0
+    }
+  ],
+  "question_selection": [
+    {
+      "question_number": 1,
+      "question_id": "QB-ASB-BRANCHING-001",
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 2,
+      "question_id": "QB-ASB-WORKFLOW-001",
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 3,
+      "question_id": "QB-ASB-ORG-KPI-001",
+      "topic_id": "TOPIC-ORG-KPI",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 4,
+      "question_id": "QB-ASB-ORG-KPI-002",
+      "topic_id": "TOPIC-ORG-KPI",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 5,
+      "question_id": "Q-ASB-2026-06-22-005",
+      "topic_id": "TOPIC-ORG-KPI",
+      "source": "manual_fixture_topic_map",
+      "selection_reason": "topic_map_fallback_after_bank_exhausted"
+    },
+    {
+      "question_number": 6,
+      "question_id": "QB-ASB-GOVERNANCE-001",
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 7,
+      "question_id": "QB-ASB-5D-001",
+      "topic_id": "TOPIC-5D",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 8,
+      "question_id": "QB-ASB-5D-002",
+      "topic_id": "TOPIC-5D",
+      "source": "question_bank_fixture",
+      "selection_reason": "question_bank_priority"
+    },
+    {
+      "question_number": 9,
+      "question_id": "Q-ASB-2026-06-22-009",
+      "topic_id": "TOPIC-5D",
+      "source": "manual_fixture_topic_map",
+      "selection_reason": "topic_map_fallback_after_bank_exhausted"
+    },
+    {
+      "question_number": 10,
+      "question_id": "Q-ASB-2026-06-22-010",
+      "topic_id": "TOPIC-5D",
+      "source": "manual_fixture_topic_map",
+      "selection_reason": "topic_map_fallback_after_bank_exhausted"
+    }
+  ],
+  "selection_policy": {
+    "weak_topic_rule": "topic accuracy below threshold receives extra allocation",
+    "question_source_priority": [
+      "question_bank_fixture",
+      "manual_fixture_topic_map"
+    ],
+    "pdf_ingest_used": false,
+    "llm_generation_used": false,
+    "slack_used": false
+  },
+  "next_actions": [
+    "翌日の10問は topic_allocations の配分で生成する",
+    "question_bank_fixture を優先し、不足分だけ topic_map fallback を使う",
+    "80%未満のtopicは次回採点後も継続して配分を見直す"
+  ]
+}

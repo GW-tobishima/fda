@@ -1,0 +1,70 @@
+{
+  "artifact_dir": "/tmp/fda-slack-context-smoke/artifacts",
+  "channel": "slack",
+  "decision_document_path": "/tmp/fda-slack-context-smoke/artifacts/human_decision_packet.md",
+  "decision_ids": [
+    "HD-FDA-001",
+    "HD-FDA-002",
+    "HD-FDA-003"
+  ],
+  "decisions": [
+    {
+      "decision_id": "HD-FDA-001",
+      "options": [
+        "approve_scope",
+        "revise"
+      ],
+      "recommended_option_id": "approve_scope",
+      "required_before": "Design Gate",
+      "resume_command": "fda decide HD-FDA-001 --answer <answer>",
+      "status": "waiting_human",
+      "summary": "入力から抽出した Scope In / Scope Out を Intake 正本として固定してよいか"
+    },
+    {
+      "decision_id": "HD-FDA-002",
+      "options": [
+        "accept_classification",
+        "revise"
+      ],
+      "recommended_option_id": "accept_classification",
+      "required_before": "Design Gate",
+      "resume_command": "fda decide HD-FDA-002 --answer <answer>",
+      "status": "waiting_human",
+      "summary": "実装可否分類 `implementation_candidate` と次 gate `Design Gate` を採用してよいか"
+    },
+    {
+      "decision_id": "HD-FDA-003",
+      "options": [
+        "confirm_before_design",
+        "revise"
+      ],
+      "recommended_option_id": "confirm_before_design",
+      "required_before": "Design Gate",
+      "resume_command": "fda decide HD-FDA-003 --answer <answer>",
+      "status": "waiting_human",
+      "summary": "外部API、個人情報、法務制約の未記載項目を Design Gate で明示確認する前提で進めてよいか"
+    }
+  ],
+  "mode": "live",
+  "notification_id": "NOTIFY-FDA-V1-011-001",
+  "options": [
+    "approve_scope",
+    "revise"
+  ],
+  "project": "forge-delivery-agent",
+  "reason": "human_turn_notice",
+  "recipient": "slack:webhook",
+  "recipient_source": "channel-default",
+  "recommended_option": "approve_scope",
+  "repo_name": "forge-delivery-agent",
+  "repo_root": "/tmp/fda-v1-slack-p0-notification",
+  "resume_command": "fda decide HD-FDA-001 --answer <answer>",
+  "resume_commands": [
+    "fda decide HD-FDA-001 --answer <answer>",
+    "fda decide HD-FDA-002 --answer <answer>",
+    "fda decide HD-FDA-003 --answer <answer>"
+  ],
+  "schema_version": "fda.notification_request.v0",
+  "sendable": true,
+  "summary": "Human Decision requires attention"
+}

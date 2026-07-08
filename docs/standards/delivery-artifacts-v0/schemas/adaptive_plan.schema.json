@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/adaptive_plan.schema.json",
+  "title": "AICX Adaptive Study Plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "adaptive_plan_id",
+    "program_id",
+    "epic_id",
+    "generated_for_date",
+    "next_quiz_date",
+    "timezone",
+    "source_grading_report_ids",
+    "weak_topic_threshold",
+    "question_count",
+    "study_window",
+    "topic_results",
+    "weak_topics",
+    "topic_allocations",
+    "question_selection",
+    "selection_policy",
+    "next_actions"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.adaptive_plan.v0" },
+    "adaptive_plan_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "generated_for_date": { "type": "string", "format": "date" },
+    "next_quiz_date": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "minLength": 1 },
+    "source_grading_report_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "weak_topic_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+    "question_count": { "type": "integer", "minimum": 1, "maximum": 60 },
+    "study_window": {
+      "type": "object",
+      "required": ["week_id", "date_from", "date_to", "study_pages", "focus_topics"],
+      "properties": {
+        "week_id": { "type": "string", "minLength": 1 },
+        "date_from": { "type": "string", "format": "date" },
+        "date_to": { "type": "string", "format": "date" },
+        "study_pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/page_range" }
+        },
+        "focus_topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "topic_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/topic_result" }
+    },
+    "weak_topics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/weak_topic" }
+    },
+    "topic_allocations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/topic_allocation" }
+    },
+    "question_selection": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "required": ["question_number", "question_id", "topic_id", "source", "selection_reason"],
+        "properties": {
+          "question_number": { "type": "integer", "minimum": 1, "maximum": 60 },
+          "question_id": { "type": "string", "minLength": 1 },
+          "topic_id": { "type": "string", "minLength": 1 },
+          "source": {
+            "type": "string",
+            "enum": ["question_bank_fixture", "manual_fixture_topic_map"]
+          },
+          "selection_reason": {
+            "type": "string",
+            "enum": ["question_bank_priority", "topic_map_fallback_after_bank_exhausted"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "selection_policy": {
+      "type": "object",
+      "required": [
+        "weak_topic_rule",
+        "question_source_priority",
+        "pdf_ingest_used",
+        "llm_generation_used",
+        "slack_used"
+      ],
+      "properties": {
+        "weak_topic_rule": { "type": "string", "minLength": 1 },
+        "question_source_priority": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "enum": ["question_bank_fixture", "manual_fixture_topic_map"]
+          }
+        },
+        "pdf_ingest_used": { "type": "boolean", "const": false },
+        "llm_generation_used": { "type": "boolean", "const": false },
+        "slack_used": { "type": "boolean", "const": false }
+      },
+      "additionalProperties": false
+    },
+    "next_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "topic_result": {
+      "type": "object",
+      "required": [
+        "topic_id",
+        "label",
+        "page_ranges",
+        "total",
+        "correct",
+        "accuracy",
+        "is_weak",
+        "source_grading_report_ids"
+      ],
+      "properties": {
+        "topic_id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "page_ranges": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/page_range" }
+        },
+        "total": { "type": "integer", "minimum": 0 },
+        "correct": { "type": "integer", "minimum": 0 },
+        "accuracy": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "is_weak": { "type": "boolean" },
+        "source_grading_report_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "weak_topic": {
+      "type": "object",
+      "required": ["topic_id", "label", "page_ranges", "accuracy", "recommended_question_count"],
+      "properties": {
+        "topic_id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "page_ranges": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/page_range" }
+        },
+        "accuracy": { "type": "number", "minimum": 0, "maximum": 1 },
+        "recommended_question_count": { "type": "integer", "minimum": 1, "maximum": 60 }
+      },
+      "additionalProperties": false
+    },
+    "topic_allocation": {
+      "type": "object",
+      "required": ["topic_id", "label", "page_ranges", "question_count", "basis", "accuracy"],
+      "properties": {
+        "topic_id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "page_ranges": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/page_range" }
+        },
+        "question_count": { "type": "integer", "minimum": 0, "maximum": 60 },
+        "basis": {
+          "type": "string",
+          "enum": ["weak_topic_boost", "maintenance", "no_history_maintenance", "out_of_daily_limit"]
+        },
+        "accuracy": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

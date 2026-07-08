@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/human_decision_packet.schema.json",
+  "title": "Human Decision Packet",
+  "type": "object",
+  "required": [
+    "decision_packet_id",
+    "program_id",
+    "epic_id",
+    "status",
+    "required_before",
+    "decision_needed",
+    "trigger",
+    "context",
+    "options",
+    "impact",
+    "default_if_no_decision",
+    "forge_mapping"
+  ],
+  "properties": {
+    "decision_packet_id": { "type": "string" },
+    "program_id": { "type": "string" },
+    "epic_id": { "type": "string" },
+    "case_id": { "type": ["string", "null"] },
+    "status": { "type": "string", "enum": ["draft", "waiting_human", "resolved", "superseded"] },
+    "required_before": { "type": "string" },
+    "decision_needed": { "type": "string" },
+    "trigger": { "type": "string" },
+    "context": {
+      "type": "object",
+      "required": ["current_state", "relevant_requirement", "relevant_evidence"],
+      "properties": {
+        "current_state": { "type": "string" },
+        "relevant_requirement": { "type": "string" },
+        "relevant_evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "contains": {
+        "type": "object",
+        "properties": {
+          "recommended": { "const": true }
+        },
+        "required": ["recommended"]
+      },
+      "minContains": 1,
+      "maxContains": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "pros", "cons", "recommended"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "pros": { "type": "array", "items": { "type": "string" } },
+          "cons": { "type": "array", "items": { "type": "string" } },
+          "recommended": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decision_id", "type", "summary", "required_before", "options", "recommended_option_id"],
+        "properties": {
+          "decision_id": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "required_before": { "type": "string", "minLength": 1 },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "description"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "description": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "recommended_option_id": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "impact": {
+      "type": "object",
+      "required": ["scope", "security", "schedule", "ux", "operations"],
+      "properties": {
+        "scope": { "type": "string" },
+        "security": { "type": "string" },
+        "schedule": { "type": "string" },
+        "ux": { "type": "string" },
+        "operations": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "default_if_no_decision": { "type": "string" },
+    "forge_mapping": {
+      "type": "object",
+      "required": ["claim_ids", "proof_obligations", "human_decision_points", "ato_task_graph", "planned_prs", "gate_requirements"],
+      "properties": {
+        "claim_ids": { "type": "array", "items": { "type": "string" } },
+        "proof_obligations": { "type": "array", "items": { "type": "string" } },
+        "human_decision_points": { "type": "array", "items": { "type": "string" } },
+        "ato_task_graph": { "type": "array", "items": { "type": "string" } },
+        "planned_prs": { "type": "array", "items": { "type": "string" } },
+        "gate_requirements": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "recorded_decision": {
+      "type": "object",
+      "properties": {
+        "decision": { "type": "string" },
+        "decided_by": { "type": "string" },
+        "decided_at": { "type": "string" },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "resolved" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["recorded_decision"],
+        "properties": {
+          "recorded_decision": {
+            "required": ["decision", "decided_by", "decided_at", "rationale"],
+            "properties": {
+              "decision": { "type": "string", "minLength": 1 },
+              "decided_by": { "type": "string", "minLength": 1 },
+              "decided_at": { "type": "string", "minLength": 1 },
+              "rationale": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,13 @@
+{
+  "artifact_count": 29,
+  "artifact_dir": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+  "decision_count": 0,
+  "outputs": [
+    "output_hub.html",
+    "decision_inbox.html",
+    "execution_status.html"
+  ],
+  "receipt_id": "OUTPUT-HUB-FDA-V1-011-001",
+  "schema_version": "fda.output_hub_receipt.v0",
+  "status_count": 5
+}

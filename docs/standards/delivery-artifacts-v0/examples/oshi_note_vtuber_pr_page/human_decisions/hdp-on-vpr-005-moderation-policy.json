@@ -1,0 +1,68 @@
+{
+  "human_decision_id": "HDP-ON-VPR-005",
+  "title": "moderation要否",
+  "status": "deferred_until_public_comments",
+  "selected_option_id": "defer_until_comment_feature",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "後で考える。MVPでは公開コメントを作らないためmoderation実装は不要。将来コメント機能を始める前に再度Human Decisionを開く。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-003",
+  "required_before": "PR-ON-VPR-003",
+  "requested_decision": "公開用コメントをVTuber側や投稿カードに表示する前に必要なmoderation方式を決める。",
+  "recommended_option": "公開コメント機能開始前に再判断する",
+  "options": [
+    {
+      "id": "automated_filter_and_human_review",
+      "description": "自動フィルタ + 人間レビュー",
+      "pros": [
+        "個人情報、誹謗中傷、権利侵害表現を抑えやすい"
+      ],
+      "cons": [
+        "運用負荷と表示遅延が発生する"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "automated_filter_only",
+      "description": "自動フィルタのみ",
+      "pros": [
+        "運用負荷が軽い"
+      ],
+      "cons": [
+        "文脈依存の危険コメントを拾いにくい"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "hide_comments_in_mvp",
+      "description": "MVPではコメント表示しない",
+      "pros": [
+        "最も安全にMVPを進められる"
+      ],
+      "cons": [
+        "投稿カードの魅力が下がる"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "defer_until_comment_feature",
+      "description": "公開コメント機能開始前に再判断する",
+      "pros": [
+        "MVPではコメントを作らない方針と整合し、不要なmoderation実装を避けられる"
+      ],
+      "cons": [
+        "将来コメント機能を追加する前に再度判断が必要"
+      ],
+      "recommended": true
+    }
+  ],
+  "default_if_no_decision": "公開用コメントは表示しない。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason risk_approval --title \"HDP-ON-VPR-005 moderation要否\" --question \"公開用コメントをVTuber側や投稿カードに表示する前に必要なmoderation方式を決める。\" --recommended-option \"自動フィルタ + 人間レビュー\" --option \"自動フィルタ + 人間レビュー\" --option \"自動フィルタのみ\" --option \"MVPではコメント表示しない\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "non_functional_requirements.md",
+    "risk_register.md",
+    "planned_prs.json"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "human_decision_id": "HDP-ON-VPR-004",
+  "title": "公開用コメントのopt-in",
+  "status": "resolved",
+  "selected_option_id": "mvp_no_public_comment",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "コメントはMVPでは作成しない。公開用コメント入力、保存、表示をscope outにする。",
+  "reason_type": "spec_decision",
+  "target_task_key": "TASK-ON-VPR-003",
+  "required_before": "PR-ON-VPR-003",
+  "requested_decision": "公開用コメントを通常メモと分け、どのopt-in方式で収集するか。",
+  "recommended_option": "MVPでは公開コメントを作成しない",
+  "options": [
+    {
+      "id": "separate_input_and_checkbox",
+      "description": "通常メモとは別入力 + 明示チェック",
+      "pros": [
+        "ユーザーの意図が明確になる",
+        "通常メモの心理的安全性を守りやすい"
+      ],
+      "cons": [
+        "入力項目が増える"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "copy_from_memo_with_confirmation",
+      "description": "通常メモから公開用コメントへ転記確認",
+      "pros": [
+        "ユーザーの入力負担が少ない"
+      ],
+      "cons": [
+        "通常メモとの混同が起きやすい"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "mvp_no_public_comment",
+      "description": "MVPでは公開コメントを作成しない",
+      "pros": [
+        "通常メモ非公開の安全性を保ち、moderation運用をMVPから外せる"
+      ],
+      "cons": [
+        "投稿カードやPRページの社会的証明は弱くなる"
+      ],
+      "recommended": true
+    }
+  ],
+  "default_if_no_decision": "公開用コメントは表示せず、通常メモの外部表示は禁止する。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason spec_decision --title \"HDP-ON-VPR-004 公開用コメントのopt-in\" --question \"公開用コメントを通常メモと分け、どのopt-in方式で収集するか。\" --recommended-option \"通常メモとは別入力 + 明示チェック\" --option \"通常メモとは別入力 + 明示チェック\" --option \"通常メモから公開用コメントへ転記確認\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "human_input_spec.md",
+    "risk_register.md",
+    "planned_prs.json"
+  ]
+}

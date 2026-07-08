@@ -1,0 +1,505 @@
+{
+  "schema_version": "fda.validation_report.v0",
+  "verdict": "pass",
+  "generated_at_unix_seconds": 1782096405,
+  "repo_root": ".",
+  "schema_dir": "docs/standards/delivery-artifacts-v0/schemas",
+  "artifact_dir": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state",
+  "summary": {
+    "passed": 42,
+    "failed": 0,
+    "skipped": 11
+  },
+  "checks": [
+    {
+      "check_id": "schema:answer_submission",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/answer_submission.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:answer_submission",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/answer_submission.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/answer_submission.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:artifact_inventory",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:artifact_inventory",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/artifact_inventory.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `artifact_inventory`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:autonomy_contract",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/autonomy_contract.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:autonomy_contract",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/autonomy_contract.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/autonomy_contract.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `autonomy_contract`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:case_graph",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:case_graph",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/case_graph.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `case_graph`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:epic_delivery_plan",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:epic_delivery_plan",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/epic_delivery_plan.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `epic_delivery_plan`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:grading_report",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/grading_report.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:grading_report",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/grading_report.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/grading_report.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:human_decision_packet",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:human_decision_packet",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/human_decision_packet.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `human_decision_packet`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:issue",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/issue.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:issue",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/issue.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/issue.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `issue`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:pull_request",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/pull_request.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:pull_request",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/pull_request.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/pull_request.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `pull_request`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:question_bank.fixture",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/question_bank.fixture.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:question_bank.fixture",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/question_bank.fixture.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/question_bank.fixture.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `question_bank.fixture`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:quiz_prompt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_prompt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:quiz_prompt",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_prompt.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/quiz_prompt.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:quiz_set",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_set.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:quiz_set",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_set.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/quiz_set.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:requirements_definition",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/requirements_definition.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:requirements_definition",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/requirements_definition.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/requirements_definition.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `requirements_definition`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:run_state",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/run_state.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:run_state",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/run_state.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/run_state.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:runner_explanation",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/runner_explanation.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:runner_explanation",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/runner_explanation.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/runner_explanation.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `runner_explanation`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_delivery_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_delivery_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_delivery_receipt",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_delivery_receipt.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_delivery_receipt.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_grading_delivery_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_delivery_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_grading_delivery_receipt",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_delivery_receipt.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_grading_delivery_receipt.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_grading_response",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_response.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_grading_response",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_response.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_grading_response.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_outbound_message",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_outbound_message.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_outbound_message",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_outbound_message.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_outbound_message.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_reply_event",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_event.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_reply_event",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_event.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_reply_event.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_reply_intake_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_intake_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_reply_intake_receipt",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_intake_receipt.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_reply_intake_receipt.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_socket_mode_payload",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_socket_mode_payload.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_socket_mode_payload",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_socket_mode_payload.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/slack_socket_mode_payload.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:study_recommendation",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/study_recommendation.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:study_recommendation",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/study_recommendation.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/study_recommendation.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:task_graph",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:task_graph",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json",
+      "artifact_path": "artifacts/runs/poc-2h-aicx-study-bot/socket-run-state/task_graph.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `task_graph`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "yaml:model_contracts/implementer.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/implementer.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/merge.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/merge.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/planner.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/planner.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/qa.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/qa.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:docs/standards/delivery-artifacts-v0/model_contracts/planner.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "docs/standards/delivery-artifacts-v0/model_contracts/planner.contract.yaml",
+      "errors": []
+    }
+  ]
+}

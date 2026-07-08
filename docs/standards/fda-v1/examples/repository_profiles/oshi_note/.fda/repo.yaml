@@ -1,0 +1,20 @@
+repo:
+  id: oshi-note
+  name: oshi-note
+  default_branch: main
+  stack:
+    language: typescript
+    framework: nextjs
+    package_manager: npm
+  risk_profile:
+    privacy_sensitive: true
+    legal_sensitive: true
+    user_generated_content: true
+  docs:
+    requirements_root: docs/spec
+    privacy_policy: templates/privacy.html
+    terms: templates/terms.html
+  commands:
+    test: npm test
+    lint: npm run lint
+    build: npm run build

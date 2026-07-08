@@ -1,0 +1,41 @@
+{
+  "schema_version": "fda.evidence_return_packet.v1",
+  "packet_id": "ERP-ON-VPR-001",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "evidence_items": [
+    {
+      "surface": "pull_request",
+      "id": "https://github.com/example/oshi-note/pull/1",
+      "verdict": "pass",
+      "summary": "actual PR URLがplanned PRに紐づいている。"
+    },
+    {
+      "surface": "acceptance_criteria",
+      "id": "AC-ON-VPR-VERIFIED-ONLY",
+      "verdict": "pass",
+      "summary": "本人確認済みVTuber以外への紹介URL発行禁止がpolicyに入っている。"
+    },
+    {
+      "surface": "rollback",
+      "id": "ROLLBACK-ON-VPR-DOCS-NOOP",
+      "verdict": "informational",
+      "summary": "docs/specとrunbookのみの変更はrevertで差し戻せる。"
+    }
+  ],
+  "human_decisions_applied": [
+    {
+      "human_decision_id": "HDP-ON-VPR-001",
+      "applied": true,
+      "evidence": "verified-only policyとして反映。"
+    },
+    {
+      "human_decision_id": "HDP-ON-VPR-007",
+      "applied": true,
+      "evidence": "素材許諾記録なしの素材利用禁止として反映。"
+    }
+  ],
+  "open_risks": [],
+  "ready_for_review": true,
+  "notes": "このpacketはcross-repo receiptのexampleであり、merge approvalではない。"
+}

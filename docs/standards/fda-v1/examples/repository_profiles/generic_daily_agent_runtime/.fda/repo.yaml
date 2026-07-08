@@ -1,0 +1,18 @@
+repo:
+  id: generic-daily-agent-runtime
+  name: generic_daily_agent_runtime
+  default_branch: main
+  stack:
+    language: python
+    framework: cli
+    package_manager: pip
+  risk_profile:
+    privacy_sensitive: false
+    legal_sensitive: false
+    user_generated_content: false
+  docs:
+    requirements_root: docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime
+  commands:
+    test: python3 -m pytest
+    lint: python3 -m compileall scripts tests
+    build: python3 scripts/aicx_study_fixture.py --help

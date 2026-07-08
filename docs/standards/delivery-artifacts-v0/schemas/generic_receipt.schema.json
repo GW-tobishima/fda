@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/generic_receipt.schema.json",
+  "title": "Generic Daily Agent Runtime Receipt Fixture",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "runtime_id",
+    "run_id",
+    "business_date",
+    "timezone",
+    "receipt_examples"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "forge_delivery.generic_receipt.v0" },
+    "runtime_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "business_date": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "minLength": 1 },
+    "receipt_examples": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/receipt" },
+      "minItems": 5
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "receipt": {
+      "type": "object",
+      "required": [
+        "receipt_id",
+        "receipt_type",
+        "command",
+        "mode",
+        "status",
+        "purpose",
+        "current_status",
+        "decisions",
+        "open_issues",
+        "next_actions",
+        "planned_pr_id",
+        "case_id",
+        "claim_ids",
+        "proof_obligations",
+        "artifact_refs",
+        "idempotency_key",
+        "started_at_unix_seconds",
+        "completed_at_unix_seconds",
+        "errors"
+      ],
+      "properties": {
+        "receipt_id": { "type": "string", "minLength": 1 },
+        "receipt_type": { "type": "string", "enum": ["dispatch", "event_intake", "action", "maintenance", "status"] },
+        "command": { "type": "string", "minLength": 1 },
+        "mode": { "type": "string", "enum": ["dry-run", "live"] },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_due",
+            "ready",
+            "dispatched",
+            "event_received",
+            "action_completed",
+            "maintenance_completed",
+            "status_reported",
+            "skipped_duplicate",
+            "blocked_missing_input",
+            "failed"
+          ]
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "current_status": { "type": "string", "minLength": 1 },
+        "decisions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "open_issues": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "next_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "planned_pr_id": { "type": "string", "minLength": 1 },
+        "case_id": { "type": "string", "minLength": 1 },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "idempotency_key": { "type": "string", "minLength": 1 },
+        "started_at_unix_seconds": { "type": "integer", "minimum": 0 },
+        "completed_at_unix_seconds": { "type": "integer", "minimum": 0 },
+        "errors": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

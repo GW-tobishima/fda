@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/artifact_map_yaml.schema.json",
+  "title": ".fda/artifact_map.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact_map"],
+  "properties": {
+    "artifact_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_root", "review_packet_root", "handoff_root", "standard_run_artifacts"],
+      "properties": {
+        "run_root": { "type": "string", "minLength": 1 },
+        "review_packet_root": { "type": "string", "minLength": 1 },
+        "handoff_root": { "type": "string", "minLength": 1 },
+        "sandbox_root": { "type": "string", "minLength": 1 },
+        "docs": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "standard_run_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "evidence_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["store_raw_stdout_stderr", "prefer_artifact_links"],
+          "properties": {
+            "store_raw_stdout_stderr": { "type": "boolean" },
+            "prefer_artifact_links": { "type": "boolean" },
+            "require_verdict": { "type": "boolean" },
+            "require_freshness": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

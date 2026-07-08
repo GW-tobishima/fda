@@ -1,0 +1,173 @@
+{
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "tasks": [
+    {
+      "task_id": "TASK-ASB-001",
+      "title": "PoC-0 planning artifacts を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-001",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-001",
+        "claim_ids": [
+          "CLM-ASB-001"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "requirements_analyst",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ASB-002",
+      "title": "PDF source ingest と page/topic map を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-002",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-002",
+        "claim_ids": [
+          "CLM-ASB-002",
+          "CLM-ASB-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ASB-003",
+      "title": "4:30 scheduler と daily quiz generation dry-run を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-003",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-003",
+        "claim_ids": [
+          "CLM-ASB-002",
+          "CLM-ASB-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ASB-004",
+      "title": "Slack messaging adapter と回答取り込み境界を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-004",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-004",
+        "claim_ids": [
+          "CLM-ASB-003",
+          "CLM-ASB-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "solution_architect",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ASB-005",
+      "title": "回答採点と推奨 PDF ページ返却を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-005",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-005",
+        "claim_ids": [
+          "CLM-ASB-004"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ASB-006",
+      "title": "run log、dry-run evidence、secret/PDF safety gate を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-ASB-006",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+        "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+        "case_id": "CASE-ASB-006",
+        "claim_ids": [
+          "CLM-ASB-003",
+          "CLM-ASB-004",
+          "CLM-ASB-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "functional_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    }
+  ]
+}

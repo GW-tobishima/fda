@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/generic_run_state.schema.json",
+  "title": "Generic Daily Agent Runtime Run State",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "runtime_id",
+    "run_id",
+    "program_id",
+    "epic_id",
+    "business_date",
+    "timezone",
+    "schedule",
+    "status",
+    "command_statuses",
+    "artifacts",
+    "idempotency",
+    "human_decisions",
+    "failure_classification",
+    "last_event",
+    "created_at_unix_seconds",
+    "updated_at_unix_seconds"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "forge_delivery.generic_run_state.v0" },
+    "runtime_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "business_date": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "minLength": 1 },
+    "schedule": {
+      "type": "object",
+      "required": ["dispatch_time", "dispatch_at", "catch_up_policy"],
+      "properties": {
+        "dispatch_time": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$" },
+        "dispatch_at": { "type": "string", "minLength": 1 },
+        "catch_up_policy": {
+          "type": "object",
+          "required": ["enabled", "late_window_hours"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "late_window_hours": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "initialized",
+        "not_due",
+        "dispatch_ready",
+        "dispatched",
+        "waiting_for_event",
+        "event_received",
+        "action_completed",
+        "maintenance_completed",
+        "status_reported",
+        "failed"
+      ]
+    },
+    "command_statuses": {
+      "type": "object",
+      "required": ["dispatch", "event_intake", "action", "maintain", "status"],
+      "properties": {
+        "dispatch": { "$ref": "#/$defs/command_state" },
+        "event_intake": { "$ref": "#/$defs/command_state" },
+        "action": { "$ref": "#/$defs/command_state" },
+        "maintain": { "$ref": "#/$defs/command_state" },
+        "status": { "$ref": "#/$defs/command_state" }
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "required": ["run_state", "artifact_inventory", "runner_explanation", "receipts"],
+      "properties": {
+        "run_state": { "type": "string", "minLength": 1 },
+        "artifact_inventory": { "type": "string", "minLength": 1 },
+        "runner_explanation": { "type": "string", "minLength": 1 },
+        "receipts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "idempotency": {
+      "type": "object",
+      "required": ["run_key", "dispatch_key", "event_intake_key", "action_key", "processed_event_ids"],
+      "properties": {
+        "run_key": { "type": "string", "minLength": 1 },
+        "dispatch_key": { "type": "string", "minLength": 1 },
+        "event_intake_key": { "type": "string", "minLength": 1 },
+        "action_key": { "type": "string", "minLength": 1 },
+        "processed_event_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "human_decisions": {
+      "type": "object",
+      "required": ["pending_decision_ids", "resolved_decision_ids"],
+      "properties": {
+        "pending_decision_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "resolved_decision_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "failure_classification": {
+      "type": ["object", "null"],
+      "required": ["class", "message", "recoverable"],
+      "properties": {
+        "class": { "type": "string", "enum": ["missing_input", "network", "rate_limit", "adapter_error", "invalid_event", "unknown"] },
+        "message": { "type": "string", "minLength": 1 },
+        "recoverable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "last_event": {
+      "type": "object",
+      "required": ["event_type", "status", "at_unix_seconds"],
+      "properties": {
+        "event_type": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "at_unix_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "created_at_unix_seconds": { "type": "integer", "minimum": 0 },
+    "updated_at_unix_seconds": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "command_state": {
+      "type": "object",
+      "required": ["state", "last_receipt_id", "updated_at_unix_seconds"],
+      "properties": {
+        "state": { "type": "string", "enum": ["not_started", "ready", "completed", "blocked", "skipped", "failed"] },
+        "last_receipt_id": { "type": ["string", "null"] },
+        "updated_at_unix_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

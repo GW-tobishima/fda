@@ -1,0 +1,18 @@
+{
+  "schema_version": "fda.sandbox_summary.v0",
+  "pr_number": 85,
+  "planned_pr_id": "PR-FDA-ARCH-FU-007",
+  "task_key": "issue-68-fu007-docs-final-20260628",
+  "run_id": "run_01KW7Y3HZ1N2HX55K74HCN8NP1",
+  "parent_task_key": "fda-operational-v1-prs-012-018-20260628",
+  "worktree": "/tmp/issue68-fu007-docs-final",
+  "branch": "codex/issue68-fu007-docs-final",
+  "summary": "FU-007 docs/artifact update completed through FDA implement dry-run and local validation gates.",
+  "verdict": "pass",
+  "evidence": [
+    "artifacts/sandbox/issue-68-fu007-docs-final-20260628/mcp_tool_call_receipt.json",
+    "artifacts/sandbox/issue-68-fu007-docs-final-20260628/dry_run_receipt.json",
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/validation_report.json",
+    "artifacts/review_packets/pr-85.md"
+  ]
+}

@@ -1,0 +1,31 @@
+skill:
+  name: forge_projection
+  version: v0.1.0
+  purpose: Case / Task / Planned PR を Forge Claim / Proof mapping に投影する。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json
+  output_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json
+  allowed_actions:
+    - claim_mapping_render
+    - proof_obligation_mapping_render
+    - promotion_input_preview
+    - artifact_inventory_update
+  forbidden_actions:
+    - forge_promotion_write
+    - proof_fabrication
+    - human_decision_approval
+    - github_pr_merge
+  required_artifacts:
+    - forge_projection.json
+    - artifact_inventory.json
+    - runner_explanation.json
+  validation_commands:
+    - cargo run -- validate-artifacts --artifacts artifacts/runs/<run_id> --out artifacts/runs/<run_id>/validation_report.json
+  escalation_conditions:
+    - claim_without_proof_obligation
+    - precedent_conflict
+    - required_proof_impossible_without_human

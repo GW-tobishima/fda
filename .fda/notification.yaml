@@ -1,0 +1,32 @@
+notification:
+  default_channels:
+    - cli
+    - local_output_hub
+  human_turn_channels:
+    - cli
+    - slack
+  slack:
+    enabled: true
+    credential_source: environment
+    webhook_url_env: FDA_SLACK_WEBHOOK_URL
+    channel_label_env: FDA_SLACK_CHANNEL_LABEL
+    allowed_domains:
+      - hooks.slack.com
+    store_secret_values: false
+  email:
+    enabled: false
+    credential_source: environment
+    required_env:
+      - FDA_SMTP_HOST
+      - FDA_SMTP_PORT
+      - FDA_SMTP_USERNAME
+      - FDA_SMTP_PASSWORD
+      - FDA_SMTP_FROM
+    recipient_env: FDA_NOTIFY_EMAIL
+    store_secret_values: false
+  output_hub:
+    enabled: true
+    default_artifact: output_hub.html
+  fail_closed_on:
+    - missing_required_decision_payload
+    - missing_resume_command

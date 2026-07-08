@@ -1,0 +1,99 @@
+{
+  "decision_packet_id": "HDPACKET-ASB-001",
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "case_id": "CASE-ASB-001",
+  "status": "resolved",
+  "required_before": "PoC-1 fixture quiz generation",
+  "decision_needed": "PoC-1 に進むための実装前提を確定する。",
+  "trigger": "PoC-0 planning artifacts の review 後",
+  "context": {
+    "current_state": "PoC-0 は Human Input Spec から Requirements、Epic Delivery Plan、Environment Readiness、Case/Task Graph まで接続済み。",
+    "relevant_requirement": "FR-002, FR-004, FR-005, NFR-SEC-001, NFR-COPY-001",
+    "relevant_evidence": [
+      "human_input_spec.md",
+      "requirements_definition.md",
+      "environment_readiness_plan.md",
+      "study_schedule.json",
+      "topic_map.json"
+    ]
+  },
+  "options": [
+    {
+      "id": "A",
+      "description": "Slack-first、local-only PDF reference、A-D 選択式、毎日 4:30 Asia/Tokyo で PoC-1 に進む。",
+      "pros": [
+        "完全ローカル前提で返信取り込みまで PoC 化しやすい",
+        "A-D 選択式により採点 fixture を先に作れる",
+        "PDF/OCR ingest を blocker にせず fixture generation へ進める"
+      ],
+      "cons": [
+        "LINE は後続 adapter 拡張になる",
+        "PDF page extraction 品質は PoC-1 後に検証する必要がある"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "B",
+      "description": "LINE-first と PDF/OCR ingest を先に進める。",
+      "pros": [
+        "最終的な LINE 運用に早く近づく"
+      ],
+      "cons": [
+        "webhook/tunnel/relay と PDF extraction が blocker になり、fixture quiz generation が遅れる"
+      ],
+      "recommended": false
+    }
+  ],
+  "impact": {
+    "scope": "PoC-1 は Slack や PDF ingest ではなく fixture quiz schema と local generation/grading に集中する。",
+    "security": "PDF と secrets は local ignored path に置き、repo には本文や token を保存しない。",
+    "schedule": "PDF/OCR ingest を後続に回すため PoC-1 にすぐ進める。",
+    "ux": "ユーザーには毎日 4:30 の A-D 問題セットを前提にした体験を設計できる。",
+    "operations": "Slack token と channel polling 権限は PoC-1 後の delivery 実装で確認する。"
+  },
+  "default_if_no_decision": "PoC-1 へ進まず、PoC-0 artifact の review を継続する。",
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-ASB-001",
+      "CLM-ASB-002",
+      "CLM-ASB-003",
+      "CLM-ASB-004",
+      "CLM-ASB-005"
+    ],
+    "proof_obligations": [
+      "PRF-ASB-001",
+      "PRF-ASB-002",
+      "PRF-ASB-003",
+      "PRF-ASB-004",
+      "PRF-ASB-005"
+    ],
+    "human_decision_points": [
+      "HDP-ASB-001",
+      "HDP-ASB-002",
+      "HDP-ASB-003",
+      "HDP-ASB-004"
+    ],
+    "ato_task_graph": [
+      "TASK-ASB-001",
+      "TASK-ASB-002",
+      "TASK-ASB-003",
+      "TASK-ASB-004",
+      "TASK-ASB-005",
+      "TASK-ASB-006"
+    ],
+    "planned_prs": [
+      "PR-ASB-001"
+    ],
+    "gate_requirements": [
+      "Human decisions recorded before PoC-1",
+      "PDF and secrets stay local-only"
+    ]
+  },
+  "recorded_decision": {
+    "decision": "PoC-0 direction OK. Use Slack, local-only PDF reference, A-D 選択式, and daily 04:30 Asia/Tokyo schedule. Fix schedule normalization, add fixture schedule/topic map before PDF ingest, then proceed to PoC-1.",
+    "decided_by": "human",
+    "decided_at": "2026-06-21",
+    "rationale": "PoC-0 artifacts are connected enough; PoC-1 should focus on fixture quiz schema and local generation/grading without Slack delivery or PDF ingest blockers."
+  }
+}

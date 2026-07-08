@@ -1,0 +1,192 @@
+{
+  "schema_version": "forge_projection.v0",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+  ],
+  "claim_contracts": [
+    {
+      "claim_id": "CLM-GDAR-001",
+      "type": "contract",
+      "statement": "Generic Daily Agent RuntimeはrequirementsからCase、Task、Planned PR、Proofまで追跡できる。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "planned_pr_ids": [
+        "PR-GDAR-001"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-002",
+      "type": "functional",
+      "statement": "Generic runtime can represent dispatch, catch-up, status, and receipts independently of AICX study domain.",
+      "blocking": true,
+      "case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002"
+      ],
+      "planned_pr_ids": [
+        "PR-GDAR-001",
+        "PR-GDAR-002"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-003",
+        "PRF-GDAR-004"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-003",
+      "type": "operational",
+      "statement": "maintain/status boundary remains idempotent across repeated local executions.",
+      "blocking": true,
+      "case_ids": [
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "planned_pr_ids": [
+        "PR-GDAR-002",
+        "PR-GDAR-003"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-003",
+        "PRF-GDAR-004",
+        "PRF-GDAR-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-004",
+      "type": "functional",
+      "statement": "AICX Study Bot can migrate onto the generic runtime boundary without removing existing behavior.",
+      "blocking": true,
+      "case_ids": [
+        "CASE-GDAR-003"
+      ],
+      "planned_pr_ids": [
+        "PR-GDAR-003"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-005",
+        "PRF-GDAR-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-005",
+      "type": "security",
+      "statement": "PoC-5A remains planning-only and does not perform live ATO materialization, Forge evaluation, GitHub PR creation, or auto-merge.",
+      "blocking": true,
+      "case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "planned_pr_ids": [
+        "PR-GDAR-001",
+        "PR-GDAR-002",
+        "PR-GDAR-003"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ]
+    }
+  ],
+  "proof_obligations": [
+    {
+      "proof_id": "PRF-GDAR-001",
+      "claim_id": "CLM-GDAR-001",
+      "type": "schema_validation",
+      "required_evidence": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json",
+        "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json"
+      ],
+      "blocking": true,
+      "owner_agent": "contract_qa",
+      "validation_method": "cargo run -- validate-artifacts"
+    },
+    {
+      "proof_id": "PRF-GDAR-002",
+      "claim_id": "CLM-GDAR-001",
+      "type": "traceability_review",
+      "required_evidence": [
+        "artifact_inventory.json",
+        "runner_explanation.json",
+        "runtime_artifact_contracts.md"
+      ],
+      "blocking": true,
+      "owner_agent": "contract_qa",
+      "validation_method": "manual trace review plus artifact inventory schema validation"
+    },
+    {
+      "proof_id": "PRF-GDAR-003",
+      "claim_id": "CLM-GDAR-003",
+      "type": "idempotency_fixture",
+      "required_evidence": [
+        "not_due fixture",
+        "dispatch candidate fixture",
+        "already dispatched fixture",
+        "action completed noop fixture"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "future PR fixture execution"
+    },
+    {
+      "proof_id": "PRF-GDAR-004",
+      "claim_id": "CLM-GDAR-003",
+      "type": "status_projection",
+      "required_evidence": [
+        "status report fixture",
+        "maintenance receipt fixture"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "future PR status projection review"
+    },
+    {
+      "proof_id": "PRF-GDAR-005",
+      "claim_id": "CLM-GDAR-004",
+      "type": "compatibility_regression",
+      "required_evidence": [
+        "AICX Study Bot validation report",
+        "legacy CLI mapping"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "future PR regression run"
+    },
+    {
+      "proof_id": "PRF-GDAR-006",
+      "claim_id": "CLM-GDAR-004",
+      "type": "recovery_runbook_review",
+      "required_evidence": [
+        "failure recovery runbook",
+        "maintenance receipt failure fixture"
+      ],
+      "blocking": true,
+      "owner_agent": "operations_qa",
+      "validation_method": "future PR runbook and fixture review"
+    }
+  ],
+  "promotion_readiness": {
+    "verdict": "not_evaluated",
+    "reason": "planning_only_poc",
+    "evaluated_at": null,
+    "gate_inputs_ready": false
+  },
+  "gate_requirements": [
+    "ClaimContractを実装PR前にfreezeする",
+    "Proof obligationとPlanned PRを1対1または明示的な多対1で追跡する",
+    "Human Decision未解決ならCASE-GDAR-002以降の実装へ進まない",
+    "PoC-5AではForge Gateを実評価しない"
+  ]
+}

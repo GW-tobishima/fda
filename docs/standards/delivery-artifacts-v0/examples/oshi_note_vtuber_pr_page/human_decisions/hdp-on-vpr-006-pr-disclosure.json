@@ -1,0 +1,57 @@
+{
+  "human_decision_id": "HDP-ON-VPR-006",
+  "title": "PR表示",
+  "status": "resolved",
+  "selected_option_id": "required_locked_disclosure_for_paid_promotion",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "PR表示する。案件性がある表示面ではPR表示を消せない前提にする。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-005",
+  "required_before": "PR-ON-VPR-005",
+  "requested_decision": "投稿カードとSNS投稿テンプレにおけるPR / 提供表記の範囲と削除可否を決める。",
+  "recommended_option": "案件性がある場合は削除不可のPR表示",
+  "options": [
+    {
+      "id": "required_locked_disclosure_for_paid_promotion",
+      "description": "案件性がある場合は削除不可のPR表示",
+      "pros": [
+        "ステルスマーケティング対応を標準化できる"
+      ],
+      "cons": [
+        "テンプレートの自由度は下がる"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "warning_only",
+      "description": "SNSテンプレで警告するが削除可能",
+      "pros": [
+        "VTuber側の編集自由度が高い"
+      ],
+      "cons": [
+        "削除時のコンプライアンスリスクが残る"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "all_referrals_have_pr",
+      "description": "全紹介投稿にPR表示",
+      "pros": [
+        "判定ロジックが単純になる"
+      ],
+      "cons": [
+        "無償紹介にも案件感が出る"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "投稿カード / SNSテンプレ実装に進まない。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-006 PR表示\" --question \"投稿カードとSNS投稿テンプレにおけるPR / 提供表記の範囲と削除可否を決める。\" --recommended-option \"案件性がある場合は削除不可のPR表示\" --option \"案件性がある場合は削除不可のPR表示\" --option \"SNSテンプレで警告するが削除可能\" --option \"全紹介投稿にPR表示\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "risk_register.md",
+    "planned_prs.json",
+    "forge_projection.json"
+  ]
+}

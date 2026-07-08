@@ -1,0 +1,804 @@
+{
+  "schema_version": "ato_cli_materialization_plan.v0",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "mode": "dry-run",
+  "transport": "ato_cli",
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_input_spec.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/epic_delivery_plan.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/case_graph.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/task_graph.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_prs.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-001-verified-vtuber-only.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-002-low-count-threshold.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-003-normal-memo-private.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-004-public-comment-opt-in.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-005-moderation-policy.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-006-pr-disclosure.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-007-material-permission.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+  ],
+  "write_policy": {
+    "execute_by_default": false,
+    "requires_human_confirmation": true,
+    "actual_cli_execution": false,
+    "ato_db_change": false,
+    "mcp_usage": false,
+    "forbidden_actions": [
+      "ATO CLI予定コマンドの実行",
+      "ATO MCP write",
+      "ATO DB直接変更",
+      "Forge Gate実評価",
+      "oshi-note実装コード変更",
+      "GitHub PR自動merge",
+      "YouTube / Twitch / Stripe / GA4 / Ads API呼び出し"
+    ]
+  },
+  "lanes": {
+    "program": {
+      "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "cli_task_key": "PROGRAM-ON-VPR-001",
+      "title": "oshi-note VTuber Referral / PR Page",
+      "purpose": "oshi-noteのVTuber紹介リンク / PRページPoCを、本人確認、推し色、匿名集計、公開コメント、PR表示、素材許諾、API Data方針まで追跡できるProgramとしてATOへ投影する。",
+      "current_status": "dry_run_preview",
+      "artifact_refs": [
+        "human_input_spec.md",
+        "requirements_definition.md",
+        "epic_delivery_plan.json"
+      ]
+    },
+    "epic": {
+      "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "cli_task_key": "EPIC-ON-VPR-6A",
+      "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "purpose": "High-risk Epic PlanningとしてHuman Decision、Case、Task、Planned PR、Proofを実装前に固定する。",
+      "current_status": "needs_human_decision",
+      "claim_ids": [
+        "CLM-ON-VPR-001",
+        "CLM-ON-VPR-002",
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-004",
+        "CLM-ON-VPR-005",
+        "CLM-ON-VPR-006",
+        "CLM-ON-VPR-007"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-001",
+        "PRF-ON-VPR-002",
+        "PRF-ON-VPR-003",
+        "PRF-ON-VPR-004",
+        "PRF-ON-VPR-005",
+        "PRF-ON-VPR-006",
+        "PRF-ON-VPR-007"
+      ],
+      "artifact_refs": [
+        "epic_delivery_plan.json",
+        "forge_projection.json",
+        "human_decision_packet.json"
+      ]
+    },
+    "cases": [
+      {
+        "case_id": "CASE-ON-VPR-001",
+        "cli_task_key": "CASE-ON-VPR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-001",
+        "purpose": "本人確認、素材許諾、Human Decision、creator/campaign申請の運用境界を決める。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-ON-VPR-001",
+          "CLM-ON-VPR-007"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-001"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "human_decisions/hdp-on-vpr-001-verified-vtuber-only.json",
+          "human_decisions/hdp-on-vpr-007-material-permission.json"
+        ]
+      },
+      {
+        "case_id": "CASE-ON-VPR-002",
+        "cli_task_key": "CASE-ON-VPR-002",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-002",
+        "purpose": "紹介URL、campaign slug、VTuber選択推し色、紹介URL経由初期推し登録の機能境界を決める。",
+        "current_status": "planned",
+        "claim_ids": [
+          "CLM-ON-VPR-002"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-002"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "planned_prs.json"
+        ]
+      },
+      {
+        "case_id": "CASE-ON-VPR-003",
+        "cli_task_key": "CASE-ON-VPR-003",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-003",
+        "purpose": "通常メモ非公開、公開用コメントopt-in、削除導線、moderation方針を決める。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-005"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-003",
+          "PRF-ON-VPR-004"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "human_decisions/hdp-on-vpr-003-normal-memo-private.json",
+          "human_decisions/hdp-on-vpr-004-public-comment-opt-in.json",
+          "human_decisions/hdp-on-vpr-005-moderation-policy.json"
+        ]
+      },
+      {
+        "case_id": "CASE-ON-VPR-004",
+        "cli_task_key": "CASE-ON-VPR-004",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-004",
+        "purpose": "匿名集計dashboard、少数母数非表示、creator成果確認の仕様を決める。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-004"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-005"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "human_decisions/hdp-on-vpr-002-low-count-threshold.json"
+        ]
+      },
+      {
+        "case_id": "CASE-ON-VPR-005",
+        "cli_task_key": "CASE-ON-VPR-005",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-005",
+        "purpose": "投稿カード、SNSテンプレ、PR表示、素材許諾、YouTube / Twitch API Data利用有無を決める。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-ON-VPR-005",
+          "CLM-ON-VPR-006",
+          "CLM-ON-VPR-007"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-004",
+          "PRF-ON-VPR-006"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "human_decisions/hdp-on-vpr-006-pr-disclosure.json",
+          "human_decisions/hdp-on-vpr-007-material-permission.json",
+          "human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+        ]
+      },
+      {
+        "case_id": "CASE-ON-VPR-006",
+        "cli_task_key": "CASE-ON-VPR-006",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "planned_pr_id": "PR-ON-VPR-006",
+        "purpose": "first log後のPremium CTA、低カーディナリティKPI、Stripe/analytics metadata境界を決める。",
+        "current_status": "planned",
+        "claim_ids": [
+          "CLM-ON-VPR-002",
+          "CLM-ON-VPR-003"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-002",
+          "PRF-ON-VPR-007"
+        ],
+        "artifact_refs": [
+          "case_graph.json",
+          "planned_prs.json"
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "TASK-ON-VPR-001",
+        "cli_task_key": "TASK-ON-VPR-001",
+        "case_id": "CASE-ON-VPR-001",
+        "planned_pr_id": "PR-ON-VPR-001",
+        "purpose": "必須Human Decisionsを解決する。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HDP-ON-VPR-001",
+          "HDP-ON-VPR-007"
+        ],
+        "open_issues": [
+          "本人確認済み限定と素材許諾が未決"
+        ],
+        "next_actions": [
+          "HDP-ON-VPR-001とHDP-ON-VPR-007をATO work blockとして作る"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-001",
+          "CLM-ON-VPR-007"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-001"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "human_decisions/hdp-on-vpr-001-verified-vtuber-only.json",
+          "human_decisions/hdp-on-vpr-007-material-permission.json"
+        ]
+      },
+      {
+        "task_id": "TASK-ON-VPR-002",
+        "cli_task_key": "TASK-ON-VPR-002",
+        "case_id": "CASE-ON-VPR-002",
+        "planned_pr_id": "PR-ON-VPR-002",
+        "purpose": "VTuber登録、紹介URL、推し色、初期推し登録の設計を固める。",
+        "current_status": "planned",
+        "decisions": [],
+        "open_issues": [],
+        "next_actions": [
+          "PR-ON-VPR-002で色反映と初期推し登録の受入テストを作る"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-002"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-002"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "planned_prs.json"
+        ]
+      },
+      {
+        "task_id": "TASK-ON-VPR-003",
+        "cli_task_key": "TASK-ON-VPR-003",
+        "case_id": "CASE-ON-VPR-003",
+        "planned_pr_id": "PR-ON-VPR-003",
+        "purpose": "通常メモ非公開と公開用コメントopt-in / moderationを設計する。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HDP-ON-VPR-003",
+          "HDP-ON-VPR-004",
+          "HDP-ON-VPR-005"
+        ],
+        "open_issues": [
+          "通常メモ非公開、公開コメントopt-in、moderation方式が未決"
+        ],
+        "next_actions": [
+          "3件のHDPを個別ATO work blockとして作る"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-005"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-003",
+          "PRF-ON-VPR-004"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "human_decisions/hdp-on-vpr-003-normal-memo-private.json",
+          "human_decisions/hdp-on-vpr-004-public-comment-opt-in.json",
+          "human_decisions/hdp-on-vpr-005-moderation-policy.json"
+        ]
+      },
+      {
+        "task_id": "TASK-ON-VPR-004",
+        "cli_task_key": "TASK-ON-VPR-004",
+        "case_id": "CASE-ON-VPR-004",
+        "planned_pr_id": "PR-ON-VPR-004",
+        "purpose": "匿名集計dashboardと少数母数非表示を設計する。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HDP-ON-VPR-002"
+        ],
+        "open_issues": [
+          "少数母数非表示閾値が未決"
+        ],
+        "next_actions": [
+          "HDP-ON-VPR-002をATO work blockとして作る"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-004"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-005"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "human_decisions/hdp-on-vpr-002-low-count-threshold.json"
+        ]
+      },
+      {
+        "task_id": "TASK-ON-VPR-005",
+        "cli_task_key": "TASK-ON-VPR-005",
+        "case_id": "CASE-ON-VPR-005",
+        "planned_pr_id": "PR-ON-VPR-005",
+        "purpose": "PRカード、SNSテンプレ、素材許諾、API Data利用方針を設計する。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HDP-ON-VPR-006",
+          "HDP-ON-VPR-007",
+          "HDP-ON-VPR-008"
+        ],
+        "open_issues": [
+          "PR表示、素材許諾、YouTube/Twitch API Data利用有無が未決"
+        ],
+        "next_actions": [
+          "3件のHDPを個別ATO work blockとして作る"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-005",
+          "CLM-ON-VPR-006",
+          "CLM-ON-VPR-007"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-004",
+          "PRF-ON-VPR-006"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "human_decisions/hdp-on-vpr-006-pr-disclosure.json",
+          "human_decisions/hdp-on-vpr-007-material-permission.json",
+          "human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+        ]
+      },
+      {
+        "task_id": "TASK-ON-VPR-006",
+        "cli_task_key": "TASK-ON-VPR-006",
+        "case_id": "CASE-ON-VPR-006",
+        "planned_pr_id": "PR-ON-VPR-006",
+        "purpose": "first log後Premium CTAと低カーディナリティKPIを設計する。",
+        "current_status": "planned",
+        "decisions": [],
+        "open_issues": [],
+        "next_actions": [
+          "PR-ON-VPR-006でanalytics payload reviewとStripe metadata reviewを行う"
+        ],
+        "claim_ids": [
+          "CLM-ON-VPR-002",
+          "CLM-ON-VPR-003"
+        ],
+        "proof_obligations": [
+          "PRF-ON-VPR-002",
+          "PRF-ON-VPR-007"
+        ],
+        "artifact_refs": [
+          "task_graph.json",
+          "planned_prs.json"
+        ]
+      }
+    ],
+    "human_decisions": [
+      {
+        "human_turn_id": "HTURN-ON-VPR-001",
+        "source_decision_id": "HDP-ON-VPR-001",
+        "target_task_key": "TASK-ON-VPR-001",
+        "reason_type": "spec_decision",
+        "requested_decision": "紹介ページ / 宣伝URLを本人確認済みVTuberまたは事務所アカウントだけに発行するか。",
+        "recommended_option": "本人確認済みVTuber / 事務所アカウントに限定する",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-001-verified-vtuber-only.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-002",
+        "source_decision_id": "HDP-ON-VPR-002",
+        "target_task_key": "TASK-ON-VPR-004",
+        "reason_type": "risk_approval",
+        "requested_decision": "VTuber dashboardやランキングで少数母数を非表示にする閾値を決める。",
+        "recommended_option": "unique users 10未満またはrecords 10未満は非表示",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-002-low-count-threshold.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-003",
+        "source_decision_id": "HDP-ON-VPR-003",
+        "target_task_key": "TASK-ON-VPR-003",
+        "reason_type": "risk_approval",
+        "requested_decision": "通常メモ本文をVTuber側、投稿カード、集計dashboardへ出さない方針を固定するか。",
+        "recommended_option": "通常メモは常に非公開",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-003-normal-memo-private.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-004",
+        "source_decision_id": "HDP-ON-VPR-004",
+        "target_task_key": "TASK-ON-VPR-003",
+        "reason_type": "spec_decision",
+        "requested_decision": "公開用コメントを通常メモと分け、どのopt-in方式で収集するか。",
+        "recommended_option": "通常メモとは別入力 + 明示チェック",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-004-public-comment-opt-in.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-005",
+        "source_decision_id": "HDP-ON-VPR-005",
+        "target_task_key": "TASK-ON-VPR-003",
+        "reason_type": "risk_approval",
+        "requested_decision": "公開用コメントをVTuber側や投稿カードに表示する前に必要なmoderation方式を決める。",
+        "recommended_option": "自動フィルタ + 人間レビュー",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-005-moderation-policy.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-006",
+        "source_decision_id": "HDP-ON-VPR-006",
+        "target_task_key": "TASK-ON-VPR-005",
+        "reason_type": "risk_approval",
+        "requested_decision": "投稿カードとSNS投稿テンプレにおけるPR / 提供表記の範囲と削除可否を決める。",
+        "recommended_option": "案件性がある場合は削除不可のPR表示",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-006-pr-disclosure.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-007",
+        "source_decision_id": "HDP-ON-VPR-007",
+        "target_task_key": "TASK-ON-VPR-005",
+        "reason_type": "risk_approval",
+        "requested_decision": "PRページや投稿カードで使う公式素材、ロゴ、サムネイルの許諾範囲を決める。",
+        "recommended_option": "VTuber提供または許諾済み素材のみ",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-007-material-permission.json"
+        ]
+      },
+      {
+        "human_turn_id": "HTURN-ON-VPR-008",
+        "source_decision_id": "HDP-ON-VPR-008",
+        "target_task_key": "TASK-ON-VPR-005",
+        "reason_type": "risk_approval",
+        "requested_decision": "動画名、サムネイル、ランキング、投稿カードでYouTube / Twitch API Dataを使うか。",
+        "recommended_option": "MVPではAPI Dataを使わない",
+        "artifact_refs": [
+          "human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+        ]
+      }
+    ],
+    "ai_repair": {
+      "items": [],
+      "empty_reason": "PoC-6A next PR refines planning artifacts only. No AI repair item is opened until validation fails or a human decision is answered.",
+      "payload_contract": [
+        "repair_id",
+        "source_task_id",
+        "reason",
+        "next_actions",
+        "artifact_refs"
+      ]
+    }
+  },
+  "commands": [
+    {
+      "command_id": "CMD-ON-VPR-001",
+      "lane": "program",
+      "purpose": "Program laneをATO taskとして開始する。",
+      "command": "ato work begin --task PROGRAM-ON-VPR-001 --title \"oshi-note VTuber Referral / PR Page\" --agent-id codex --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-program-001 --json",
+      "idempotency_key": "on-vpr-program-001",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "PROGRAM-ON-VPR-001",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "human_input_spec.md",
+        "epic_delivery_plan.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-002",
+      "lane": "epic",
+      "purpose": "Epic laneをATO taskとして開始する。",
+      "command": "ato work begin --task EPIC-ON-VPR-6A --title \"PoC-6A oshi-note VTuber PR page high-risk epic planning\" --agent-id codex --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-epic-6a --json",
+      "idempotency_key": "on-vpr-epic-6a",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "EPIC-ON-VPR-6A",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "epic_delivery_plan.json",
+        "forge_projection.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-003",
+      "lane": "task",
+      "purpose": "HDP対象のTASK-ON-VPR-001を開始する。",
+      "command": "ato work begin --task TASK-ON-VPR-001 --title \"Resolve verified creator and material permission decisions\" --agent-id codex --role human_liaison --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-task-001 --json",
+      "idempotency_key": "on-vpr-task-001",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "TASK-ON-VPR-001",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "task_graph.json",
+        "human_decisions/hdp-on-vpr-001-verified-vtuber-only.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-004",
+      "lane": "task",
+      "purpose": "HDP対象のTASK-ON-VPR-003を開始する。",
+      "command": "ato work begin --task TASK-ON-VPR-003 --title \"Resolve normal memo privacy and public comment decisions\" --agent-id codex --role human_liaison --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-task-003 --json",
+      "idempotency_key": "on-vpr-task-003",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "TASK-ON-VPR-003",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "task_graph.json",
+        "human_decisions/hdp-on-vpr-003-normal-memo-private.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-005",
+      "lane": "task",
+      "purpose": "HDP対象のTASK-ON-VPR-004を開始する。",
+      "command": "ato work begin --task TASK-ON-VPR-004 --title \"Resolve low-count aggregation threshold decision\" --agent-id codex --role human_liaison --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-task-004 --json",
+      "idempotency_key": "on-vpr-task-004",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "TASK-ON-VPR-004",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "task_graph.json",
+        "human_decisions/hdp-on-vpr-002-low-count-threshold.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-006",
+      "lane": "task",
+      "purpose": "HDP対象のTASK-ON-VPR-005を開始する。",
+      "command": "ato work begin --task TASK-ON-VPR-005 --title \"Resolve PR disclosure material permission and API Data decisions\" --agent-id codex --role human_liaison --capability-profile planning --workspace-policy read_only --idempotency-key on-vpr-task-005 --json",
+      "idempotency_key": "on-vpr-task-005",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "TASK-ON-VPR-005",
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "task_graph.json",
+        "human_decisions/hdp-on-vpr-006-pr-disclosure.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-007",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-001を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-001 --run-id \"<RUN_ID:TASK-ON-VPR-001>\" --reason spec_decision --title \"HDP-ON-VPR-001 本人確認済みVTuber限定\" --question \"紹介ページ / 宣伝URLを本人確認済みVTuberまたは事務所アカウントだけに発行するか。\" --recommended-option \"本人確認済みVTuber / 事務所アカウントに限定する\" --option \"本人確認済みVTuber / 事務所アカウントに限定する\" --option \"申請後審査中の限定公開を許す\" --json",
+      "idempotency_key": "on-vpr-hdp-001",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-003",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-001",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-001-verified-vtuber-only.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-008",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-002を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-004 --run-id \"<RUN_ID:TASK-ON-VPR-004>\" --reason risk_approval --title \"HDP-ON-VPR-002 少数母数非表示閾値\" --question \"VTuber dashboardやランキングで少数母数を非表示にする閾値を決める。\" --recommended-option \"unique users 10未満またはrecords 10未満は非表示\" --option \"unique users 10未満またはrecords 10未満は非表示\" --option \"unique users 5未満を非表示\" --option \"項目ごとに別閾値を設定する\" --json",
+      "idempotency_key": "on-vpr-hdp-002",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-005",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-002",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-002-low-count-threshold.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-009",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-003を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason risk_approval --title \"HDP-ON-VPR-003 通常メモ非公開\" --question \"通常メモ本文をVTuber側、投稿カード、集計dashboardへ出さない方針を固定するか。\" --recommended-option \"通常メモは常に非公開\" --option \"通常メモは常に非公開\" --option \"個別明示同意がある場合だけ一部公開\" --json",
+      "idempotency_key": "on-vpr-hdp-003",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-004",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-003",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-003-normal-memo-private.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-010",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-004を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason spec_decision --title \"HDP-ON-VPR-004 公開用コメントのopt-in\" --question \"公開用コメントを通常メモと分け、どのopt-in方式で収集するか。\" --recommended-option \"通常メモとは別入力 + 明示チェック\" --option \"通常メモとは別入力 + 明示チェック\" --option \"通常メモから公開用コメントへ転記確認\" --json",
+      "idempotency_key": "on-vpr-hdp-004",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-004",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-004",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-004-public-comment-opt-in.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-011",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-005を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason risk_approval --title \"HDP-ON-VPR-005 moderation要否\" --question \"公開用コメントをVTuber側や投稿カードに表示する前に必要なmoderation方式を決める。\" --recommended-option \"自動フィルタ + 人間レビュー\" --option \"自動フィルタ + 人間レビュー\" --option \"自動フィルタのみ\" --option \"MVPではコメント表示しない\" --json",
+      "idempotency_key": "on-vpr-hdp-005",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-004",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-005",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-005-moderation-policy.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-012",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-006を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-006 PR表示\" --question \"投稿カードとSNS投稿テンプレにおけるPR / 提供表記の範囲と削除可否を決める。\" --recommended-option \"案件性がある場合は削除不可のPR表示\" --option \"案件性がある場合は削除不可のPR表示\" --option \"SNSテンプレで警告するが削除可能\" --option \"全紹介投稿にPR表示\" --json",
+      "idempotency_key": "on-vpr-hdp-006",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-006",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-006",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-006-pr-disclosure.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-013",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-007を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-007 素材許諾\" --question \"PRページや投稿カードで使う公式素材、ロゴ、サムネイルの許諾範囲を決める。\" --recommended-option \"VTuber提供または許諾済み素材のみ\" --option \"VTuber提供または許諾済み素材のみ\" --option \"公式ガイドライン許可範囲の素材も許す\" --option \"MVPは素材なし\" --json",
+      "idempotency_key": "on-vpr-hdp-007",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-006",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-007",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-007-material-permission.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-014",
+      "lane": "human_decision",
+      "purpose": "HDP-ON-VPR-008を個別Human Decisionとして作る。",
+      "command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-008 YouTube/Twitch API Data利用有無\" --question \"動画名、サムネイル、ランキング、投稿カードでYouTube / Twitch API Dataを使うか。\" --recommended-option \"MVPではAPI Dataを使わない\" --option \"MVPではAPI Dataを使わない\" --option \"refresh / delete方針込みで使う\" --option \"VTuber提供素材だけ使う\" --json",
+      "idempotency_key": "on-vpr-hdp-008",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-006",
+      "expected_effect": {
+        "decision_id": "HDP-ON-VPR-008",
+        "status": "HUMAN_TURN"
+      },
+      "source_refs": [
+        "human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+      ]
+    },
+    {
+      "command_id": "CMD-ON-VPR-015",
+      "lane": "evidence",
+      "purpose": "materialization dry-run計画をevidenceとしてcheckpointする予定コマンド。",
+      "command": "ato work checkpoint --task EPIC-ON-VPR-6A --run-id \"<RUN_ID:EPIC-ON-VPR-6A>\" --kind progress --summary \"Prepared ATO CLI materialization dry-run plan with eight individual Human Decision work block commands. No ATO CLI command was executed.\" --evidence-surface file --evidence-id docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_materialization_plan.json --evidence-verdict pass --validation-status passed --freshness current --durability-class artifact --trust-level self_reported --json",
+      "idempotency_key": "on-vpr-evidence-materialization-plan",
+      "planned_only": true,
+      "requires_run_id_from": "CMD-ON-VPR-002",
+      "expected_effect": {
+        "evidence_id": "ato_cli_materialization_plan.json",
+        "validation_status": "passed"
+      },
+      "source_refs": [
+        "ato_cli_materialization_plan.json",
+        "ato_cli_commands.md"
+      ]
+    }
+  ],
+  "traceability": {
+    "planned_pr_ids": [
+      "PR-ON-VPR-001",
+      "PR-ON-VPR-002",
+      "PR-ON-VPR-003",
+      "PR-ON-VPR-004",
+      "PR-ON-VPR-005",
+      "PR-ON-VPR-006"
+    ],
+    "case_ids": [
+      "CASE-ON-VPR-001",
+      "CASE-ON-VPR-002",
+      "CASE-ON-VPR-003",
+      "CASE-ON-VPR-004",
+      "CASE-ON-VPR-005",
+      "CASE-ON-VPR-006"
+    ],
+    "task_ids": [
+      "TASK-ON-VPR-001",
+      "TASK-ON-VPR-002",
+      "TASK-ON-VPR-003",
+      "TASK-ON-VPR-004",
+      "TASK-ON-VPR-005",
+      "TASK-ON-VPR-006"
+    ],
+    "human_decision_ids": [
+      "HDP-ON-VPR-001",
+      "HDP-ON-VPR-002",
+      "HDP-ON-VPR-003",
+      "HDP-ON-VPR-004",
+      "HDP-ON-VPR-005",
+      "HDP-ON-VPR-006",
+      "HDP-ON-VPR-007",
+      "HDP-ON-VPR-008"
+    ],
+    "claim_ids": [
+      "CLM-ON-VPR-001",
+      "CLM-ON-VPR-002",
+      "CLM-ON-VPR-003",
+      "CLM-ON-VPR-004",
+      "CLM-ON-VPR-005",
+      "CLM-ON-VPR-006",
+      "CLM-ON-VPR-007"
+    ],
+    "proof_obligations": [
+      "PRF-ON-VPR-001",
+      "PRF-ON-VPR-002",
+      "PRF-ON-VPR-003",
+      "PRF-ON-VPR-004",
+      "PRF-ON-VPR-005",
+      "PRF-ON-VPR-006",
+      "PRF-ON-VPR-007"
+    ],
+    "artifact_refs": [
+      "human_decision_packet.json",
+      "human_decisions/*.json",
+      "ato_cli_materialization_plan.json",
+      "ato_cli_commands.md",
+      "task_graph.json",
+      "planned_prs.json"
+    ]
+  },
+  "validation": {
+    "expected_commands": [
+      "cargo run -- validate-artifacts --artifacts docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page --out docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/validation_report.json --json",
+      "git diff --check",
+      "cargo test"
+    ],
+    "expected_report": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/validation_report.json",
+    "verdict": "not_run"
+  }
+}

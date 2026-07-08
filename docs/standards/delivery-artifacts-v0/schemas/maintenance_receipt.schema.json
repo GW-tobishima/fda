@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/maintenance_receipt.schema.json",
+  "title": "AICX Daily Maintenance Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "maintenance_receipt_id",
+    "date",
+    "mode",
+    "status",
+    "action",
+    "actions",
+    "out_dir",
+    "run_state_path",
+    "allow_late",
+    "late_window_hours",
+    "started_at_unix_seconds",
+    "completed_at_unix_seconds",
+    "env_readiness",
+    "run_state_status",
+    "run_state_last_event_status",
+    "artifacts",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.maintenance_receipt.v0" },
+    "maintenance_receipt_id": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date" },
+    "mode": { "type": "string", "enum": ["dry-run", "live"] },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_due",
+        "dispatched",
+        "late_dispatched",
+        "late_window_expired",
+        "duplicate_dispatch_skipped",
+        "no_reply_found",
+        "reply_found_graded_and_sent",
+        "invalid_reply_found",
+        "already_graded",
+        "duplicate_reply_skipped",
+        "blocked_missing_env_or_sdk",
+        "dispatch_failed",
+        "poll_failed",
+        "thread_not_found",
+        "rate_limited"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "enum": ["noop", "dispatch", "thread_poll"]
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "status"],
+        "properties": {
+          "action": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "minLength": 1 },
+          "artifact_path": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "out_dir": { "type": "string", "minLength": 1 },
+    "run_state_path": { "type": "string", "minLength": 1 },
+    "allow_late": { "type": "boolean" },
+    "late_window_hours": { "type": "integer", "minimum": 0 },
+    "started_at_unix_seconds": { "type": "integer", "minimum": 0 },
+    "completed_at_unix_seconds": { "type": "integer", "minimum": 0 },
+    "env_readiness": {
+      "type": "object",
+      "required": ["bot_token_present", "channel_id_present", "slack_sdk_available", "required_env", "missing_env"],
+      "properties": {
+        "bot_token_present": { "type": "boolean" },
+        "channel_id_present": { "type": "boolean" },
+        "slack_sdk_available": { "type": "boolean" },
+        "required_env": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["SLACK_BOT_TOKEN", "SLACK_CHANNEL_ID"] },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "missing_env": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["SLACK_BOT_TOKEN", "SLACK_CHANNEL_ID"] }
+        }
+      },
+      "additionalProperties": false
+    },
+    "run_state_status": { "type": ["string", "null"] },
+    "run_state_last_event_status": { "type": ["string", "null"] },
+    "artifacts": {
+      "type": "object",
+      "required": ["run_state", "maintenance_receipt"],
+      "properties": {
+        "quiz_set": { "type": "string" },
+        "quiz_prompt_json": { "type": "string" },
+        "quiz_prompt_md": { "type": "string" },
+        "slack_outbound_message": { "type": "string" },
+        "slack_delivery_receipt": { "type": "string" },
+        "slack_reply_event": { "type": "string" },
+        "answer_submission": { "type": "string" },
+        "grading_report": { "type": "string" },
+        "study_recommendation": { "type": "string" },
+        "slack_grading_response": { "type": "string" },
+        "slack_grading_delivery_receipt": { "type": "string" },
+        "slack_reply_intake_receipt": { "type": "string" },
+        "slack_thread_poll_receipt": { "type": "string" },
+        "maintenance_receipt": { "type": "string", "minLength": 1 },
+        "run_state": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false
+}

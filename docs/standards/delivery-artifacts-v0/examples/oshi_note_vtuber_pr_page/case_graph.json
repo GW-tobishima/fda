@@ -1,0 +1,92 @@
+{
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "cases": [
+    {
+      "case_id": "CASE-ON-VPR-001",
+      "purpose": "本人確認、素材許諾、Human Decision、creator/campaign申請の運用境界を決める。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-ON-VPR-001",
+        "CLM-ON-VPR-007"
+      ],
+      "planned_pr": "PR-ON-VPR-001",
+      "risk": "critical",
+      "state": "human_turn"
+    },
+    {
+      "case_id": "CASE-ON-VPR-002",
+      "purpose": "紹介URL、campaign slug、VTuber選択推し色、紹介URL経由初期推し登録の機能境界を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-001"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-002"
+      ],
+      "planned_pr": "PR-ON-VPR-002",
+      "risk": "high",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-ON-VPR-003",
+      "purpose": "通常メモ非公開、公開用コメントopt-in、削除導線、moderation方針を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-005"
+      ],
+      "planned_pr": "PR-ON-VPR-003",
+      "risk": "critical",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-ON-VPR-004",
+      "purpose": "匿名集計dashboard、少数母数非表示、creator成果確認の仕様を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-003"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-004"
+      ],
+      "planned_pr": "PR-ON-VPR-004",
+      "risk": "critical",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-ON-VPR-005",
+      "purpose": "投稿カード、SNSテンプレ、PR表示、素材許諾、YouTube / Twitch API Data利用有無を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-005",
+        "CLM-ON-VPR-006",
+        "CLM-ON-VPR-007"
+      ],
+      "planned_pr": "PR-ON-VPR-005",
+      "risk": "critical",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-ON-VPR-006",
+      "purpose": "first log後のPremium CTA、低カーディナリティKPI、Stripe/analytics metadata境界を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-004"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-002",
+        "CLM-ON-VPR-003"
+      ],
+      "planned_pr": "PR-ON-VPR-006",
+      "risk": "high",
+      "state": "planned"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "human_decision_id": "HDP-ON-VPR-007",
+  "title": "素材許諾",
+  "status": "resolved",
+  "selected_option_id": "provided_or_permitted_only",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "VTuber提供または許諾済み素材のみ使用する。素材許諾記録がない素材をPRページ、カード、テンプレートに出さない。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-005",
+  "required_before": "PR-ON-VPR-005",
+  "requested_decision": "PRページや投稿カードで使う公式素材、ロゴ、サムネイルの許諾範囲を決める。",
+  "recommended_option": "VTuber提供または許諾済み素材のみ",
+  "options": [
+    {
+      "id": "provided_or_permitted_only",
+      "description": "VTuber提供または許諾済み素材のみ",
+      "pros": [
+        "著作権、商標、パブリシティリスクを抑えられる"
+      ],
+      "cons": [
+        "素材提供フローが必要になる"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "guideline_allowed_materials",
+      "description": "公式ガイドライン許可範囲の素材も許す",
+      "pros": [
+        "素材選択の幅が広がる"
+      ],
+      "cons": [
+        "ガイドライン差分の確認負荷が高い"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "no_materials_in_mvp",
+      "description": "MVPは素材なし",
+      "pros": [
+        "権利リスクを最小化できる"
+      ],
+      "cons": [
+        "PRページやカードの魅力が下がる"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "素材を使わない。許諾済みでない素材は表示しない。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-007 素材許諾\" --question \"PRページや投稿カードで使う公式素材、ロゴ、サムネイルの許諾範囲を決める。\" --recommended-option \"VTuber提供または許諾済み素材のみ\" --option \"VTuber提供または許諾済み素材のみ\" --option \"公式ガイドライン許可範囲の素材も許す\" --option \"MVPは素材なし\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "non_functional_requirements.md",
+    "risk_register.md",
+    "planned_prs.json"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/actual_pr_receipt.schema.json",
+  "title": "Actual PR Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "planned_pr_id", "target_repo", "actual_pr_url", "status", "collected_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.actual_pr_receipt.v1" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "actual_pr_url": { "type": "string", "format": "uri" },
+    "status": { "type": "string", "enum": ["draft", "open", "opened", "merged", "blocked", "rejected", "closed"] },
+    "checks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["pass", "fail", "passed", "failed", "skipped", "not_run", "not_applicable", "unknown"]
+      }
+    },
+    "evidence_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "deviation_from_plan": { "type": "array", "items": { "type": "string" } },
+    "collected_at": { "type": "string", "format": "date-time" }
+  }
+}

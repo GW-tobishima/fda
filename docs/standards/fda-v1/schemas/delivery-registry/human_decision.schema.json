@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/human_decision.schema.json",
+  "title": "Human Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "reason", "status", "question", "owner_role", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.human_decision.v1" },
+    "decision_id": { "type": "string", "minLength": 1 },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "spec_decision",
+        "risk_approval",
+        "merge_approval",
+        "exception_handle",
+        "knowledge_review",
+        "blocker_confirmation",
+        "scope_change",
+        "privacy_policy_change",
+        "terms_change",
+        "legal_judgment",
+        "security_boundary_change",
+        "security_high_or_critical",
+        "user_data_exposure",
+        "public_api_breaking_change",
+        "release_approval",
+        "precedent_conflict",
+        "database_destructive_migration",
+        "raw_user_log_exposure",
+        "third_party_data_export"
+      ]
+    },
+    "trigger": {
+      "type": "string",
+      "enum": [
+        "scope_change",
+        "privacy_policy_change",
+        "terms_change",
+        "legal_judgment",
+        "security_boundary_change",
+        "security_high_or_critical",
+        "user_data_exposure",
+        "public_api_breaking_change",
+        "risk_approval",
+        "merge_approval",
+        "release_approval",
+        "precedent_conflict",
+        "database_destructive_migration",
+        "raw_user_log_exposure",
+        "third_party_data_export"
+      ]
+    },
+    "status": { "type": "string", "enum": ["draft", "open", "waiting_human", "answered", "resolved", "applied", "superseded", "canceled"] },
+    "question": { "type": "string", "minLength": 1 },
+    "recommended_option": { "type": "string" },
+    "options": { "type": "array", "items": { "type": "string" } },
+    "why_now": { "type": "string" },
+    "impact_if_delayed": { "type": "string" },
+    "owner_role": { "type": "string", "minLength": 1 },
+    "evidence_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "related_knowledge_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

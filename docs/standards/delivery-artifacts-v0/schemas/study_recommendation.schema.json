@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/study_recommendation.schema.json",
+  "title": "AICX Fixture Study Recommendation",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "recommendation_id",
+    "quiz_set_id",
+    "grading_report_id",
+    "generated_for_date",
+    "overall_accuracy",
+    "recommended_pages",
+    "next_actions",
+    "pdf_ingest_required",
+    "slack_required"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.study_recommendation.v0" },
+    "recommendation_id": { "type": "string", "minLength": 1 },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "grading_report_id": { "type": "string", "minLength": 1 },
+    "generated_for_date": { "type": "string", "format": "date" },
+    "overall_accuracy": { "type": "number", "minimum": 0, "maximum": 1 },
+    "recommended_pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["topic_id", "label", "page_ranges", "reason"],
+        "properties": {
+          "topic_id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "page_ranges": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/page_range" }
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "next_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "pdf_ingest_required": { "type": "boolean", "const": false },
+    "slack_required": { "type": "boolean", "const": false }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

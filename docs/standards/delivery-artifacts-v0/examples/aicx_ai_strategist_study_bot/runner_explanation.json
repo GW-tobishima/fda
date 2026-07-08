@@ -1,0 +1,27 @@
+{
+  "runner_explanation": {
+    "current_phase": "resumable_runtime_catchup",
+    "previous_run_id": "run_01KVSN777TVSVMBBBD50YCTEZ0",
+    "diff_from_previous_run": "catch-up dispatchとSlack thread pollingを人間が分けて実行していた状態から、daily-maintainがrun_stateを見て未送信dispatch、未採点poll、採点済みnoopを単発で判断する形に統合した。",
+    "execution_actor": "codex-cli",
+    "input_summary": "AICX AI ストラテジスト学習BotのPoC-4。PC復帰後に `daily-maintain` を何度実行しても、未送信なら送信し、返信があれば採点し、完了済みなら何もしない状態にする。",
+    "changed_input_summary": "`daily-maintain --date <date> --out-root <root> --allow-late --late-window-hours 12` を追加した。run_stateがない/未送信ならdispatch、送信済み未採点ならthread poll、採点済みならalready_gradedとしてmaintenance_receiptを残す。",
+    "stop_condition": "`daily-maintain` がnot_due、dispatched/late_dispatched、no_reply_found、reply_found_graded_and_sent、already_graded、失敗statusのいずれかを `maintenance_receipt.json` に必ず残す。",
+    "next_action": "次PRでdaily-statusを検討し、現在状態、前回action、次に実行すべきcommandを人間がすぐ読める形にする。",
+    "automation_boundary": "PoC-4のこのsliceは単発catch-up commandだけを扱う。daily-status、長時間daemon、Socket Mode再接続管理、PDF/OCR、LLM問題生成は扱わない。",
+    "completion_evidence": [
+      "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/daily_operation_runbook.md",
+      "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_delivery_receipt.json",
+      "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/maintenance_receipt.json",
+      "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/artifact_inventory.json"
+    ],
+    "failure_evidence": [
+      "04:30前はnot_dueとしてSlackへ送らない。",
+      "late_window_hoursを超えた場合はlate_window_expiredとしてSlackへ送らない。",
+      "既にsteps.slack_sent=trueなら二重送信せずthread pollingへ進む。",
+      "既にsteps.graded=trueならalready_gradedとしてnoopにする。"
+    ],
+    "related_program_id": "PROGRAM-AICX-STUDY-BOT-001",
+    "related_epic_id": "EPIC-AICX-STUDY-BOT-POC-001"
+  }
+}

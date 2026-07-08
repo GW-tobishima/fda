@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/cross-repo/target_repo_profile.schema.json",
+  "title": "Target Repo Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "target_repo", "source_repo", "handoff_policy", "reference_artifacts"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.target_repo_profile.v1" },
+    "profile_id": { "type": "string", "minLength": 1 },
+    "target_repo": { "$ref": "#/$defs/repo_ref" },
+    "source_repo": { "$ref": "#/$defs/repo_ref" },
+    "handoff_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fda_may_modify_target_repo", "target_repo_pr_creation_by_this_packet", "implementation_must_return_evidence_packet"],
+      "properties": {
+        "fda_may_modify_target_repo": { "type": "boolean" },
+        "target_repo_pr_creation_by_this_packet": { "type": "boolean" },
+        "target_repo_expected_to_copy_or_reference_artifacts": { "type": "boolean" },
+        "implementation_must_return_evidence_packet": { "type": "boolean" }
+      }
+    },
+    "reference_artifacts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "scope_in": { "type": "array", "items": { "type": "string" } },
+    "scope_out": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "repo_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "local_path": { "type": "string" },
+        "artifact_root": { "type": "string" },
+        "role": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string" }
+      }
+    }
+  }
+}

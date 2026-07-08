@@ -1,0 +1,172 @@
+{
+  "schema_version": "forge_delivery.generic_receipt.v0",
+  "runtime_id": "GDAR",
+  "run_id": "GDAR-DAILY-2026-06-24",
+  "business_date": "2026-06-24",
+  "timezone": "Asia/Tokyo",
+  "receipt_examples": [
+    {
+      "receipt_id": "GDAR-RECEIPT-DISPATCH-2026-06-24",
+      "receipt_type": "dispatch",
+      "command": "generic-daily dispatch-if-due",
+      "mode": "dry-run",
+      "status": "dispatched",
+      "purpose": "定時dispatchをAICX固有domainから独立したcommand receiptとして表現する。",
+      "current_status": "dispatch completed",
+      "decisions": [],
+      "open_issues": [],
+      "next_actions": [
+        "event intake receiptを待つ"
+      ],
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json"
+      ],
+      "idempotency_key": "GDAR:2026-06-24:dispatch",
+      "started_at_unix_seconds": 1782257400,
+      "completed_at_unix_seconds": 1782257460,
+      "errors": []
+    },
+    {
+      "receipt_id": "GDAR-RECEIPT-EVENT-2026-06-24",
+      "receipt_type": "event_intake",
+      "command": "generic-daily intake-event",
+      "mode": "dry-run",
+      "status": "event_received",
+      "purpose": "外部event intakeをadapter非依存のreceiptとして表現する。",
+      "current_status": "event accepted",
+      "decisions": [],
+      "open_issues": [],
+      "next_actions": [
+        "action commandのidempotency keyを確認する"
+      ],
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json"
+      ],
+      "idempotency_key": "GDAR:2026-06-24:event-intake",
+      "started_at_unix_seconds": 1782259140,
+      "completed_at_unix_seconds": 1782259200,
+      "errors": []
+    },
+    {
+      "receipt_id": "GDAR-RECEIPT-ACTION-2026-06-24",
+      "receipt_type": "action",
+      "command": "generic-daily action",
+      "mode": "dry-run",
+      "status": "action_completed",
+      "purpose": "eventに対するdomain actionの完了をgeneric receiptとして残す。",
+      "current_status": "action completed",
+      "decisions": [],
+      "open_issues": [],
+      "next_actions": [
+        "maintenance commandでrun_stateを再確認する"
+      ],
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json"
+      ],
+      "idempotency_key": "GDAR:2026-06-24:action",
+      "started_at_unix_seconds": 1782259440,
+      "completed_at_unix_seconds": 1782259500,
+      "errors": []
+    },
+    {
+      "receipt_id": "GDAR-RECEIPT-MAINTAIN-2026-06-24",
+      "receipt_type": "maintenance",
+      "command": "generic-daily maintain",
+      "mode": "dry-run",
+      "status": "maintenance_completed",
+      "purpose": "catch-upと再実行安全性をgeneric maintenance receiptとして残す。",
+      "current_status": "no repair required",
+      "decisions": [],
+      "open_issues": [],
+      "next_actions": [
+        "status commandで人間向けprojectionを出す"
+      ],
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json"
+      ],
+      "idempotency_key": "GDAR:2026-06-24:maintain",
+      "started_at_unix_seconds": 1782259740,
+      "completed_at_unix_seconds": 1782259800,
+      "errors": []
+    },
+    {
+      "receipt_id": "GDAR-RECEIPT-STATUS-2026-06-24",
+      "receipt_type": "status",
+      "command": "generic-daily status",
+      "mode": "dry-run",
+      "status": "status_reported",
+      "purpose": "人間が現在状態、未決判断、次action、artifact refsを確認できるstatus receiptを残す。",
+      "current_status": "maintenance_completed with pending human decisions",
+      "decisions": [
+        "HD-GDAR-001",
+        "HD-GDAR-002",
+        "HD-GDAR-003"
+      ],
+      "open_issues": [
+        "command boundary以降の実装はHuman Decision回答後に進める"
+      ],
+      "next_actions": [
+        "PR-GDAR-002へ進む前にHD-GDAR-001を解決する"
+      ],
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "claim_ids": [
+        "CLM-GDAR-001",
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json"
+      ],
+      "idempotency_key": "GDAR:2026-06-24:status",
+      "started_at_unix_seconds": 1782259820,
+      "completed_at_unix_seconds": 1782259860,
+      "errors": []
+    }
+  ]
+}

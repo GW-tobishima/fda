@@ -1,0 +1,51 @@
+gates:
+  pre_work_profile_gate:
+    required: true
+    description: FDA対象repoで作業する前に .fda profile が存在することを確認する。
+    required_files:
+      - .fda/repo.yaml
+      - .fda/delivery_policy.yaml
+      - .fda/skills.lock
+      - .fda/agent_roles.yaml
+      - .fda/gates.yaml
+      - .fda/artifact_map.yaml
+      - .fda/notification.yaml
+    if_missing: create_before_work
+  human_decision_gate:
+    required: true
+    blocks:
+      - unresolved_scope_change
+      - unresolved_security_high_or_critical
+      - unresolved_privacy_or_legal
+      - unresolved_merge_approval
+      - unresolved_release_approval
+  design_gate:
+    required_before:
+      - implementation
+    required_artifacts:
+      - requirements_definition.md
+      - human_decision_packet.md
+      - basic_design.md
+      - detailed_design.md
+      - planned_prs.json
+  review_agent_gate:
+    required_before:
+      - pr_ready
+      - merge
+    required_reviewers:
+      - pr_reviewer
+      - functional_qa
+      - security_qa
+    conditional_reviewers:
+      - forge_reviewer
+      - design_qa
+    check_command: python3 scripts/check_review_agent_gate.py --pr-number <PR_NUMBER>
+  merge_gate:
+    auto_merge_allowed: false
+    requires_human_approval: true
+    fail_closed_on:
+      - missing_review_agent_gate
+      - unresolved_human_decision
+      - missing_current_test_evidence
+      - missing_forge_evidence
+      - security_high_or_critical

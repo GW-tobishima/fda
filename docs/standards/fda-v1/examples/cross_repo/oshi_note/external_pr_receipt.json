@@ -1,0 +1,31 @@
+{
+  "schema_version": "fda.external_pr_receipt.v1",
+  "receipt_id": "EPR-ON-VPR-001",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "actual_pr_url": "https://github.com/example/oshi-note/pull/1",
+  "status": "opened",
+  "checks": {
+    "tests": "passed",
+    "lint": "passed",
+    "security": "passed",
+    "legal_policy_self_review": "passed"
+  },
+  "evidence": [
+    {
+      "surface": "pull_request",
+      "id": "https://github.com/example/oshi-note/pull/1",
+      "verdict": "pass",
+      "summary": "対象repoでpolicy docs PRが開かれ、planned PRのscope内に収まっている。"
+    },
+    {
+      "surface": "validation",
+      "id": "oshi-note-pr-1-ci",
+      "verdict": "pass",
+      "summary": "tests, lint, security self-reviewがpass。"
+    }
+  ],
+  "deviation_from_plan": [],
+  "rollback_plan": "docs/specとrunbookのみの変更ならPR revertで戻せる。terms/privacy文言を変更した場合は差し戻しPRで戻す。",
+  "notes": "このreceiptはv1 contract例であり、実在PRではない。"
+}

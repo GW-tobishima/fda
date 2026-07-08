@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/output-hub/output_hub.schema.json",
+  "title": "Output Hub v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "programs", "epics", "artifacts", "human_decisions", "external_pr_receipts", "ai_repair_lane"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.output_hub.v1" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "programs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program_summary" }
+    },
+    "epics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/epic_summary" }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/artifact_summary" }
+    },
+    "human_decisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/human_decision_summary" }
+    },
+    "external_pr_receipts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/external_pr_receipt_summary" }
+    },
+    "ai_repair_lane": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ai_repair_item" }
+    }
+  },
+  "$defs": {
+    "program_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["program_id", "title", "status", "next_action"],
+      "properties": {
+        "program_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["draft", "planning", "running", "human_turn", "completed", "canceled"] },
+        "summary": { "type": "string" },
+        "next_action": { "type": "string", "minLength": 1 }
+      }
+    },
+    "epic_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["epic_id", "program_id", "title", "status", "next_action"],
+      "properties": {
+        "epic_id": { "type": "string", "minLength": 1 },
+        "program_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["draft", "ready", "running", "ai_repair", "human_turn", "completed", "done", "superseded", "canceled"] },
+        "summary": { "type": "string" },
+        "next_action": { "type": "string", "minLength": 1 },
+        "decision_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "artifact_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "artifact_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "title", "producer_adapter", "latest_version", "path_or_url", "evidence_links", "created_at", "updated_at"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "producer_adapter": { "type": "string", "minLength": 1 },
+        "producer_agent": { "type": "string", "minLength": 1 },
+        "related_program_id": { "type": "string" },
+        "related_epic_id": { "type": "string" },
+        "related_case_id": { "type": "string" },
+        "related_task_id": { "type": "string" },
+        "related_planned_pr_id": { "type": "string" },
+        "latest_version": { "type": "string", "minLength": 1 },
+        "preview_summary": { "type": "string" },
+        "path_or_url": { "type": "string", "minLength": 1 },
+        "open_in_editor_link": { "type": "string" },
+        "open_in_browser_link": { "type": "string" },
+        "diff_link": { "type": "string" },
+        "evidence_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "evidence_links": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "human_decision_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "reason", "status", "question", "owner_role"],
+      "properties": {
+        "decision_id": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "minLength": 1 },
+        "recommended_option": { "type": "string" },
+        "owner_role": { "type": "string", "minLength": 1 }
+      }
+    },
+    "external_pr_receipt_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "planned_pr_id", "actual_pr_url", "status"],
+      "properties": {
+        "receipt_id": { "type": "string", "minLength": 1 },
+        "planned_pr_id": { "type": "string", "minLength": 1 },
+        "actual_pr_url": { "type": "string", "format": "uri" },
+        "status": { "type": "string", "minLength": 1 },
+        "checks": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "ai_repair_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repair_id", "reason", "status", "next_action"],
+      "properties": {
+        "repair_id": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "next_action": { "type": "string", "minLength": 1 },
+        "artifact_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

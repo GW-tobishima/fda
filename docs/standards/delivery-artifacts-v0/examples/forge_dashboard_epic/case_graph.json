@@ -1,0 +1,31 @@
+{
+  "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "cases": [
+    {
+      "case_id": "CASE-FD-001",
+      "purpose": "標準成果物パック v0 の正本と schema を作る。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-001"
+      ],
+      "planned_pr": "PR-FD-001",
+      "risk": "medium",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FD-002",
+      "purpose": "Mission Control の UI/UX 設計方針を文書化する。",
+      "depends_on": [
+        "CASE-FD-001"
+      ],
+      "claim_ids": [
+        "CLM-002",
+        "CLM-003"
+      ],
+      "planned_pr": "PR-FD-002",
+      "risk": "medium",
+      "state": "planned"
+    }
+  ]
+}

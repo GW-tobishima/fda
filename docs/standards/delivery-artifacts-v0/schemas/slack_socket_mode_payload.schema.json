@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/slack_socket_mode_payload.schema.json",
+  "title": "AICX Slack Socket Mode Payload Fixture",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "envelope_id",
+    "type",
+    "accepts_response_payload",
+    "payload",
+    "source"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.slack_socket_mode_payload_fixture.v0" },
+    "envelope_id": { "type": "string", "minLength": 1 },
+    "type": { "type": "string", "const": "events_api" },
+    "accepts_response_payload": { "type": "boolean" },
+    "payload": {
+      "type": "object",
+      "required": ["event_id", "team_id", "event"],
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "team_id": { "type": "string", "minLength": 1 },
+        "event": {
+          "type": "object",
+          "required": ["type", "channel", "user", "text", "ts", "thread_ts"],
+          "properties": {
+            "type": { "type": "string", "const": "message" },
+            "channel": { "type": "string", "minLength": 1 },
+            "user": { "type": "string", "minLength": 1 },
+            "text": { "type": "string", "minLength": 1 },
+            "ts": { "type": "string", "minLength": 1 },
+            "thread_ts": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "source": { "type": "string", "const": "manual_socket_mode_fixture" }
+  },
+  "additionalProperties": false
+}

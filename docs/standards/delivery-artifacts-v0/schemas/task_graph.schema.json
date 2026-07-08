@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/task_graph.schema.json",
+  "title": "ATO Task Graph",
+  "type": "object",
+  "required": ["program_id", "epic_id", "tasks"],
+  "properties": {
+    "program_id": { "type": "string" },
+    "epic_id": { "type": "string" },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["task_id", "title", "parent_type", "parent_id", "status", "forge", "execution", "human"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "title": { "type": "string" },
+          "parent_type": { "type": "string", "enum": ["program", "epic", "case"] },
+          "parent_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["planned", "ready_to_work", "in_progress", "ai_repair", "human_turn", "done", "blocked"] },
+          "forge": {
+            "type": "object",
+            "required": ["program_id", "epic_id", "case_id", "claim_ids", "promotion_state", "proof_state"],
+            "properties": {
+              "program_id": { "type": "string", "minLength": 1 },
+              "epic_id": { "type": "string", "minLength": 1 },
+              "case_id": { "type": "string", "minLength": 1 },
+              "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+              "promotion_state": { "type": "string", "enum": ["draft", "repair", "promote", "block"] },
+              "proof_state": { "type": "string", "enum": ["missing", "partial", "complete"] }
+            },
+            "additionalProperties": false
+          },
+          "execution": {
+            "type": "object",
+            "required": ["owner_agent", "pr_number", "run_id"],
+            "properties": {
+              "owner_agent": { "type": "string" },
+              "branch": { "type": ["string", "null"] },
+              "pr_number": { "type": ["integer", "null"] },
+              "run_id": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          },
+          "repair": {
+            "type": "object",
+            "required": ["reason", "detail"],
+            "properties": {
+              "reason": {
+                "type": "string",
+                "enum": ["missing_proof", "test_not_run", "stale_evidence", "trace_gap", "review_packet_missing", "schema_repair", "other"]
+              },
+              "detail": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          },
+          "human": {
+            "type": "object",
+            "required": ["decision_required", "decision_packet_id"],
+            "properties": {
+              "decision_required": { "type": "boolean" },
+              "decision_packet_id": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": { "const": "ai_repair" }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "required": ["repair"],
+              "properties": {
+                "forge": {
+                  "properties": {
+                    "promotion_state": { "const": "repair" },
+                    "proof_state": { "enum": ["missing", "partial"] }
+                  },
+                  "required": ["promotion_state", "proof_state"]
+                },
+                "human": {
+                  "properties": {
+                    "decision_required": { "const": false },
+                    "decision_packet_id": { "type": "null" }
+                  },
+                  "required": ["decision_required", "decision_packet_id"]
+                }
+              },
+              "required": ["forge", "human"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": { "const": "done" }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "forge": {
+                  "properties": {
+                    "promotion_state": { "const": "promote" },
+                    "proof_state": { "const": "complete" }
+                  },
+                  "required": ["promotion_state", "proof_state"]
+                },
+                "execution": {
+                  "properties": {
+                    "run_id": { "type": "string", "minLength": 1 }
+                  },
+                  "required": ["run_id"]
+                },
+                "human": {
+                  "properties": {
+                    "decision_required": { "const": false },
+                    "decision_packet_id": { "type": "null" }
+                  },
+                  "required": ["decision_required", "decision_packet_id"]
+                }
+              },
+              "required": ["forge", "execution", "human"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": { "const": "blocked" }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "forge": {
+                  "properties": {
+                    "promotion_state": { "const": "block" }
+                  },
+                  "required": ["promotion_state"]
+                }
+              },
+              "required": ["forge"],
+              "anyOf": [
+                {
+                  "not": {
+                    "required": ["repair"]
+                  },
+                  "properties": {
+                    "human": {
+                      "properties": {
+                        "decision_required": { "const": true },
+                        "decision_packet_id": { "type": "string", "minLength": 1 }
+                      },
+                      "required": ["decision_required", "decision_packet_id"]
+                    }
+                  },
+                  "required": ["human"]
+                },
+                {
+                  "properties": {
+                    "forge": {
+                      "properties": {
+                        "proof_state": { "enum": ["missing", "partial"] }
+                      },
+                      "required": ["proof_state"]
+                    },
+                    "human": {
+                      "properties": {
+                        "decision_required": { "const": false },
+                        "decision_packet_id": { "type": "null" }
+                      },
+                      "required": ["decision_required", "decision_packet_id"]
+                    },
+                    "repair": {
+                      "properties": {
+                        "detail": { "type": "string", "minLength": 1 }
+                      },
+                      "required": ["reason", "detail"]
+                    }
+                  },
+                  "required": ["forge", "human", "repair"]
+                }
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "human": {
+                  "properties": {
+                    "decision_required": { "const": true }
+                  },
+                  "required": ["decision_required"]
+                }
+              },
+              "required": ["human"]
+            },
+            "then": {
+              "properties": {
+                "human": {
+                  "properties": {
+                    "decision_packet_id": { "type": "string", "minLength": 1 }
+                  },
+                  "required": ["decision_packet_id"]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": { "const": "human_turn" }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "human": {
+                  "properties": {
+                    "decision_required": { "const": true },
+                    "decision_packet_id": { "type": "string", "minLength": 1 }
+                  },
+                  "required": ["decision_required", "decision_packet_id"]
+                }
+              },
+              "required": ["human"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": { "const": "ready_to_work" }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "human": {
+                  "properties": {
+                    "decision_required": { "const": false },
+                    "decision_packet_id": { "type": "null" }
+                  },
+                  "required": ["decision_required", "decision_packet_id"]
+                }
+              },
+              "required": ["human"]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": ["planned", "ready_to_work", "in_progress", "human_turn", "done"]
+                }
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "not": {
+                "required": ["repair"]
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

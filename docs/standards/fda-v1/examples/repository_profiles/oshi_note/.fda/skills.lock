@@ -1,0 +1,9 @@
+skills:
+  requirement_to_epic_plan: v0.3.0
+  epic_to_task_graph: v0.1.0
+  epic_to_planned_prs: v0.2.0
+  forge_projection: v0.1.0
+  external_implementation_handoff: v0.1.0
+  external_pr_receipt_collect: v0.1.0
+  proof_gap_detection: v0.1.0
+  human_decision_triage: v0.2.0

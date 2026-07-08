@@ -1,0 +1,78 @@
+{
+  "schema_version": "forge_delivery.generic_run_state.v0",
+  "runtime_id": "GDAR",
+  "run_id": "GDAR-DAILY-2026-06-24",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "business_date": "2026-06-24",
+  "timezone": "Asia/Tokyo",
+  "schedule": {
+    "dispatch_time": "04:30",
+    "dispatch_at": "2026-06-24T04:30:00+09:00",
+    "catch_up_policy": {
+      "enabled": true,
+      "late_window_hours": 12
+    }
+  },
+  "status": "maintenance_completed",
+  "command_statuses": {
+    "dispatch": {
+      "state": "completed",
+      "last_receipt_id": "GDAR-RECEIPT-DISPATCH-2026-06-24",
+      "updated_at_unix_seconds": 1782257400
+    },
+    "event_intake": {
+      "state": "completed",
+      "last_receipt_id": "GDAR-RECEIPT-EVENT-2026-06-24",
+      "updated_at_unix_seconds": 1782259200
+    },
+    "action": {
+      "state": "completed",
+      "last_receipt_id": "GDAR-RECEIPT-ACTION-2026-06-24",
+      "updated_at_unix_seconds": 1782259500
+    },
+    "maintain": {
+      "state": "completed",
+      "last_receipt_id": "GDAR-RECEIPT-MAINTAIN-2026-06-24",
+      "updated_at_unix_seconds": 1782259800
+    },
+    "status": {
+      "state": "completed",
+      "last_receipt_id": "GDAR-RECEIPT-STATUS-2026-06-24",
+      "updated_at_unix_seconds": 1782259860
+    }
+  },
+  "artifacts": {
+    "run_state": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+    "artifact_inventory": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+    "runner_explanation": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json",
+    "receipts": [
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json"
+    ]
+  },
+  "idempotency": {
+    "run_key": "GDAR:2026-06-24",
+    "dispatch_key": "GDAR:2026-06-24:dispatch",
+    "event_intake_key": "GDAR:2026-06-24:event-intake",
+    "action_key": "GDAR:2026-06-24:action",
+    "processed_event_ids": [
+      "external-event-2026-06-24-001"
+    ]
+  },
+  "human_decisions": {
+    "pending_decision_ids": [
+      "HD-GDAR-001",
+      "HD-GDAR-002",
+      "HD-GDAR-003"
+    ],
+    "resolved_decision_ids": []
+  },
+  "failure_classification": null,
+  "last_event": {
+    "event_type": "maintenance_completed",
+    "status": "maintenance_completed",
+    "at_unix_seconds": 1782259860
+  },
+  "created_at_unix_seconds": 1782257400,
+  "updated_at_unix_seconds": 1782259860
+}

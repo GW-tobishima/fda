@@ -1,0 +1,98 @@
+{
+  "decision_packet_id": "HDPACKET-FDA-ARCH-FU-001",
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "case_id": null,
+  "status": "resolved",
+  "required_before": "EPIC-FDA-ARCH-FU-001 artifact creation",
+  "decision_needed": "GitHub Issue #68 を FDA artifact 形式の正式 Epic として管理するか。",
+  "trigger": "Human requested formal FDA artifact creation so PR granularity is fixed by the artifact.",
+  "context": {
+    "current_state": "Issue #68 exists as a GitHub EPIC, but it was not yet represented as FDA delivery artifacts.",
+    "relevant_requirement": "Create formal FDA artifacts and use them to determine PR granularity.",
+    "relevant_evidence": [
+      "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68",
+      "docs/standards/fda-v1/source_architecture.md",
+      "docs/standards/fda-v1/architecture.md"
+    ]
+  },
+  "options": [
+    {
+      "id": "issue_only",
+      "description": "Keep #68 only as a GitHub issue EPIC.",
+      "pros": [
+        "No additional artifact maintenance"
+      ],
+      "cons": [
+        "PR granularity is less machine-readable",
+        "Case / Claim / Proof mapping is not available to FDA tooling"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "fda_artifact_epic",
+      "description": "Create FDA artifact set for #68 and make planned_prs.json the PR granularity source.",
+      "pros": [
+        "PR sequence, scope, proof, and acceptance criteria become explicit",
+        "ATO/FDA/Forge traces can refer to stable artifact IDs"
+      ],
+      "cons": [
+        "Artifacts must be kept in sync with implementation PRs"
+      ],
+      "recommended": true
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "HD-FDA-ARCH-FU-001",
+      "type": "spec_decision",
+      "summary": "Formalize Issue #68 as FDA delivery artifacts.",
+      "required_before": "EPIC-FDA-ARCH-FU-001 artifact creation",
+      "options": [
+        {
+          "id": "issue_only",
+          "description": "Keep #68 only as a GitHub issue EPIC."
+        },
+        {
+          "id": "fda_artifact_epic",
+          "description": "Create FDA artifact set and use planned_prs.json as PR granularity source."
+        }
+      ],
+      "recommended_option_id": "fda_artifact_epic"
+    }
+  ],
+  "impact": {
+    "scope": "Adds planning artifacts without changing runtime code.",
+    "security": "No secret or live execution surface is added.",
+    "schedule": "Adds a small planning step before implementation PRs.",
+    "ux": "Improves reviewer and maintainer visibility into PR sequence.",
+    "operations": "Creates stable artifact paths for ATO/FDA/Forge evidence."
+  },
+  "default_if_no_decision": "Do not create FDA artifacts and keep #68 as a GitHub issue only.",
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-FDA-ARCH-FU-005"
+    ],
+    "proof_obligations": [
+      "PRF-FDA-ARCH-FU-007"
+    ],
+    "human_decision_points": [
+      "HD-FDA-ARCH-FU-001"
+    ],
+    "ato_task_graph": [
+      "TASK-FDA-ARCH-FU-001"
+    ],
+    "planned_prs": [
+      "PR-FDA-ARCH-FU-007"
+    ],
+    "gate_requirements": [
+      "FDA artifact validation report"
+    ]
+  },
+  "recorded_decision": {
+    "decision": "HD-FDA-ARCH-FU-001=fda_artifact_epic",
+    "decided_by": "human",
+    "decided_at": "2026-06-28T07:00:00+09:00",
+    "rationale": "Human requested formal FDA artifact creation so PR granularity can be determined from artifacts."
+  }
+}

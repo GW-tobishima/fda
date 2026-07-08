@@ -1,0 +1,99 @@
+{
+  "schema_version": "fda.output_hub.v1",
+  "generated_at": "2026-06-25T10:55:00+09:00",
+  "programs": [
+    {
+      "program_id": "program-fda-v1-foundation",
+      "title": "fda v1 foundation",
+      "status": "running",
+      "summary": "PR-AからPR-Fでv1基盤のdocs、schemas、skills、Output Hub、cross-repo handoffを整備する。",
+      "next_action": "PR-F cross-repo handoffのreceipt例を回収する。"
+    }
+  ],
+  "epics": [
+    {
+      "epic_id": "epic-fda-v1-foundation",
+      "program_id": "program-fda-v1-foundation",
+      "title": "fda v1 foundation contracts",
+      "status": "running",
+      "summary": "architecture、repository profile、skills、delivery registry、Output Hub、cross-repo handoff の v1 contract を揃える。",
+      "next_action": "review follow-up で schema と skill registry の trace gap を閉じる。",
+      "decision_ids": [],
+      "artifact_ids": [
+        "artifact-fda-v1-architecture",
+        "artifact-delivery-registry-schema"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "artifact-fda-v1-architecture",
+      "artifact_type": "architecture",
+      "title": "fda v1 architecture",
+      "producer_adapter": "codex",
+      "producer_agent": "fda-orchestrator",
+      "related_program_id": "program-fda-v1-foundation",
+      "related_epic_id": "epic-fda-v1-foundation",
+      "latest_version": "v1",
+      "preview_summary": "SoT境界、ATO CLI first、Human DecisionとAI Repair分離、v1 DoD。",
+      "path_or_url": "docs/standards/fda-v1/architecture.md",
+      "open_in_editor_link": "docs/standards/fda-v1/architecture.md",
+      "open_in_browser_link": "docs/standards/fda-v1/architecture.md",
+      "diff_link": "",
+      "evidence_ids": [],
+      "evidence_links": [],
+      "created_at": "2026-06-25T10:55:00+09:00",
+      "updated_at": "2026-06-25T10:55:00+09:00"
+    },
+    {
+      "artifact_id": "artifact-delivery-registry-schema",
+      "artifact_type": "schema_directory",
+      "title": "Delivery Registry schemas",
+      "producer_adapter": "codex",
+      "producer_agent": "fda-orchestrator",
+      "related_program_id": "program-fda-v1-foundation",
+      "related_epic_id": "epic-fda-v1-foundation",
+      "latest_version": "v1",
+      "preview_summary": "Program/Epic/Case/Planned PR/Actual PR Receipt/Human Decision/Artifact/Evidence schema。",
+      "path_or_url": "docs/standards/fda-v1/schemas/delivery-registry/",
+      "open_in_editor_link": "docs/standards/fda-v1/schemas/delivery-registry/",
+      "open_in_browser_link": "docs/standards/fda-v1/schemas/delivery-registry/",
+      "diff_link": "",
+      "evidence_ids": [],
+      "evidence_links": [],
+      "created_at": "2026-06-25T10:55:00+09:00",
+      "updated_at": "2026-06-25T10:55:00+09:00"
+    }
+  ],
+  "human_decisions": [
+    {
+      "decision_id": "decision-none-open",
+      "reason": "blocker_confirmation",
+      "status": "canceled",
+      "question": "このexampleでは未解決の人間判断はない。",
+      "recommended_option": "AI repairまたはPR作業を続行する。",
+      "owner_role": "orchestrator"
+    }
+  ],
+  "external_pr_receipts": [
+    {
+      "receipt_id": "receipt-pr-a",
+      "planned_pr_id": "PRA-FDA-V1-ARCH",
+      "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/31",
+      "status": "merged",
+      "checks": {
+        "rust": "passed",
+        "gitguardian": "passed"
+      }
+    }
+  ],
+  "ai_repair_lane": [
+    {
+      "repair_id": "repair-none-open",
+      "reason": "no_open_ai_repair_in_example",
+      "status": "closed",
+      "next_action": "新しいmissing proofまたはtrace gapが出たら追加する。",
+      "artifact_ids": []
+    }
+  ]
+}

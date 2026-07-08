@@ -1,0 +1,44 @@
+{
+  "schema_version": "fda.mcp_tool_call_receipt.v0",
+  "receipt_id": "MCPR-FDA-V1-IMPLEMENTER-001",
+  "plan_id": "MCP-FDA-V1-PLAN-001",
+  "invocation_id": "INV-FDA-V1-IMPLEMENTER-001",
+  "role": "implementer",
+  "provider": "codex",
+  "mcp_server": "codex mcp-server",
+  "tool_name": "codex",
+  "thread_id": "codex-thread-placeholder",
+  "cwd": "/workspace/target-repo",
+  "status": "succeeded",
+  "started_at": "2026-06-27T10:00:00Z",
+  "completed_at": "2026-06-27T10:01:00Z",
+  "input_artifacts": [
+    "planned_pr_execution_packet.json",
+    "implementation_handoff.md"
+  ],
+  "output_artifacts": [
+    "coding_agent_thread_state.json"
+  ],
+  "tool_result_digest": {
+    "raw_result_stored": false,
+    "summary": "tools/listとprompt境界を確認したdry-run receipt例。",
+    "exit_code": 0
+  },
+  "semantic_result": {
+    "semantic_verdict": "pass",
+    "summary": "Implementer invocationはHuman Decision clearかつwrite policyで準備できている。",
+    "scope_drift": [],
+    "tests": [
+      {
+        "command": "tools/list",
+        "verdict": "pass",
+        "evidence": "expected tools codex and codex-reply are present"
+      }
+    ],
+    "gate_effect": "advance"
+  },
+  "evidence_links": [
+    "mcp_agent_invocation_plan.json"
+  ],
+  "next_action": "fda implement --dry-runで実adapter availabilityを確認する"
+}

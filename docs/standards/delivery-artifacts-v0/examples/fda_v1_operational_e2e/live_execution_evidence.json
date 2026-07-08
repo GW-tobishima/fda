@@ -1,0 +1,64 @@
+{
+  "completed_at": "unix:1782627314",
+  "dry_run_gate": {
+    "evidence_links": [
+      "mcp_tool_call_receipt.json",
+      "mcp_agent_invocation_plan.json",
+      "dry_run_receipt.json"
+    ],
+    "issues": [],
+    "status": "succeeded"
+  },
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "evidence_id": "LIVE-EVIDENCE-FDA-V1-015-001",
+  "evidence_links": [
+    "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/mcp_tool_call_receipt.json",
+    "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/implementation_receipt.json",
+    "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/external_pr_receipt.json",
+    "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/coding_agent_thread_state.json"
+  ],
+  "fixture_free_gate": {
+    "status": "pass",
+    "summary": "現在のCodex CLI sessionがfixtureなしでV1-PIVOT-010/011を実装し、PR #87、test status、scope evidenceを回収した。"
+  },
+  "fixture_free_required_for_operational_v1": true,
+  "fixture_used": false,
+  "implementation_result": {
+    "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+    "changed_files": [
+      "src/application/merge.rs",
+      "src/rendering/merge.rs",
+      "src/lib.rs",
+      "docs/v1/fda_v1_product_contract.md",
+      "docs/v1/fda_v1_pr_sequence.md",
+      "artifacts/runs/fda-v1-codex-cli-primary-epic-20260629/human_decision_packet.md"
+    ],
+    "scope_drift": [],
+    "summary": "Codex CLI primary rebaseline and Review Agent Gate packet reflection gate were implemented within the approved V1 pivot scope.",
+    "test_status": "passed"
+  },
+  "implementation_status": "succeeded",
+  "mcp": {
+    "codex_tool_call_sent": false,
+    "codex_tool_source": "not_invoked",
+    "detected_tools": [],
+    "exit_code": null,
+    "expected_tools": [
+      "current_codex_cli"
+    ],
+    "missing_tools": [],
+    "server_command": [
+      "current-codex-cli-session"
+    ],
+    "thread_id": null,
+    "tools_list_source": "not_invoked"
+  },
+  "next_action": "PR #87はmerge済み。Slack P0再ベースラインPRのReview Agent Gate、CI、Codex reviewを通す",
+  "operational_completion_pr_id": "PR-87",
+  "planned_pr_id": "PR-V1-018",
+  "program_id": "FDA-V1",
+  "schema_version": "fda.live_execution_evidence.v0",
+  "started_at": "unix:1782627313",
+  "status": "succeeded",
+  "target_repo": "/root/code/forge-delivery-agent"
+}

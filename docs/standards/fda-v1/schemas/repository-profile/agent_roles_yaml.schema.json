@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/agent_roles_yaml.schema.json",
+  "title": ".fda/agent_roles.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["agent_roles"],
+  "properties": {
+    "agent_roles": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/role" },
+      "required": [
+        "default_orchestrator",
+        "implementer",
+        "pr_reviewer",
+        "functional_qa",
+        "security_qa",
+        "merge_manager"
+      ],
+      "properties": {
+        "default_orchestrator": { "$ref": "#/$defs/role" },
+        "implementer": { "$ref": "#/$defs/role" },
+        "pr_reviewer": { "$ref": "#/$defs/role" },
+        "functional_qa": { "$ref": "#/$defs/role" },
+        "security_qa": { "$ref": "#/$defs/role" },
+        "forge_reviewer": { "$ref": "#/$defs/role" },
+        "design_qa": { "$ref": "#/$defs/role" },
+        "merge_manager": { "$ref": "#/$defs/role" }
+      }
+    }
+  },
+  "$defs": {
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executor", "workspace_policy", "can_edit"],
+      "properties": {
+        "executor": {
+          "type": "string",
+          "enum": ["current_codex_cli", "codex_subagent", "external_adapter"]
+        },
+        "workspace_policy": {
+          "type": "string",
+          "enum": ["read_only", "workspace_write", "controlled_write"]
+        },
+        "can_edit": { "type": "boolean" },
+        "required_checkpoint": { "type": "boolean" },
+        "role_switch_allowed": { "type": "boolean" },
+        "required_handoff": { "type": "string", "minLength": 1 },
+        "required_for_pr": { "type": "boolean" },
+        "required_when": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "fallback_role": { "type": "string", "minLength": 1 },
+        "not_applicable_requires_reason": { "type": "boolean" },
+        "requires_human_approval": { "type": "boolean" }
+      }
+    }
+  }
+}

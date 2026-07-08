@@ -1,0 +1,31 @@
+registry:
+  schema_version: fda.skill_registry.v1
+  default_lock_file: .fda/skills.lock
+  skills:
+    - name: requirement_to_epic_plan
+      version: v0.3.0
+      path: skills/requirement_to_epic_plan/skill.yaml
+    - name: epic_to_task_graph
+      version: v0.1.0
+      path: skills/epic_to_task_graph/skill.yaml
+    - name: epic_to_planned_prs
+      version: v0.2.0
+      path: skills/epic_to_planned_prs/skill.yaml
+    - name: forge_projection
+      version: v0.1.0
+      path: skills/forge_projection/skill.yaml
+    - name: external_implementation_handoff
+      version: v0.1.0
+      path: skills/external_implementation_handoff/skill.yaml
+    - name: external_pr_receipt_collect
+      version: v0.1.0
+      path: skills/external_pr_receipt_collect/skill.yaml
+    - name: ato_cli_materialization
+      version: v0.1.0
+      path: skills/ato_cli_materialization/skill.yaml
+    - name: human_decision_triage
+      version: v0.2.0
+      path: skills/human_decision_triage/skill.yaml
+    - name: proof_gap_detection
+      version: v0.1.0
+      path: skills/proof_gap_detection/skill.yaml

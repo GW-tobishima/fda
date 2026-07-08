@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/cross-repo/evidence_return_packet.schema.json",
+  "title": "Evidence Return Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "packet_id", "target_repo", "planned_pr_id", "evidence_items", "human_decisions_applied", "open_risks", "ready_for_review"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.evidence_return_packet.v1" },
+    "packet_id": { "type": "string", "minLength": 1 },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "evidence_items": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_item" }
+    },
+    "human_decisions_applied": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["human_decision_id", "applied", "evidence"],
+        "properties": {
+          "human_decision_id": { "type": "string", "minLength": 1 },
+          "applied": { "type": "boolean" },
+          "evidence": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "open_risks": { "type": "array", "items": { "type": "string" } },
+    "ready_for_review": { "type": "boolean" },
+    "notes": { "type": "string" }
+  },
+  "$defs": {
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "id", "verdict", "summary"],
+      "properties": {
+        "surface": { "type": "string", "minLength": 1 },
+        "id": { "type": "string", "minLength": 1 },
+        "verdict": { "type": "string", "enum": ["pass", "fail", "not_run", "informational"] },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

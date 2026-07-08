@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/agent_role_policy.schema.json",
+  "title": "Agent Role Policy",
+  "type": "object",
+  "required": ["schema_version", "policy_id", "status", "roles", "human_decision_guard"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.agent_role_policy.v0" },
+    "policy_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["draft", "approved", "superseded"] },
+    "roles": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "workspace_policy",
+          "source_mutation_allowed",
+          "allowed_actions",
+          "forbidden_actions",
+          "allowed_mcp_tools",
+          "approval_policy",
+          "receipt_required"
+        ],
+        "properties": {
+          "role": { "type": "string", "enum": ["implementer", "functional_qa", "security_qa"] },
+          "workspace_policy": { "type": "string", "enum": ["write", "read_only"] },
+          "source_mutation_allowed": { "type": "boolean" },
+          "allowed_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "forbidden_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "allowed_mcp_tools": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "approval_policy": { "type": "string", "enum": ["on-request", "never", "read-only"] },
+          "receipt_required": { "type": "boolean", "const": true }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "role": { "enum": ["functional_qa", "security_qa"] } },
+              "required": ["role"]
+            },
+            "then": {
+              "properties": {
+                "workspace_policy": { "const": "read_only" },
+                "source_mutation_allowed": { "const": false }
+              },
+              "required": ["workspace_policy", "source_mutation_allowed"]
+            }
+          },
+          {
+            "if": {
+              "properties": { "role": { "const": "implementer" } },
+              "required": ["role"]
+            },
+            "then": {
+              "properties": {
+                "workspace_policy": { "const": "write" },
+                "source_mutation_allowed": { "const": true }
+              },
+              "required": ["workspace_policy", "source_mutation_allowed"]
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "allOf": [
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "implementer" } }, "required": ["role"] },
+          "minContains": 1
+        },
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "functional_qa" } }, "required": ["role"] },
+          "minContains": 1
+        },
+        {
+          "contains": { "type": "object", "properties": { "role": { "const": "security_qa" } }, "required": ["role"] },
+          "minContains": 1
+        }
+      ]
+    },
+    "human_decision_guard": {
+      "type": "object",
+      "required": ["unresolved_decisions_block_invocation", "non_approval_answers_block_invocation"],
+      "properties": {
+        "unresolved_decisions_block_invocation": { "type": "boolean", "const": true },
+        "non_approval_answers_block_invocation": { "type": "boolean", "const": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

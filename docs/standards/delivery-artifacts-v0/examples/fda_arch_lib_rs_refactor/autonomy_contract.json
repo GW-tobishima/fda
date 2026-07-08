@@ -1,0 +1,112 @@
+{
+  "contract_id": "AUTONOMY-FDA-ARCH-FU-001",
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "autonomy_level": "multi_pr_execution",
+  "status": "approved",
+  "applies_to": [
+    "PR-FDA-ARCH-FU-001",
+    "PR-FDA-ARCH-FU-002",
+    "PR-FDA-ARCH-FU-003",
+    "PR-FDA-ARCH-FU-004",
+    "PR-FDA-ARCH-FU-005",
+    "PR-FDA-ARCH-FU-006",
+    "PR-FDA-ARCH-FU-007"
+  ],
+  "expires_at": null,
+  "allowed_actions": [
+    "Create behavior-preserving refactor PRs that follow planned_prs.json.",
+    "Move code between modules when public CLI behavior and artifacts remain compatible.",
+    "Add or update focused tests for moved boundaries.",
+    "Run architecture gate, cargo test, and cargo clippy.",
+    "Update FDA artifacts and architecture docs to reflect completed responsibility boundaries."
+  ],
+  "forbidden_actions": [
+    "Do not change public CLI behavior without a separate human spec decision.",
+    "Do not weaken architecture boundary checks.",
+    "Do not auto-merge or treat AI-side readiness as merge approval.",
+    "Do not close issue #68 until all planned PRs are merged or explicitly superseded.",
+    "Do not move domain, rendering, or application responsibilities in the opposite direction of source_architecture.md."
+  ],
+  "escalation_rules": [
+    {
+      "trigger": "A planned PR requires behavior change rather than behavior-preserving movement.",
+      "required_action": "Open a spec_decision before implementation continues.",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "Architecture gate must be weakened to make a PR pass.",
+      "required_action": "Stop and request risk approval.",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "A PR touches merge/release approval semantics.",
+      "required_action": "Treat as human-only merge/risk decision.",
+      "human_decision_packet_required": true
+    }
+  ],
+  "auto_merge_policy": {
+    "allowed": false,
+    "conditions": [
+      "No auto-merge is allowed for this Epic."
+    ],
+    "forbidden": [
+      "Any PR in this Epic requires human merge approval.",
+      "Security or merge gate semantic changes require explicit review."
+    ]
+  },
+  "evidence_policy": {
+    "citations_required": true,
+    "source_trace_required": true,
+    "verification_required": true,
+    "summary_update_required": true
+  },
+  "next_allowed_phase": [
+    "PR-FDA-ARCH-FU-001"
+  ],
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-FDA-ARCH-FU-001",
+      "CLM-FDA-ARCH-FU-002",
+      "CLM-FDA-ARCH-FU-003",
+      "CLM-FDA-ARCH-FU-004",
+      "CLM-FDA-ARCH-FU-005"
+    ],
+    "proof_obligations": [
+      "PRF-FDA-ARCH-FU-001",
+      "PRF-FDA-ARCH-FU-002",
+      "PRF-FDA-ARCH-FU-003",
+      "PRF-FDA-ARCH-FU-004",
+      "PRF-FDA-ARCH-FU-005",
+      "PRF-FDA-ARCH-FU-006",
+      "PRF-FDA-ARCH-FU-007"
+    ],
+    "human_decision_points": [
+      "HDPACKET-FDA-ARCH-FU-001"
+    ],
+    "ato_task_graph": [
+      "TASK-FDA-ARCH-FU-001",
+      "TASK-FDA-ARCH-FU-002",
+      "TASK-FDA-ARCH-FU-003",
+      "TASK-FDA-ARCH-FU-004",
+      "TASK-FDA-ARCH-FU-005",
+      "TASK-FDA-ARCH-FU-006",
+      "TASK-FDA-ARCH-FU-007"
+    ],
+    "planned_prs": [
+      "PR-FDA-ARCH-FU-001",
+      "PR-FDA-ARCH-FU-002",
+      "PR-FDA-ARCH-FU-003",
+      "PR-FDA-ARCH-FU-004",
+      "PR-FDA-ARCH-FU-005",
+      "PR-FDA-ARCH-FU-006",
+      "PR-FDA-ARCH-FU-007"
+    ],
+    "gate_requirements": [
+      "architecture boundary check",
+      "cargo test",
+      "cargo clippy -- -D warnings",
+      "review packet claim mapping"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+skill:
+  name: human_decision_triage
+  version: v0.2.0
+  purpose: Human Decision と AI Repair を分離し、typed decision packet を作る。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json
+    - docs/standards/fda-v1/schemas/repository-profile/delivery_policy_yaml.schema.json
+  output_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json
+  allowed_actions:
+    - decision_classify
+    - ai_repair_classify
+    - recommended_option_write
+    - impact_if_delayed_write
+  forbidden_actions:
+    - human_decision_approval
+    - merge_approval_self_issue
+    - release_approval_self_issue
+    - proof_gap_as_human_decision
+  required_artifacts:
+    - human_decision_packet.json
+    - ai_repair_lane.json
+  validation_commands:
+    - cargo run -- validate-artifacts --artifacts artifacts/runs/<run_id> --out artifacts/runs/<run_id>/validation_report.json
+  escalation_conditions:
+    - scope_change
+    - risk_approval
+    - merge_approval
+    - exception_handle
+    - knowledge_review
+    - blocker_confirmation

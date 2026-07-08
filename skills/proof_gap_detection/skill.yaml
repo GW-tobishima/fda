@@ -1,0 +1,30 @@
+skill:
+  name: proof_gap_detection
+  version: v0.1.0
+  purpose: Claim / proof obligation と返却 evidence の不足、古さ、逸脱を検出する。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json
+    - docs/standards/fda-v1/schemas/cross-repo/external_pr_receipt.schema.json
+    - docs/standards/fda-v1/schemas/cross-repo/evidence_return_packet.schema.json
+  output_schema:
+    - artifact_contract:proof_gap_report.v1
+    - artifact_contract:ai_repair_lane.v1
+  allowed_actions:
+    - proof_obligation_compare
+    - missing_proof_report
+    - stale_evidence_report
+    - ai_repair_lane_update
+  forbidden_actions:
+    - forge_promotion_write
+    - proof_fabrication
+    - missing_proof_as_human_approval
+    - github_pr_merge
+  required_artifacts:
+    - proof_gap_report.json
+    - ai_repair_lane.json
+  validation_commands:
+    - git diff --check
+  escalation_conditions:
+    - precedent_conflict
+    - security_high_or_critical
+    - required_proof_impossible_without_human

@@ -1,0 +1,337 @@
+{
+  "schema_version": "fda.artifact_inventory.v0",
+  "generated_at_unix_seconds": 1782597600,
+  "artifacts": [
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-001",
+      "artifact_type": "epic_delivery_plan",
+      "title": "FDA architecture follow-up Epic Delivery Plan",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001",
+        "TASK-FDA-ARCH-FU-002",
+        "TASK-FDA-ARCH-FU-003",
+        "TASK-FDA-ARCH-FU-004",
+        "TASK-FDA-ARCH-FU-005",
+        "TASK-FDA-ARCH-FU-006",
+        "TASK-FDA-ARCH-FU-007"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Issue #68 を FDA の Epic / Case / Task / Planned PR / Proof へ変換した実行計画。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68",
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/requirements_definition.md"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-002",
+      "artifact_type": "planned_prs",
+      "title": "FDA architecture follow-up Planned PRs",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001",
+        "TASK-FDA-ARCH-FU-002",
+        "TASK-FDA-ARCH-FU-003",
+        "TASK-FDA-ARCH-FU-004",
+        "TASK-FDA-ARCH-FU-005",
+        "TASK-FDA-ARCH-FU-006",
+        "TASK-FDA-ARCH-FU-007"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-FDA-ARCH-FU-001 から 007 までの PR 粒度、scope、AC、proof を固定する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/planned_prs.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-003",
+      "artifact_type": "case_graph",
+      "title": "FDA architecture follow-up Case Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "各 Planned PR を Case に 1:1 で対応させ、順序依存を明示する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/case_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-004",
+      "artifact_type": "task_graph",
+      "title": "FDA architecture follow-up Task Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001",
+        "TASK-FDA-ARCH-FU-002",
+        "TASK-FDA-ARCH-FU-003",
+        "TASK-FDA-ARCH-FU-004",
+        "TASK-FDA-ARCH-FU-005",
+        "TASK-FDA-ARCH-FU-006",
+        "TASK-FDA-ARCH-FU-007"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ATO task 候補を Planned PR と同じ粒度で表す。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/task_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/case_graph.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-005",
+      "artifact_type": "forge_projection",
+      "title": "FDA architecture follow-up Forge Projection",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001",
+        "TASK-FDA-ARCH-FU-002",
+        "TASK-FDA-ARCH-FU-003",
+        "TASK-FDA-ARCH-FU-004",
+        "TASK-FDA-ARCH-FU-005",
+        "TASK-FDA-ARCH-FU-006",
+        "TASK-FDA-ARCH-FU-007"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ClaimContract と Proof Obligation を Planned PR へ投影する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/forge_projection.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/planned_prs.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-006",
+      "artifact_type": "autonomy_contract",
+      "title": "FDA architecture follow-up Autonomy Contract",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001",
+        "CASE-FDA-ARCH-FU-002",
+        "CASE-FDA-ARCH-FU-003",
+        "CASE-FDA-ARCH-FU-004",
+        "CASE-FDA-ARCH-FU-005",
+        "CASE-FDA-ARCH-FU-006",
+        "CASE-FDA-ARCH-FU-007"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001",
+        "TASK-FDA-ARCH-FU-002",
+        "TASK-FDA-ARCH-FU-003",
+        "TASK-FDA-ARCH-FU-004",
+        "TASK-FDA-ARCH-FU-005",
+        "TASK-FDA-ARCH-FU-006",
+        "TASK-FDA-ARCH-FU-007"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Behavior-preserving refactor の許可範囲と禁止事項を定義する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/autonomy_contract.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/human_decision_packet.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-007",
+      "artifact_type": "human_decision_packet",
+      "title": "FDA architecture follow-up Human Decision Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "Issue #68 を FDA artifact として正式 Epic 化する判断を記録する resolved packet。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/human_decision_packet.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-008",
+      "artifact_type": "runner_explanation",
+      "title": "FDA architecture follow-up Runner Explanation",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "GitHub issue EPIC から FDA artifact EPIC へ変換した理由と次 action を説明する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/runner_explanation.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-009",
+      "artifact_type": "development_handoff",
+      "title": "FDA architecture follow-up Implementation Handoff",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [
+        "CASE-FDA-ARCH-FU-001"
+      ],
+      "related_task_ids": [
+        "TASK-FDA-ARCH-FU-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-FDA-ARCH-FU-001 の最初の実装 handoff。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/implementation_handoff.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/planned_prs.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    },
+    {
+      "artifact_id": "ART-FDA-ARCH-FU-010",
+      "artifact_type": "validation_report",
+      "title": "FDA architecture follow-up Validation Report",
+      "producer_agent": "fda-cli",
+      "related_program_id": "PROGRAM-FDA-ARCH-001",
+      "related_epic_id": "EPIC-FDA-ARCH-FU-001",
+      "related_case_ids": [],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "FDA artifact schema validation result.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782597600,
+      "updated_at_unix_seconds": 1782597600
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "GRP-FDA-ARCH-FU-PLANNING",
+      "title": "Planning Source",
+      "artifact_ids": [
+        "ART-FDA-ARCH-FU-001",
+        "ART-FDA-ARCH-FU-002",
+        "ART-FDA-ARCH-FU-003",
+        "ART-FDA-ARCH-FU-004",
+        "ART-FDA-ARCH-FU-005"
+      ]
+    },
+    {
+      "group_id": "GRP-FDA-ARCH-FU-GOVERNANCE",
+      "title": "Governance And Evidence",
+      "artifact_ids": [
+        "ART-FDA-ARCH-FU-006",
+        "ART-FDA-ARCH-FU-007",
+        "ART-FDA-ARCH-FU-008",
+        "ART-FDA-ARCH-FU-009",
+        "ART-FDA-ARCH-FU-010"
+      ]
+    }
+  ]
+}

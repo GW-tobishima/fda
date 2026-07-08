@@ -1,0 +1,76 @@
+{
+  "schema_version": "planned_pr_execution_packet.v0",
+  "packet_id": "PPEP-FDA-V1-MCP-001",
+  "status": "ready_for_external_implementation",
+  "created_at": "2026-06-27",
+  "source_repo": "forge-delivery-agent",
+  "target_repo": {
+    "name": "forge-delivery-agent",
+    "local_path": "/root/code/forge-delivery-agent"
+  },
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-MCP",
+  "planned_pr_id": "PR-V1-005",
+  "planned_pr_title": "Codex MCP dry-run",
+  "handoff_kind": "mcp_implementation",
+  "agent_invocation_plan_id": "MCP-FDA-V1-PLAN-001",
+  "source_artifacts": [
+    "basic_design.md",
+    "detailed_design.md",
+    "mcp_agent_invocation_plan.json",
+    "agent_role_policy.json"
+  ],
+  "resolved_human_decisions": [
+    {
+      "human_decision_id": "HD-FDA-001",
+      "decision": "approve_scope",
+      "implementation_directive": "Scope In / Outを変更せずにdry-runへ進む。"
+    }
+  ],
+  "human_decision_dependencies": [],
+  "scope_in": [
+    "Codex MCP serverのtools/list確認",
+    "prompt/cwd/approval policy/forbidden actionsのdry-run receipt生成"
+  ],
+  "scope_out": [
+    "target repo source mutation",
+    "live implementation",
+    "merge"
+  ],
+  "files_to_change_candidates": [
+    "src/main.rs",
+    "docs/standards/delivery-artifacts-v0/schemas/mcp_agent_invocation_plan.schema.json"
+  ],
+  "acceptance_criteria": [
+    "Implementer / Functional QA / Security QAのinvocationが分離されている。",
+    "QA invocationはread_onlyかつsource_mutation_allowed=falseである。",
+    "Human Decision未解決または非承認回答がある場合はinvocation planがblockedになる。",
+    "MCP tool resultをsemantic receiptへ変換できる。"
+  ],
+  "security_privacy_legal_checks": [
+    "QA roleはsource mutationできない。",
+    "High/Critical security findingはHuman Turn候補へ分類する。",
+    "secretやraw log全文をreceiptへ保存しない。"
+  ],
+  "rollback_noop_plan": [
+    "schemaとdry-run artifactのみの変更なのでruntime rollbackは不要。",
+    "後続PRでadapter実装を入れた場合は該当PRをrevertする。"
+  ],
+  "expected_evidence_from_target_pr": [
+    "mcp_agent_invocation_plan.json",
+    "mcp_tool_call_receipt.json",
+    "coding_agent_thread_state.json",
+    "validate-artifacts result"
+  ],
+  "implementation_start_gate": {
+    "human_decisions_resolved": true,
+    "target_repo_changes_allowed_by_this_repo": true,
+    "target_repo_pr_creation_allowed_by_this_packet": false,
+    "notes": "PR-V1-005まではdry-runであり、MCP経由の実source mutationは行わない。"
+  },
+  "forge_mapping": {
+    "claim_ids": ["CLM-FDA-V1-MCP-001"],
+    "proof_obligations": ["PROOF-FDA-V1-MCP-SCHEMA-001"],
+    "gate_requirements": ["Schema Gate", "MCP Dry-run Gate"]
+  }
+}

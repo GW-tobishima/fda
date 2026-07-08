@@ -1,0 +1,14 @@
+{
+  "schema_version": "fda.actual_pr_handle.v1",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "actual_pr_url": "https://github.com/example/oshi-note/pull/1",
+  "actual_pr_number": 1,
+  "head_sha": "0123456789abcdef",
+  "base_branch": "main",
+  "head_branch": "codex/vtuber-policy-readiness",
+  "status_url": "https://github.com/example/oshi-note/actions/runs/1",
+  "review_url": "https://github.com/example/oshi-note/pull/1/files",
+  "observed_at": "2026-06-25T11:30:00+09:00",
+  "notes": "このhandleはv1 contract例であり、実在PRではない。"
+}

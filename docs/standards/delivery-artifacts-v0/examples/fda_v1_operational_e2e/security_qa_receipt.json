@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "role": "security_qa",
+  "summary": "No credential values or secret stdout are stored in the proof pack."
+}

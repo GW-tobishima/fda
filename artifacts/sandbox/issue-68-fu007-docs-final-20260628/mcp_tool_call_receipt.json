@@ -1,0 +1,45 @@
+{
+  "completed_at": "unix:1782677367",
+  "cwd": "/tmp/issue68-fu007-docs-final",
+  "evidence_links": [
+    "mcp_agent_invocation_plan.json",
+    "dry_run_receipt.json"
+  ],
+  "input_artifacts": [
+    "mcp_agent_invocation_plan.json",
+    "codex_prompt.md"
+  ],
+  "invocation_id": "INV-FDA-V1-IMPLEMENTER-DRY-RUN-001",
+  "mcp_server": "codex mcp-server",
+  "next_action": "fda implement --live",
+  "output_artifacts": [
+    "dry_run_receipt.json"
+  ],
+  "plan_id": "MCP-FDA-V1-DRY-RUN-001",
+  "provider": "codex",
+  "receipt_id": "MCPR-FDA-V1-DRY-RUN-001",
+  "role": "implementer",
+  "schema_version": "fda.mcp_tool_call_receipt.v0",
+  "semantic_result": {
+    "gate_effect": "advance",
+    "scope_drift": [],
+    "semantic_verdict": "pass",
+    "summary": "MCP initialize and tools/list completed.",
+    "tests": [
+      {
+        "command": "tools/list",
+        "evidence": "detected tools: codex, codex-reply",
+        "verdict": "pass"
+      }
+    ]
+  },
+  "started_at": "unix:1782677367",
+  "status": "succeeded",
+  "thread_id": null,
+  "tool_name": "tools/list",
+  "tool_result_digest": {
+    "exit_code": 0,
+    "raw_result_stored": false,
+    "summary": "MCP initialize and tools/list completed."
+  }
+}

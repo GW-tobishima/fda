@@ -1,0 +1,111 @@
+{
+  "decision_packet_id": "HDPACKET-ON-VPR-6A",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "case_id": "CASE-ON-VPR-001",
+  "status": "resolved",
+  "required_before": "Any oshi-note implementation PR for VTuber referral / PR page",
+  "decision_needed": "VTuber紹介リンク / PRページMVPを、安全側の制約付きで進めるかを決める。含む判断: 本人確認済みVTuber限定、少数母数非表示閾値、通常メモ非公開、公開用コメントopt-in、moderation要否、PR表示、素材許諾、YouTube/Twitch API Data利用有無。",
+  "trigger": "Planning-only artifact is ready and downstream implementation would otherwise start touching creator intake, referral campaign, public comments, aggregation dashboard, PR card, or analytics surfaces.",
+  "context": {
+    "current_state": "PoC-6A planning is complete and user decisions for MVP handoff were recorded on 2026-06-25. No oshi-note implementation code is changed in this repo.",
+    "relevant_requirement": "MVP should issue referral pages only to verified VTubers, reflect selected creator color in referral sign-up initial favorite state, expose only anonymous aggregates, keep normal memos private, collect public comments by explicit opt-in, and handle PR/material/API compliance before implementation.",
+    "relevant_evidence": [
+      "/root/code/oshi-note/artifacts/reports/vtuber-pr-page-feasibility-20260620.md",
+      "/root/code/oshi-note/artifacts/designs/vtuber-referral-monetization-flow-20260624.excalidraw",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/risk_register.md"
+    ]
+  },
+  "options": [
+    {
+      "id": "OPTION-A-STRICT-SAFETY-MVP",
+      "description": "本人確認済みVTuber限定、unique users 10未満またはrecords 10未満を非表示、通常メモ非公開固定、MVPでは公開コメントを作らずmoderationは将来再判断、案件投稿はPR表記必須、許諾済み素材のみ、MVPではYouTube/Twitch API Dataを使わない。",
+      "pros": [
+        "プライバシー、ステマ、素材許諾、API規約リスクを最小化できる",
+        "後続実装のGateが明確になる",
+        "推し色と紹介URL経由初期推し登録の価値検証に集中できる"
+      ],
+      "cons": [
+        "VTuber側dashboardや投稿カードの表現力が限定される",
+        "本人確認と素材許諾の運用が必要になる",
+        "少数VTuberでは成果が非表示になりやすい"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "OPTION-B-GROWTH-LEANING-MVP",
+      "description": "本人確認は申請後審査中の限定公開を許し、少数母数閾値やmoderationを軽くし、YouTube/Twitch API Dataやサムネイル利用を早期に含める。",
+      "pros": [
+        "VTuber側の見栄えと投稿価値を早く検証できる",
+        "申請から公開までの摩擦が下がる",
+        "動画名やサムネイル付きカードを作りやすい"
+      ],
+      "cons": [
+        "なりすまし、個人推測、権利、API規約、ステマ対応のリスクが増える",
+        "法務 / privacy review前に実装が膨らみやすい",
+        "後から制限を強めるとVTuber / ファン体験が変わる"
+      ],
+      "recommended": false
+    }
+  ],
+  "impact": {
+    "scope": "Resolved MVP keeps implementation narrow: verified creator intake policy first, then referral page, selected creator color, initial favorite, first log, Premium CTA, and anonymous aggregate. Public comments and API Data stay out of MVP.",
+    "security": "Option A reduces cross-creator exposure and raw data access risk by making privacy gates blocking.",
+    "schedule": "Option A may add verification and moderation setup time but lowers rework risk. Option B may appear faster but increases review and remediation risk.",
+    "ux": "Resolved MVP protects fan trust but limits visible social proof for small creators.",
+    "operations": "Resolved MVP requires explicit workflows for verification, material permission, PR disclosure, and takedown. Comment moderation is deferred until public comments are reconsidered."
+  },
+  "default_if_no_decision": "Do not start implementation. Keep all downstream tasks in planned or human_turn state and use Option A as the draft planning assumption only.",
+  "recorded_decision": {
+    "decision": "MVPは本人確認済みVTuberのみ、unique users < 10 または records < 10 は非表示、通常メモは常に非公開、公開コメントは作成しない、moderationはコメント機能開始前に再判断、PR表示する、VTuber提供または許諾済み素材のみ使用、YouTube / Twitch API Dataは使わない。",
+    "decided_by": "user",
+    "decided_at": "2026-06-25",
+    "rationale": "oshi-note外部実装handoffのため、MVPの安全側制約とscope outを確定した。"
+  },
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-ON-VPR-001",
+      "CLM-ON-VPR-003",
+      "CLM-ON-VPR-004",
+      "CLM-ON-VPR-005",
+      "CLM-ON-VPR-006",
+      "CLM-ON-VPR-007"
+    ],
+    "proof_obligations": [
+      "PRF-ON-VPR-001",
+      "PRF-ON-VPR-002",
+      "PRF-ON-VPR-003",
+      "PRF-ON-VPR-004",
+      "PRF-ON-VPR-005"
+    ],
+    "human_decision_points": [
+      "HDP-ON-VPR-001",
+      "HDP-ON-VPR-002",
+      "HDP-ON-VPR-003",
+      "HDP-ON-VPR-004",
+      "HDP-ON-VPR-005",
+      "HDP-ON-VPR-006",
+      "HDP-ON-VPR-007",
+      "HDP-ON-VPR-008"
+    ],
+    "ato_task_graph": [
+      "TASK-ON-VPR-001",
+      "TASK-ON-VPR-003",
+      "TASK-ON-VPR-004",
+      "TASK-ON-VPR-005"
+    ],
+    "planned_prs": [
+      "PR-ON-VPR-001",
+      "PR-ON-VPR-003",
+      "PR-ON-VPR-004",
+      "PR-ON-VPR-005"
+    ],
+    "gate_requirements": [
+      "Human Decision Gate",
+      "Privacy Gate",
+      "Compliance Gate",
+      "Material Permission Gate"
+    ]
+  }
+}

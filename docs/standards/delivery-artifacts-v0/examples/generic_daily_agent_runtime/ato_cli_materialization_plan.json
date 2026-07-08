@@ -1,0 +1,638 @@
+{
+  "schema_version": "ato_cli_materialization_plan.v0",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "mode": "dry-run",
+  "transport": "ato_cli",
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+  ],
+  "write_policy": {
+    "execute_by_default": false,
+    "requires_human_confirmation": true,
+    "actual_cli_execution": false,
+    "ato_db_change": false,
+    "mcp_usage": false,
+    "forbidden_actions": [
+      "ATO CLI予定コマンドの実行",
+      "ATO MCP write",
+      "ATO DB直接変更",
+      "ATO UI実装",
+      "Codex CLIによるruntime実装PR作成",
+      "Forge Gate実評価",
+      "自動マージ"
+    ]
+  },
+  "lanes": {
+    "program": {
+      "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "cli_task_key": "PROGRAM-GDAR-001",
+      "title": "Generic Daily Agent Runtime",
+      "purpose": "AICX Study Botで実証した日次実行、catch-up、status、artifact管理を汎用Daily Agent Runtimeへ昇格するProgramとしてATO CLIへ投影する。",
+      "current_status": "dry_run_preview",
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md"
+      ]
+    },
+    "epic": {
+      "epic_id": "EPIC-GDAR-001",
+      "cli_task_key": "EPIC-GDAR-001",
+      "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "purpose": "RequirementsからCase、Task、Planned PR、Human Decision、Forge Claim/Proofを辿れるEpic単位としてATO CLIへ投影する。",
+      "current_status": "ready_for_cli_materialization_dry_run",
+      "claim_ids": [
+        "CLM-GDAR-001",
+        "CLM-GDAR-002",
+        "CLM-GDAR-003",
+        "CLM-GDAR-004",
+        "CLM-GDAR-005"
+      ],
+      "proof_obligations": [
+        "PRF-GDAR-001",
+        "PRF-GDAR-002",
+        "PRF-GDAR-003",
+        "PRF-GDAR-004",
+        "PRF-GDAR-005",
+        "PRF-GDAR-006"
+      ],
+      "artifact_refs": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+      ]
+    },
+    "cases": [
+      {
+        "case_id": "CASE-GDAR-001",
+        "cli_task_key": "CASE-GDAR-001",
+        "epic_id": "EPIC-GDAR-001",
+        "planned_pr_id": "PR-GDAR-001",
+        "purpose": "Runtime Artifact Contractsとしてrun_state、receipt、runner_explanation、artifact_inventory、validation evidenceの契約を固定する。",
+        "current_status": "planned",
+        "claim_ids": [
+          "CLM-GDAR-001",
+          "CLM-GDAR-002",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-001",
+          "PRF-GDAR-002",
+          "PRF-GDAR-003",
+          "PRF-GDAR-004"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+        ]
+      },
+      {
+        "case_id": "CASE-GDAR-002",
+        "cli_task_key": "CASE-GDAR-002",
+        "epic_id": "EPIC-GDAR-001",
+        "planned_pr_id": "PR-GDAR-002",
+        "purpose": "Generic Command Boundaryとしてdispatch、maintain、status、event intake、catch-upの責務境界を定義する。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-GDAR-002",
+          "CLM-GDAR-003",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-001",
+          "PRF-GDAR-002",
+          "PRF-GDAR-003",
+          "PRF-GDAR-004",
+          "PRF-GDAR-006"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+        ]
+      },
+      {
+        "case_id": "CASE-GDAR-003",
+        "cli_task_key": "CASE-GDAR-003",
+        "epic_id": "EPIC-GDAR-001",
+        "planned_pr_id": "PR-GDAR-003",
+        "purpose": "AICX Study Bot runnerをgeneric runtime boundaryへ移す計画、互換性QA、failure recovery runbookを定義する。",
+        "current_status": "needs_human_decision",
+        "claim_ids": [
+          "CLM-GDAR-003",
+          "CLM-GDAR-004",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-001",
+          "PRF-GDAR-002",
+          "PRF-GDAR-003",
+          "PRF-GDAR-004",
+          "PRF-GDAR-005",
+          "PRF-GDAR-006"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "TASK-GDAR-001",
+        "cli_task_key": "TASK-GDAR-001",
+        "case_id": "CASE-GDAR-001",
+        "planned_pr_id": "PR-GDAR-001",
+        "purpose": "Generic Daily Agent Runtimeのrun_stateとreceipt系artifactを実装前に検証可能なcontractへ落とす。",
+        "current_status": "planned",
+        "decisions": [],
+        "open_issues": [],
+        "next_actions": [
+          "PR-GDAR-001でschemaとfixtureを実装対象にする",
+          "validate-artifactsでschema validationを通す"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-001",
+          "CLM-GDAR-002",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-001",
+          "PRF-GDAR-002",
+          "PRF-GDAR-003",
+          "PRF-GDAR-004"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+        ]
+      },
+      {
+        "task_id": "TASK-GDAR-002",
+        "cli_task_key": "TASK-GDAR-002",
+        "case_id": "CASE-GDAR-001",
+        "planned_pr_id": "PR-GDAR-001",
+        "purpose": "artifact catalogとplanning fixture inventoryからPoC-5A/5B成果物を辿れるようにする。",
+        "current_status": "planned",
+        "decisions": [],
+        "open_issues": [],
+        "next_actions": [
+          "artifact_inventoryとrunner_explanationを更新する",
+          "validation_reportをevidenceとして保持する"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-001",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-001",
+          "PRF-GDAR-002"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json"
+        ]
+      },
+      {
+        "task_id": "TASK-GDAR-003",
+        "cli_task_key": "TASK-GDAR-003",
+        "case_id": "CASE-GDAR-002",
+        "planned_pr_id": "PR-GDAR-002",
+        "purpose": "dispatch/poll/action/status command contractを設計し、どこまで汎用runtime化するかの人間判断を受ける。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HD-GDAR-001"
+        ],
+        "open_issues": [
+          "Generic runtimeの切り出し粒度が未確定"
+        ],
+        "next_actions": [
+          "HD-GDAR-001の回答後にcommand boundary contractを固定する",
+          "PR-GDAR-002の実装範囲を更新する"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-002",
+          "CLM-GDAR-003",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-003",
+          "PRF-GDAR-004",
+          "PRF-GDAR-006"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+        ]
+      },
+      {
+        "task_id": "TASK-GDAR-004",
+        "cli_task_key": "TASK-GDAR-004",
+        "case_id": "CASE-GDAR-002",
+        "planned_pr_id": "PR-GDAR-002",
+        "purpose": "idempotencyとfailure classification fixtureを定義し、maintain/statusの再実行安全性を検証可能にする。",
+        "current_status": "planned",
+        "decisions": [],
+        "open_issues": [],
+        "next_actions": [
+          "not_due、already_dispatched、action_completed、failed分類のfixtureを作る",
+          "proof obligation PRF-GDAR-003/004へ紐づける"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-002",
+          "CLM-GDAR-003"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-003",
+          "PRF-GDAR-004"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+        ]
+      },
+      {
+        "task_id": "TASK-GDAR-005",
+        "cli_task_key": "TASK-GDAR-005",
+        "case_id": "CASE-GDAR-003",
+        "planned_pr_id": "PR-GDAR-003",
+        "purpose": "AICX runner migration planとlegacy CLI mappingを作り、互換性優先度の人間判断を受ける。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HD-GDAR-002"
+        ],
+        "open_issues": [
+          "既存CLI完全互換、breaking change許容、deprecated方針のどれを採るか未確定"
+        ],
+        "next_actions": [
+          "HD-GDAR-002の回答後にmigration planを固定する",
+          "AICX compatibility validationの証跡方針を決める"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-003",
+          "CLM-GDAR-004",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-005",
+          "PRF-GDAR-006"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+        ]
+      },
+      {
+        "task_id": "TASK-GDAR-006",
+        "cli_task_key": "TASK-GDAR-006",
+        "case_id": "CASE-GDAR-003",
+        "planned_pr_id": "PR-GDAR-003",
+        "purpose": "AICX互換性QAとfailure recovery runbookを定義し、runtime codeのmerge候補化範囲を人間判断へ委ねる。",
+        "current_status": "needs_human_decision",
+        "decisions": [
+          "HD-GDAR-003"
+        ],
+        "open_issues": [
+          "runtime codeを自動マージ候補にしてよい範囲が未確定"
+        ],
+        "next_actions": [
+          "HD-GDAR-003の回答後にmerge policyをPR-GDAR-003へ反映する",
+          "failure recovery runbookの検証項目を固定する"
+        ],
+        "claim_ids": [
+          "CLM-GDAR-004",
+          "CLM-GDAR-005"
+        ],
+        "proof_obligations": [
+          "PRF-GDAR-005",
+          "PRF-GDAR-006"
+        ],
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+        ]
+      }
+    ],
+    "human_decisions": [
+      {
+        "human_turn_id": "HT-GDAR-001",
+        "source_decision_id": "HD-GDAR-001",
+        "target_task_key": "TASK-GDAR-003",
+        "reason_type": "spec_decision",
+        "requested_decision": "Generic runtimeをAICX runnerからどこまで切り出すかを選ぶ。",
+        "recommended_option": "B: command boundaryまで汎用化する",
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+        ]
+      },
+      {
+        "human_turn_id": "HT-GDAR-002",
+        "source_decision_id": "HD-GDAR-002",
+        "target_task_key": "TASK-GDAR-005",
+        "reason_type": "spec_decision",
+        "requested_decision": "AICX Study Bot互換性の優先度を選ぶ。",
+        "recommended_option": "A: 既存CLI完全互換",
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+        ]
+      },
+      {
+        "human_turn_id": "HT-GDAR-003",
+        "source_decision_id": "HD-GDAR-003",
+        "target_task_key": "TASK-GDAR-006",
+        "reason_type": "merge_approval",
+        "requested_decision": "runtime codeをどこまで自動マージ候補にしてよいかを選ぶ。",
+        "recommended_option": "B: runtime codeは人間確認",
+        "artifact_refs": [
+          "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+        ]
+      }
+    ],
+    "ai_repair": {
+      "items": [],
+      "empty_reason": "PoC-5B時点では不足証跡や失敗検証を修復する段階ではなく、CLI予定コマンドのdry-run projectionのみを作る。",
+      "payload_contract": [
+        "repair_id",
+        "source_task_id",
+        "reason",
+        "next_actions",
+        "artifact_refs"
+      ]
+    }
+  },
+  "commands": [
+    {
+      "command_id": "ATOCLI-001",
+      "lane": "program",
+      "purpose": "Create or resume Program work item",
+      "command": "ato work begin --task PROGRAM-GDAR-001 --agent-id ato-cli-materializer --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key PROGRAM-GDAR-001 --json",
+      "idempotency_key": "PROGRAM-GDAR-001",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "PROGRAM-GDAR-001",
+        "status": "IN_PROGRESS",
+        "run_id_binding": "RUN_ID_FROM_ATOCLI-001"
+      },
+      "source_refs": [
+        "epic_delivery_plan.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-002",
+      "lane": "program",
+      "purpose": "Attach Program summary preview",
+      "command": "ato work checkpoint --task PROGRAM-GDAR-001 --run-id <RUN_ID_FROM_ATOCLI-001> --kind summary --summary \"Generic Daily Agent Runtime program materialization preview. See ato_summary_preview.md\" --evidence-surface ato_summary_preview --evidence-id docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md --evidence-verdict pass --validation-status passed --freshness current --durability-class artifact --trust-level self_reported --json",
+      "idempotency_key": "PROGRAM-GDAR-001:summary-preview",
+      "planned_only": true,
+      "requires_run_id_from": "ATOCLI-001",
+      "expected_effect": {
+        "summary_source": "ato_summary_preview.md",
+        "evidence_relation": "summary_preview"
+      },
+      "source_refs": [
+        "ato_summary_preview.md"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-003",
+      "lane": "epic",
+      "purpose": "Create or resume Epic work item",
+      "command": "ato work begin --task EPIC-GDAR-001 --agent-id ato-cli-materializer --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key EPIC-GDAR-001 --json",
+      "idempotency_key": "EPIC-GDAR-001",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "EPIC-GDAR-001",
+        "status": "IN_PROGRESS",
+        "run_id_binding": "RUN_ID_FROM_ATOCLI-003"
+      },
+      "source_refs": [
+        "epic_delivery_plan.json",
+        "forge_projection.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-004",
+      "lane": "case",
+      "purpose": "Create or resume Runtime Artifact Contracts case",
+      "command": "ato work begin --task CASE-GDAR-001 --agent-id ato-cli-materializer --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key CASE-GDAR-001 --json",
+      "idempotency_key": "CASE-GDAR-001",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "CASE-GDAR-001",
+        "status": "IN_PROGRESS",
+        "planned_pr_id": "PR-GDAR-001"
+      },
+      "source_refs": [
+        "case_graph.json",
+        "planned_prs.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-005",
+      "lane": "case",
+      "purpose": "Create or resume Generic Command Boundary case",
+      "command": "ato work begin --task CASE-GDAR-002 --agent-id ato-cli-materializer --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key CASE-GDAR-002 --json",
+      "idempotency_key": "CASE-GDAR-002",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "CASE-GDAR-002",
+        "status": "IN_PROGRESS",
+        "planned_pr_id": "PR-GDAR-002"
+      },
+      "source_refs": [
+        "case_graph.json",
+        "human_decision_packet.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-006",
+      "lane": "case",
+      "purpose": "Create or resume AICX Adapter Migration case",
+      "command": "ato work begin --task CASE-GDAR-003 --agent-id ato-cli-materializer --role orchestrator --capability-profile planning --workspace-policy read_only --idempotency-key CASE-GDAR-003 --json",
+      "idempotency_key": "CASE-GDAR-003",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_key": "CASE-GDAR-003",
+        "status": "IN_PROGRESS",
+        "planned_pr_id": "PR-GDAR-003"
+      },
+      "source_refs": [
+        "case_graph.json",
+        "human_decision_packet.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-007",
+      "lane": "task",
+      "purpose": "Create Task Graph work items",
+      "command": "for task in TASK-GDAR-001 TASK-GDAR-002 TASK-GDAR-003 TASK-GDAR-004 TASK-GDAR-005 TASK-GDAR-006; do ato work begin --task \"$task\" --agent-id ato-cli-materializer --role implementer --capability-profile planning --workspace-policy read_only --idempotency-key \"$task\" --json; done",
+      "idempotency_key": "TASK-GDAR-001..006",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "task_keys": [
+          "TASK-GDAR-001",
+          "TASK-GDAR-002",
+          "TASK-GDAR-003",
+          "TASK-GDAR-004",
+          "TASK-GDAR-005",
+          "TASK-GDAR-006"
+        ],
+        "status": "IN_PROGRESS"
+      },
+      "source_refs": [
+        "task_graph.json",
+        "planned_prs.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-008",
+      "lane": "human_decision",
+      "purpose": "Convert HD-GDAR-001 into human_turn payload",
+      "command": "ato work block --task TASK-GDAR-003 --run-id <RUN_ID_FROM_TASK_GDAR_003> --reason spec_decision --title \"HD-GDAR-001: 汎用runtime化の切り出し粒度\" --question \"Generic runtimeをAICX runnerからどこまで切り出すか\" --option \"A: run_state/receiptだけ汎用化する\" --option \"B: command boundaryまで汎用化する\" --option \"C: Slack adapterまで汎用化する\" --json",
+      "idempotency_key": "HD-GDAR-001:human-turn",
+      "planned_only": true,
+      "requires_run_id_from": "ATOCLI-007:TASK-GDAR-003",
+      "expected_effect": {
+        "human_turn_id": "HT-GDAR-001",
+        "status": "HUMAN_TURN",
+        "recommended_option": "B"
+      },
+      "source_refs": [
+        "human_decision_packet.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-009",
+      "lane": "human_decision",
+      "purpose": "Convert HD-GDAR-002 into human_turn payload",
+      "command": "ato work block --task TASK-GDAR-005 --run-id <RUN_ID_FROM_TASK_GDAR_005> --reason spec_decision --title \"HD-GDAR-002: AICX Study Bot互換性の優先度\" --question \"AICX Study Bot互換性の優先度をどうするか\" --option \"A: 既存CLI完全互換\" --option \"B: breaking change許容\" --option \"C: adapter移行後に旧コマンドdeprecated\" --json",
+      "idempotency_key": "HD-GDAR-002:human-turn",
+      "planned_only": true,
+      "requires_run_id_from": "ATOCLI-007:TASK-GDAR-005",
+      "expected_effect": {
+        "human_turn_id": "HT-GDAR-002",
+        "status": "HUMAN_TURN",
+        "recommended_option": "A"
+      },
+      "source_refs": [
+        "human_decision_packet.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-010",
+      "lane": "human_decision",
+      "purpose": "Convert HD-GDAR-003 into human_turn payload",
+      "command": "ato work block --task TASK-GDAR-006 --run-id <RUN_ID_FROM_TASK_GDAR_006> --reason merge_approval --title \"HD-GDAR-003: 自動マージ許可範囲\" --question \"runtime codeをどこまで自動マージ候補にするか\" --option \"A: docs/schema/testのみ自動候補\" --option \"B: runtime codeは人間確認\" --option \"C: すべて人間確認\" --json",
+      "idempotency_key": "HD-GDAR-003:human-turn",
+      "planned_only": true,
+      "requires_run_id_from": "ATOCLI-007:TASK-GDAR-006",
+      "expected_effect": {
+        "human_turn_id": "HT-GDAR-003",
+        "status": "HUMAN_TURN",
+        "recommended_option": "B"
+      },
+      "source_refs": [
+        "human_decision_packet.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-011",
+      "lane": "evidence",
+      "purpose": "Attach planning artifacts as durable evidence",
+      "command": "ato evidence attach --task EPIC-GDAR-001 --run-id <RUN_ID_FROM_ATOCLI-003> --surface artifact --path docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json --relation planning_projection --verdict pass --json",
+      "idempotency_key": "EPIC-GDAR-001:ato-cli-materialization-plan",
+      "planned_only": true,
+      "requires_run_id_from": "ATOCLI-003",
+      "expected_effect": {
+        "evidence_path": "ato_cli_materialization_plan.json",
+        "relation": "planning_projection"
+      },
+      "source_refs": [
+        "ato_cli_materialization_plan.json"
+      ]
+    },
+    {
+      "command_id": "ATOCLI-012",
+      "lane": "readiness",
+      "purpose": "Preview deterministic readiness after materialization",
+      "command": "ato task readiness --task EPIC-GDAR-001 --json",
+      "idempotency_key": "EPIC-GDAR-001:readiness-preview",
+      "planned_only": true,
+      "requires_run_id_from": null,
+      "expected_effect": {
+        "readiness_checked": true,
+        "writes": false
+      },
+      "source_refs": [
+        "ato_cli_commands.md"
+      ]
+    }
+  ],
+  "traceability": {
+    "planned_pr_ids": [
+      "PR-GDAR-001",
+      "PR-GDAR-002",
+      "PR-GDAR-003"
+    ],
+    "case_ids": [
+      "CASE-GDAR-001",
+      "CASE-GDAR-002",
+      "CASE-GDAR-003"
+    ],
+    "task_ids": [
+      "TASK-GDAR-001",
+      "TASK-GDAR-002",
+      "TASK-GDAR-003",
+      "TASK-GDAR-004",
+      "TASK-GDAR-005",
+      "TASK-GDAR-006"
+    ],
+    "human_decision_ids": [
+      "HD-GDAR-001",
+      "HD-GDAR-002",
+      "HD-GDAR-003"
+    ],
+    "claim_ids": [
+      "CLM-GDAR-001",
+      "CLM-GDAR-002",
+      "CLM-GDAR-003",
+      "CLM-GDAR-004",
+      "CLM-GDAR-005"
+    ],
+    "proof_obligations": [
+      "PRF-GDAR-001",
+      "PRF-GDAR-002",
+      "PRF-GDAR-003",
+      "PRF-GDAR-004",
+      "PRF-GDAR-005",
+      "PRF-GDAR-006"
+    ],
+    "artifact_refs": [
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_commands.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json",
+      "artifacts/runs/poc-5b-generic-daily-agent-runtime/validation_report.json"
+    ]
+  },
+  "validation": {
+    "expected_commands": [
+      "cargo run -- validate-artifacts --artifacts docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime --out artifacts/runs/poc-5b-generic-daily-agent-runtime/validation_report.json",
+      "cargo test",
+      "git diff --check"
+    ],
+    "expected_report": "artifacts/runs/poc-5b-generic-daily-agent-runtime/validation_report.json",
+    "verdict": "pass"
+  }
+}

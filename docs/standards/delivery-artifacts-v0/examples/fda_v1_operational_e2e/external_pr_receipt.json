@@ -1,0 +1,72 @@
+{
+  "acceptance_criteria_status": [
+    {
+      "criterion": "planned PR と actual PR が対応し、test 結果が receipt に残る",
+      "evidence": "implementation_receipt.json",
+      "status": "pass"
+    }
+  ],
+  "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+  "changed_files": [
+    "src/application/merge.rs",
+    "src/rendering/merge.rs",
+    "src/lib.rs",
+    "docs/v1/fda_v1_product_contract.md",
+    "docs/v1/fda_v1_pr_sequence.md",
+    "artifacts/runs/fda-v1-codex-cli-primary-epic-20260629/human_decision_packet.md"
+  ],
+  "checks": {
+    "lint": "passed",
+    "security": "passed",
+    "tests": "passed"
+  },
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "evidence": [
+    "implementation_receipt.json",
+    "live_execution_evidence.json",
+    "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+  ],
+  "human_decisions_resolved": [],
+  "notes": "V1主経路はcurrent Codex CLI primary。PR #87は2026-06-29T23:06:45Zにsquash merge済み（GitHub merge result commit 5c3a06956c917e567c1e91480215109265035d8c）。MCP live implementerはV1.5 optional automationとして残す。",
+  "open_issues": [],
+  "planned_pr_id": "PR-V1-018",
+  "program_id": "FDA-V1",
+  "receipt_id": "EXTPR-FDA-V1-006-001",
+  "rollback_plan": "PR #87はsquash merge済みのため、必要に応じてGitHub merge result commit 5c3a06956c917e567c1e91480215109265035d8cをrevertする。target PRをcloseする手順やtarget branch削除は、merged状態のrollback手順としては扱わない。",
+  "schema_version": "external_pr_receipt.v0",
+  "scope_disposition": {
+    "affected_planned_pr_ids": [
+      "PR-V1-006"
+    ],
+    "closure_recommendation": "manual_review_required",
+    "kind": "within_scope",
+    "summary": "Codex CLI primary rebaseline、.fda profile gate、Review Agent Gate packet reflection gateの範囲内。"
+  },
+  "security_privacy_legal_review": "Review Agent Gateでfunctional_qa/security_qa/forge_reviewer/design_qaをPR #87 review packetへ反映する。",
+  "source_packet_id": "PPEXEC-FDA-V1-018-001",
+  "status": "merged",
+  "target_pr": {
+    "head_sha": "0e90b774453c2455c9db530b2ad2569cc46a0419",
+    "number": 87,
+    "state": "merged",
+    "url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+  },
+  "target_repo": "forge-delivery-agent",
+  "validation": [
+    {
+      "command": "cargo test -- --nocapture",
+      "status": "pass",
+      "summary": "156 tests passed after rebase onto origin/main."
+    },
+    {
+      "command": "cargo check",
+      "status": "pass",
+      "summary": "Rust type check passed."
+    },
+    {
+      "command": "python3 scripts/check_architecture_boundaries.py",
+      "status": "pass",
+      "summary": "Architecture boundary check passed."
+    }
+  ]
+}

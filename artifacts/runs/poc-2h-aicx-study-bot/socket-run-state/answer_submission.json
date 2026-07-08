@@ -1,0 +1,50 @@
+{
+  "schema_version": "aicx.answer_submission.v0",
+  "submission_id": "SUB-QUIZ-ASB-2026-06-21-SLACK-SOCKET",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "submitted_for_date": "2026-06-21",
+  "source": "slack_socket_mode_grading",
+  "source_event_id": "SLACKREPLY-QUIZ-ASB-2026-06-21-EV-QUIZ-ASB-2026-06-21-FIXTURE",
+  "answers": [
+    {
+      "question_id": "QB-ASB-BRANCHING-001",
+      "selected_choice": "A"
+    },
+    {
+      "question_id": "QB-ASB-BRANCHING-002",
+      "selected_choice": "B"
+    },
+    {
+      "question_id": "QB-ASB-WORKFLOW-001",
+      "selected_choice": "B"
+    },
+    {
+      "question_id": "QB-ASB-WORKFLOW-002",
+      "selected_choice": "C"
+    },
+    {
+      "question_id": "QB-ASB-ORG-KPI-001",
+      "selected_choice": "C"
+    },
+    {
+      "question_id": "QB-ASB-ORG-KPI-002",
+      "selected_choice": "C"
+    },
+    {
+      "question_id": "QB-ASB-GOVERNANCE-001",
+      "selected_choice": "B"
+    },
+    {
+      "question_id": "QB-ASB-GOVERNANCE-002",
+      "selected_choice": "B"
+    },
+    {
+      "question_id": "QB-ASB-5D-001",
+      "selected_choice": "B"
+    },
+    {
+      "question_id": "QB-ASB-5D-002",
+      "selected_choice": "C"
+    }
+  ]
+}

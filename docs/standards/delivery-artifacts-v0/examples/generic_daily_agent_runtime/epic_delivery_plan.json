@@ -1,0 +1,324 @@
+{
+  "schema_version": "forge_delivery.epic_delivery_plan.v0",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "status": "ready",
+  "source_requirements": [
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md"
+  ],
+  "planning_mode": "planning_only",
+  "objective": {
+    "summary": "AICX Study Botで実証した日次実行、catch-up、status、artifact管理をGeneric Daily Agent Runtimeとして切り出す。",
+    "success_outcomes": [
+      "AICX固有runnerから汎用runtime境界を分離できる",
+      "dispatch、event intake、maintain、statusが汎用化される",
+      "run_state、receipt、artifact inventory、runner explanationが再利用可能になる"
+    ],
+    "non_goals": [
+      "Slack以外のadapter実装",
+      "長時間daemon化",
+      "自動マージ",
+      "UI実装"
+    ]
+  },
+  "outcome": "Requirements Definitionから、Generic Daily Agent RuntimeのCase、Task、Planned PR、Human Decision、Forge Claim/Proofをplanning-onlyで追跡できる状態にする。",
+  "success_metrics": [
+    "requirements_definition.mdからEpic Delivery Planが作られている",
+    "Case Graphが3 Caseに分割されている",
+    "Planned PRsが3件に分割されている",
+    "各Planned PRに目的、scope、risk、claims、proof strategyがある",
+    "Human Decision Packetが人間に聞くべき判断だけを含んでいる",
+    "Autonomy Contractがplanning_onlyの権限境界を定義している",
+    "Forge projectionがClaim、Proof、readinessを持つ",
+    "artifact_inventoryとrunner_explanationから生成物を辿れる",
+    "validate-artifactsがPASSする"
+  ],
+  "scope": {
+    "in": [
+      "generic run_state schema",
+      "generic receipt schema",
+      "generic maintain/status command boundary",
+      "AICX adapter migration plan"
+    ],
+    "out": [
+      "multi-user runtime",
+      "production daemon",
+      "LINE adapter",
+      "deployment automation"
+    ]
+  },
+  "scope_in": [
+    "requirements_definition.mdを読んだ前提のplanning fixture",
+    "Epic Delivery Plan",
+    "Case Graph",
+    "Task Graph",
+    "Planned PRs",
+    "Human Decision Packet",
+    "Autonomy Contract",
+    "Forge projection",
+    "artifact_inventoryとrunner_explanation",
+    "不足schemaの追加"
+  ],
+  "scope_out": [
+    "Codex CLIで実装PRを作る",
+    "GitHub PRを自動作成する",
+    "ATOへProgram/Epic/Case/Taskを実書き込みする",
+    "Forge Gateを実評価する",
+    "Slack/AICX Botの機能追加",
+    "UI実装",
+    "自動マージ"
+  ],
+  "assumptions": [
+    "AICX Study Bot PoCのcloseoutから、run_state、receipt、catch-up、status、artifact inventoryの境界が抽出済みである",
+    "Generic Daily Agent RuntimeはATO/Forgeの正本stateを置換せず、実行runtimeのartifact contractとして扱う",
+    "初期sliceはfile artifactをstate保存の既定とし、SQLiteやATO-backed stateは後続判断に残す",
+    "Codex CLIは開発と手動検証のactorであり、長時間runnerの所有者ではない"
+  ],
+  "open_questions": [
+    {
+      "id": "Q-GDAR-001",
+      "question": "state保存はfile artifactで十分か、SQLiteへ寄せるか",
+      "blocking": false,
+      "owner": "human/runtime architect"
+    },
+    {
+      "id": "Q-GDAR-002",
+      "question": "inboundはpolling-firstでよいか、Socket Modeまたはwebhook抽象化を先に置くか",
+      "blocking": false,
+      "owner": "human/runtime architect"
+    },
+    {
+      "id": "Q-GDAR-003",
+      "question": "AICX Study Botの既存CLI互換をどこまで維持するか",
+      "blocking": false,
+      "owner": "human/product owner"
+    }
+  ],
+  "claim_tree": [
+    {
+      "claim_id": "CLM-GDAR-001",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "Generic Daily Agent RuntimeはrequirementsからCase、Task、Planned PR、Proofまで追跡できる。",
+      "blocking": true,
+      "proof_required": [
+        "epic_delivery_plan",
+        "case_graph",
+        "task_graph",
+        "planned_prs",
+        "artifact_inventory"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-002",
+      "parent_claim_id": "CLM-GDAR-001",
+      "type": "functional",
+      "statement": "Generic runtimeはdispatch、catch-up、status、receiptをAICX学習ドメインから独立して表現できる。",
+      "blocking": true,
+      "proof_required": [
+        "generic_run_state_schema",
+        "generic_receipt_schema",
+        "compatibility_fixture"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-003",
+      "parent_claim_id": "CLM-GDAR-001",
+      "type": "operational",
+      "statement": "maintain/status境界は再実行しても二重dispatchや二重actionを起こさない計画になっている。",
+      "blocking": true,
+      "proof_required": [
+        "idempotency_fixture",
+        "maintenance_receipt",
+        "status_projection_fixture"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-004",
+      "parent_claim_id": "CLM-GDAR-001",
+      "type": "functional",
+      "statement": "AICX Study Bot runnerは既存挙動を維持したままgeneric runtime boundaryへ移行できる。",
+      "blocking": true,
+      "proof_required": [
+        "aicx_compatibility_tests",
+        "migration_runbook",
+        "legacy_cli_mapping"
+      ]
+    },
+    {
+      "claim_id": "CLM-GDAR-005",
+      "parent_claim_id": "CLM-GDAR-001",
+      "type": "security",
+      "statement": "planning-only PoCはsecret、live ATO materialization、Forge実評価、GitHub PR作成を実行しない。",
+      "blocking": true,
+      "proof_required": [
+        "autonomy_contract",
+        "human_decision_packet",
+        "validation_report"
+      ]
+    }
+  ],
+  "case_graph": [
+    {
+      "case_id": "CASE-GDAR-001",
+      "purpose": "Runtime Artifact Contractsとしてrun_state、receipt、runner_explanation、artifact_inventory、validation evidenceの契約を固定する。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-GDAR-001",
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-001",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-GDAR-002",
+      "purpose": "Generic Command Boundaryとしてdispatch、maintain、status、event intake、catch-upの責務境界を定義する。",
+      "depends_on": [
+        "CASE-GDAR-001"
+      ],
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-003",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-002",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-GDAR-003",
+      "purpose": "AICX Study Bot runnerをgeneric runtime boundaryへ移す計画と互換性QA、failure recovery runbookを定義する。",
+      "depends_on": [
+        "CASE-GDAR-002"
+      ],
+      "claim_ids": [
+        "CLM-GDAR-003",
+        "CLM-GDAR-004",
+        "CLM-GDAR-005"
+      ],
+      "planned_pr": "PR-GDAR-003",
+      "risk": "high"
+    }
+  ],
+  "pr_plan": [
+    {
+      "planned_pr_id": "PR-GDAR-001",
+      "case_id": "CASE-GDAR-001",
+      "purpose": "generic runtime schemas and artifact catalogを追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/standards/delivery-artifacts-v0/schemas/run_state.schema.json",
+        "docs/standards/delivery-artifacts-v0/schemas/*receipt*.schema.json",
+        "docs/standards/delivery-artifacts-v0/artifact_catalog.md",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-GDAR-002",
+      "case_id": "CASE-GDAR-002",
+      "purpose": "generic maintain/status command boundaryを追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/**",
+        "docs/runtime/**",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-GDAR-003",
+      "case_id": "CASE-GDAR-003",
+      "purpose": "AICX Study Bot runnerをgeneric runtime boundaryへ移行する。",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "scripts/aicx_study_fixture.py",
+        "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/**",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**",
+        "artifacts/review_packets/**"
+      ]
+    }
+  ],
+  "proof_strategy": [
+    {
+      "claim_id": "CLM-GDAR-001",
+      "proof_type": "schema_validation_and_trace_links",
+      "owner_agent": "contract_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-GDAR-002",
+      "proof_type": "runtime_artifact_contract_fixture",
+      "owner_agent": "runtime_implementer",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-GDAR-003",
+      "proof_type": "idempotency_and_status_fixture",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-GDAR-004",
+      "proof_type": "aicx_compatibility_regression",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-GDAR-005",
+      "proof_type": "autonomy_boundary_review",
+      "owner_agent": "security_qa",
+      "blocking": true
+    }
+  ],
+  "human_decision_points": [
+    {
+      "id": "HD-GDAR-001",
+      "trigger": "CASE-GDAR-002に入る前",
+      "decision_needed": "Generic runtimeをAICX runnerからどこまで切り出すかを選ぶ。",
+      "options": [
+        "run_state/receiptだけ汎用化する",
+        "command boundaryまで汎用化する",
+        "Slack adapterまで汎用化する"
+      ],
+      "required_before": "CASE-GDAR-002"
+    },
+    {
+      "id": "HD-GDAR-002",
+      "trigger": "CASE-GDAR-003に入る前",
+      "decision_needed": "AICX Study Bot互換性の優先度を選ぶ。",
+      "options": [
+        "既存CLI完全互換",
+        "breaking change許容",
+        "adapter移行後に旧コマンドdeprecated"
+      ],
+      "required_before": "CASE-GDAR-003"
+    },
+    {
+      "id": "HD-GDAR-003",
+      "trigger": "実装PRのmerge候補化前",
+      "decision_needed": "自動マージ候補にしてよい範囲を選ぶ。",
+      "options": [
+        "docs/schema/testのみ自動候補",
+        "runtime codeは人間確認",
+        "すべて人間確認"
+      ],
+      "required_before": "implementation_merge_policy"
+    }
+  ],
+  "merge_policy": {
+    "auto_merge_level": "none",
+    "conditions": [
+      "validate-artifactsがpassする",
+      "git diff --checkがpassする",
+      "Planning-only scopeから外れていない"
+    ],
+    "forbidden": [
+      "runtime code modification in PoC-5A",
+      "GitHub PR auto creation in PoC-5A",
+      "ATO materialization write in PoC-5A",
+      "Forge Gate real evaluation in PoC-5A"
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/status_summary.schema.json",
+  "title": "FDA Status Summary",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "verdict",
+    "artifact_dir",
+    "current_phase",
+    "phase_reason",
+    "unresolved_decisions",
+    "notification",
+    "qa",
+    "repair",
+    "merge",
+    "next_actions"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.status_result.v0" },
+    "verdict": { "type": "string", "enum": ["pass", "fail"] },
+    "artifact_dir": { "type": "string", "minLength": 1 },
+    "current_phase": { "type": "string", "minLength": 1 },
+    "phase_reason": { "type": "string", "minLength": 1 },
+    "unresolved_decisions": { "type": "array" },
+    "notification": {
+      "type": "object",
+      "required": ["request_status", "receipt_status", "channel", "recipient", "sent"],
+      "properties": {
+        "request_status": { "type": "string", "minLength": 1 },
+        "receipt_status": { "type": "string", "minLength": 1 },
+        "channel": { "type": ["string", "null"] },
+        "recipient": { "type": ["string", "null"] },
+        "sent": { "type": ["boolean", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "qa": {
+      "type": "object",
+      "required": ["functional_qa_status", "security_qa_status", "qa_status", "return_to_role"],
+      "properties": {
+        "functional_qa_status": { "type": "string", "minLength": 1 },
+        "security_qa_status": { "type": "string", "minLength": 1 },
+        "qa_status": { "type": "string", "minLength": 1 },
+        "return_to_role": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "repair": {
+      "type": "object",
+      "required": [
+        "repair_loop_status",
+        "failure_classification",
+        "retry_attempt_count",
+        "retry_limit"
+      ],
+      "properties": {
+        "repair_loop_status": { "type": "string", "minLength": 1 },
+        "failure_classification": { "type": ["string", "null"] },
+        "retry_attempt_count": { "type": ["integer", "null"], "minimum": 0 },
+        "retry_limit": { "type": ["integer", "null"], "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "merge": {
+      "type": "object",
+      "required": [
+        "merge_gate_status",
+        "policy_disposition",
+        "ci_status",
+        "risk_classification",
+        "actual_pr_url"
+      ],
+      "properties": {
+        "merge_gate_status": { "type": "string", "minLength": 1 },
+        "policy_disposition": { "type": ["string", "null"] },
+        "ci_status": { "type": ["string", "null"] },
+        "risk_classification": { "type": ["string", "null"] },
+        "actual_pr_url": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "next_actions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

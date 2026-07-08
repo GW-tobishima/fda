@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/planned_pr_execution_packet.schema.json",
+  "title": "Planned PR Execution Packet",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_id",
+    "status",
+    "source_repo",
+    "target_repo",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "planned_pr_title",
+    "handoff_kind",
+    "source_artifacts",
+    "resolved_human_decisions",
+    "scope_in",
+    "scope_out",
+    "acceptance_criteria",
+    "security_privacy_legal_checks",
+    "expected_evidence_from_target_pr",
+    "implementation_start_gate"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "planned_pr_execution_packet.v0" },
+    "packet_id": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["draft", "ready_for_external_implementation", "blocked", "superseded"] },
+    "created_at": { "type": "string", "minLength": 1 },
+    "source_repo": { "type": "string", "minLength": 1 },
+    "target_repo": {
+      "type": "object",
+      "required": ["name", "local_path"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "local_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "planned_pr_title": { "type": "string", "minLength": 1 },
+    "handoff_kind": { "type": "string", "enum": ["external_implementation", "mcp_implementation", "qa_review"] },
+    "agent_invocation_plan_id": { "type": ["string", "null"] },
+    "source_artifacts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "resolved_human_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["human_decision_id", "decision", "implementation_directive"],
+        "properties": {
+          "human_decision_id": { "type": "string", "minLength": 1 },
+          "decision": { "type": "string", "minLength": 1 },
+          "implementation_directive": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "human_decision_dependencies": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "scope_in": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "scope_out": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "files_to_change_candidates": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "security_privacy_legal_checks": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "rollback_noop_plan": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "expected_evidence_from_target_pr": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "implementation_start_gate": {
+      "type": "object",
+      "required": ["human_decisions_resolved", "target_repo_changes_allowed_by_this_repo", "target_repo_pr_creation_allowed_by_this_packet", "notes"],
+      "properties": {
+        "human_decisions_resolved": { "type": "boolean" },
+        "target_repo_changes_allowed_by_this_repo": { "type": "boolean" },
+        "target_repo_pr_creation_allowed_by_this_packet": { "type": "boolean" },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "forge_mapping": {
+      "type": "object",
+      "required": ["claim_ids", "proof_obligations", "gate_requirements"],
+      "properties": {
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "gate_requirements": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "ready_for_external_implementation" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "implementation_start_gate": {
+            "properties": { "human_decisions_resolved": { "const": true } },
+            "required": ["human_decisions_resolved"]
+          }
+        },
+        "required": ["implementation_start_gate"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

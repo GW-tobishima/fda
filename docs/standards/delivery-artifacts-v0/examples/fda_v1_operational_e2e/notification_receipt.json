@@ -1,0 +1,18 @@
+{
+  "schema_version": "fda.notification_receipt.v0",
+  "receipt_id": "NOTIFY-RECEIPT-FDA-V1-SLACK-001",
+  "notification_id": "NOTIFY-FDA-V1-011-001",
+  "status": "skipped",
+  "sent": false,
+  "sendable": false,
+  "dry_run": false,
+  "skip_reason": "no_open_human_decision",
+  "channel": "slack",
+  "recipient": "slack:webhook",
+  "recipient_source": "channel-default",
+  "adapter": "slack_incoming_webhook",
+  "webhook_source": "env:FDA_SLACK_WEBHOOK_URL",
+  "sent_at": "unix:1783114428",
+  "external_live_receipt": "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_live_notification_receipt.json",
+  "adapter_boundary": "Operational V1 proof pack has no open Human Decision; Slack live delivery proof is retained as PR #88 evidence."
+}

@@ -1,0 +1,32 @@
+skill:
+  name: external_pr_receipt_collect
+  version: v0.1.0
+  purpose: 対象 repo の actual PR 結果を receipt として回収する。
+  input_schema:
+    - artifact_contract:planned_pr_execution_packet.v1
+    - docs/standards/fda-v1/schemas/cross-repo/actual_pr_handle.schema.json
+  output_schema:
+    - docs/standards/fda-v1/schemas/cross-repo/external_pr_receipt.schema.json
+    - docs/standards/fda-v1/schemas/cross-repo/evidence_return_packet.schema.json
+  allowed_actions:
+    - actual_pr_status_collect
+    - ci_status_collect
+    - deviation_from_plan_record
+    - evidence_return_packet_update
+  forbidden_actions:
+    - github_pr_merge
+    - ci_status_override
+    - proof_fabrication
+    - human_decision_approval
+  required_artifacts:
+    - external_pr_receipt.json
+    - evidence_return_packet.json
+  validation_commands:
+    - test -f artifacts/runs/<run_id>/external_pr_receipt.json
+    - test -f artifacts/runs/<run_id>/evidence_return_packet.json
+    - cargo run -- validate-artifacts --schemas docs/standards/fda-v1/schemas/cross-repo --artifacts artifacts/runs/<run_id> --out artifacts/runs/<run_id>/validation_report.json
+  escalation_conditions:
+    - actual_pr_missing
+    - ci_failed
+    - deviation_requires_scope_decision
+    - missing_required_proof

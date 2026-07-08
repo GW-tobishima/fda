@@ -1,0 +1,14 @@
+delivery_policy:
+  default_autonomy_level: handoff_only
+  auto_merge_allowed: false
+  human_required_for:
+    - scope_change
+    - public_api_breaking_change
+    - release_approval
+  low_risk_paths:
+    - docs/**
+    - artifacts/**
+    - tests/**
+  forbidden_without_human:
+    - raw_user_log_exposure
+    - third_party_data_export

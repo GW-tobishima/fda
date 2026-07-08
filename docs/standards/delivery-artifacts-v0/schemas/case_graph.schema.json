@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/case_graph.schema.json",
+  "title": "Case Graph",
+  "type": "object",
+  "required": ["program_id", "epic_id", "cases"],
+  "properties": {
+    "program_id": { "type": "string" },
+    "epic_id": { "type": "string" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["case_id", "purpose", "depends_on", "claim_ids", "planned_pr", "risk", "state"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "purpose": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "planned_pr": { "type": "string", "minLength": 1 },
+          "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "state": { "type": "string", "enum": ["planned", "ready", "running", "ai_repair", "human_turn", "done", "blocked"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

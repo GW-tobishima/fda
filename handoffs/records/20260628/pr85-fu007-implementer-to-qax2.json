@@ -1,0 +1,31 @@
+{
+  "schema_version": "fda.handoff_record.v0",
+  "handoff_id": "handoff-pr85-fu007-implementer-to-qax2",
+  "pr_number": 85,
+  "planned_pr_id": "PR-FDA-ARCH-FU-007",
+  "from_role": "implementer",
+  "to_role": "qax2",
+  "task_key": "issue-68-fu007-docs-final-20260628",
+  "run_id": "run_01KW7Y3HZ1N2HX55K74HCN8NP1",
+  "parent_task_key": "fda-operational-v1-prs-012-018-20260628",
+  "worktree": "/tmp/issue68-fu007-docs-final",
+  "summary": "FU-007 updates architecture docs and FDA artifact validation report after lib.rs facade completion.",
+  "scope": [
+    "docs/standards/fda-v1/architecture.md",
+    "docs/standards/fda-v1/source_architecture.md",
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/validation_report.json",
+    "artifacts/review_packets/pr-85.md"
+  ],
+  "validation": [
+    "FDA implement --dry-run detected codex/codex-reply with verdict pass",
+    "architecture boundary check pass",
+    "python unittest pass",
+    "cargo fmt/check/clippy/test/build pass",
+    "FDA artifact validation pass"
+  ],
+  "open_risks": [
+    "Codex GitHub review pending until @codex review is requested",
+    "merge approval not granted by this handoff"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "aicx.daily_run_state.v0",
+  "run_id": "AICX-DAILY-2026-06-22",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "date": "2026-06-22",
+  "timezone": "Asia/Tokyo",
+  "scheduled_time": "04:30",
+  "scheduled_at": "2026-06-22T04:30:00+09:00",
+  "status": "graded",
+  "steps": {
+    "quiz_generated": true,
+    "slack_sent": true,
+    "reply_received": true,
+    "graded": true,
+    "grading_response_sent": true
+  },
+  "slack": {
+    "channel_id": null,
+    "message_ts": null,
+    "thread_ts": "1782074738.865009",
+    "slack_used": false
+  },
+  "artifacts": {
+    "quiz_set": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/quiz_set.json",
+    "quiz_prompt_json": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/quiz_prompt.json",
+    "quiz_prompt_md": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/quiz_prompt.md",
+    "slack_outbound_message": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/slack_outbound_message.json",
+    "slack_delivery_receipt": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/slack_delivery_receipt.json",
+    "slack_reply_event": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/slack_reply_event.json",
+    "answer_submission": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/answer_submission.json",
+    "grading_report": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/grading_report.json",
+    "study_recommendation": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/study_recommendation.json",
+    "slack_grading_response": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/slack_grading_response.json",
+    "slack_grading_delivery_receipt": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/slack_grading_delivery_receipt.json",
+    "run_state": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/run_state.json"
+  },
+  "idempotency": {
+    "dispatch_key": "2026-06-22:QUIZ-ASB-2026-06-22:SLACK_CHANNEL_ID",
+    "grading_key": "2026-06-22:QUIZ-ASB-2026-06-22:thread",
+    "duplicate_dispatch_skipped": true,
+    "duplicate_grading_skipped": true,
+    "processed_reply_event_ids": [
+      "SLACKREPLY-QUIZ-ASB-2026-06-22-FIXTURE"
+    ]
+  },
+  "failure": null,
+  "last_event": {
+    "event_type": "grading",
+    "status": "duplicate_skipped",
+    "at_unix_seconds": 1782070860
+  },
+  "created_at_unix_seconds": 1782070200,
+  "updated_at_unix_seconds": 1782070860
+}

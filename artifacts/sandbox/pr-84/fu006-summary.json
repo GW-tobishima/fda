@@ -1,0 +1,39 @@
+{
+  "schema_version": "fda.sandbox_summary.v0",
+  "task_key": "issue-68-fu006-lib-facade-gate-20260628",
+  "run_id": "run_01KW6P2TYM2HVCSXNRRM7VDPGW",
+  "pr_number": 84,
+  "branch": "codex/issue68-fu006-lib-facade-gate",
+  "summary": "FU-006 lib facade architecture gate implementation and Codex P2 dependency-boundary repair.",
+  "verdict": "pass",
+  "commands": [
+    {
+      "command": "python3 scripts/check_architecture_boundaries.py",
+      "verdict": "pass"
+    },
+    {
+      "command": "python3 -m unittest tests.test_architecture_boundaries",
+      "verdict": "pass",
+      "tests": 5
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "verdict": "pass",
+      "tests": 61
+    },
+    {
+      "command": "cargo test -- --test-threads=1",
+      "verdict": "pass",
+      "tests": 134
+    },
+    {
+      "command": "python3 scripts/check_review_agent_gate.py --packet-path artifacts/review_packets/pr-84.md",
+      "verdict": "pass"
+    }
+  ],
+  "artifacts": {
+    "review_packet": "artifacts/review_packets/pr-84.md",
+    "handoff": "handoffs/records/20260628/pr84-fu006-implementer-to-qax2.json",
+    "runtime_evidence": "artifacts/sandbox/pr-84/runtime-evidence.json"
+  }
+}

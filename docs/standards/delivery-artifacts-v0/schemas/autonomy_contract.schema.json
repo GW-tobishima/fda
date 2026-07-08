@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/autonomy_contract.schema.json",
+  "title": "Autonomy Contract",
+  "type": "object",
+  "required": [
+    "contract_id",
+    "program_id",
+    "epic_id",
+    "status",
+    "applies_to",
+    "allowed_actions",
+    "forbidden_actions",
+    "escalation_rules",
+    "auto_merge_policy",
+    "evidence_policy",
+    "forge_mapping"
+  ],
+  "properties": {
+    "contract_id": { "type": "string" },
+    "program_id": { "type": "string" },
+    "epic_id": { "type": "string" },
+    "autonomy_level": { "type": "string", "enum": ["planning_only", "single_pr_execution", "multi_pr_execution"] },
+    "status": { "type": "string", "enum": ["draft", "approved", "superseded"] },
+    "applies_to": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "expires_at": { "type": ["string", "null"] },
+    "allowed_actions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "forbidden_actions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "escalation_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["trigger", "required_action", "human_decision_packet_required"],
+        "properties": {
+          "trigger": { "type": "string", "minLength": 1 },
+          "required_action": { "type": "string", "minLength": 1 },
+          "human_decision_packet_required": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "auto_merge_policy": {
+      "type": "object",
+      "required": ["allowed", "conditions", "forbidden"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "conditions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "forbidden": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "evidence_policy": {
+      "type": "object",
+      "required": ["citations_required", "source_trace_required", "verification_required", "summary_update_required"],
+      "properties": {
+        "citations_required": { "type": "boolean" },
+        "source_trace_required": { "type": "boolean" },
+        "verification_required": { "type": "boolean" },
+        "summary_update_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "next_allowed_phase": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "forge_mapping": {
+      "type": "object",
+      "required": ["claim_ids", "proof_obligations", "human_decision_points", "ato_task_graph", "planned_prs", "gate_requirements"],
+      "properties": {
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "human_decision_points": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "ato_task_graph": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "planned_prs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "gate_requirements": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "approved" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "allowed_actions": { "minItems": 1 },
+          "forbidden_actions": { "minItems": 1 },
+          "escalation_rules": { "minItems": 1 },
+          "auto_merge_policy": {
+            "properties": {
+              "forbidden": { "minItems": 1 }
+            },
+            "required": ["forbidden"]
+          },
+          "forge_mapping": {
+            "properties": {
+              "claim_ids": { "minItems": 1 },
+              "proof_obligations": { "minItems": 1 },
+              "gate_requirements": { "minItems": 1 }
+            },
+            "required": ["claim_ids", "proof_obligations", "gate_requirements"]
+          }
+        },
+        "required": ["allowed_actions", "forbidden_actions", "escalation_rules", "auto_merge_policy", "forge_mapping"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "approved" },
+          "auto_merge_policy": {
+            "properties": {
+              "allowed": { "const": true }
+            },
+            "required": ["allowed"]
+          }
+        },
+        "required": ["status", "auto_merge_policy"]
+      },
+      "then": {
+        "properties": {
+          "auto_merge_policy": {
+            "properties": {
+              "conditions": { "minItems": 1 }
+            },
+            "required": ["conditions"]
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

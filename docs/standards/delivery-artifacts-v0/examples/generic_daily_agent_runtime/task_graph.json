@@ -1,0 +1,177 @@
+{
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "tasks": [
+    {
+      "task_id": "TASK-GDAR-001",
+      "title": "generic runtime artifact schemaを定義する",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-001",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-001",
+        "claim_ids": [
+          "CLM-GDAR-001",
+          "CLM-GDAR-002",
+          "CLM-GDAR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "runtime_implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-GDAR-002",
+      "title": "artifact catalogとplanning fixture inventoryを更新する",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-001",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-001",
+        "claim_ids": [
+          "CLM-GDAR-001",
+          "CLM-GDAR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "contract_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-GDAR-003",
+      "title": "dispatch/poll/action/status command contractを設計する",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-002",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-002",
+        "claim_ids": [
+          "CLM-GDAR-002",
+          "CLM-GDAR-003",
+          "CLM-GDAR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "solution_architect",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-GDAR-001"
+      }
+    },
+    {
+      "task_id": "TASK-GDAR-004",
+      "title": "idempotencyとfailure classification fixtureを定義する",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-002",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-002",
+        "claim_ids": [
+          "CLM-GDAR-002",
+          "CLM-GDAR-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "functional_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-GDAR-005",
+      "title": "AICX runner migration planとlegacy CLI mappingを作る",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-003",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-003",
+        "claim_ids": [
+          "CLM-GDAR-003",
+          "CLM-GDAR-004",
+          "CLM-GDAR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "runtime_implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-GDAR-001"
+      }
+    },
+    {
+      "task_id": "TASK-GDAR-006",
+      "title": "AICX互換性QAとfailure recovery runbookを定義する",
+      "parent_type": "case",
+      "parent_id": "CASE-GDAR-003",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+        "epic_id": "EPIC-GDAR-001",
+        "case_id": "CASE-GDAR-003",
+        "claim_ids": [
+          "CLM-GDAR-004",
+          "CLM-GDAR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "functional_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    }
+  ]
+}

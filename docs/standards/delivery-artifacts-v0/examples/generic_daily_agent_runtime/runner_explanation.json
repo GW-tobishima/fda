@@ -1,0 +1,46 @@
+{
+  "runner_explanation": {
+    "current_phase": "single_planned_pr_execution",
+    "previous_run_id": "run_01KVW9SKWH3C8YX5ZPGKK3SY06",
+    "diff_from_previous_run": "PoC-5BではATO CLI materialization dry-run planを作成した。PR-GDAR-001ではPlanned PRsの最初のsliceだけを実行し、generic_run_stateとgeneric_receiptのschema/fixture、runtime artifact contract、QA evidenceを追加した。",
+    "execution_actor": "codex-cli",
+    "input_summary": "PoC-5Bまでに作成したplanned_prs、forge_projection、artifact_inventoryを入力に、PR-GDAR-001だけをimplementation PRとして実行する。",
+    "changed_input_summary": "generic_run_state.schema/json、generic_receipt.schema/json、runtime_artifact_contracts、PR-GDAR-001 validation/QA evidenceを追加し、artifact_inventoryとForge proof referencesを更新した。",
+    "stop_condition": "validate-artifacts、cargo test、cargo check、git diff --checkがpassし、runtime command実装、Slack adapter migration、ATO materialization write、Forge Gate実評価が発生していないことをvalidation_reportとself_review_reportで確認できる。",
+    "next_action": "PR-GDAR-001のreview後、HD-GDAR-001を解決してPR-GDAR-002 generic maintain/status command boundaryへ進む。",
+    "automation_boundary": "このPRはschema/fixture/docs/evidenceだけを扱う。runtime command実装、Slack adapter migration、対象Program/Epic/Case/TaskへのATO CLI実行、ATO MCP write、ATO DB変更、Forge Gate実評価、自動マージは行わない。",
+    "completion_evidence": [
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/autonomy_contract.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_commands.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runtime_artifact_contracts.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+      "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json",
+      "artifacts/runs/pr-gdar-001-runtime-contracts/development_handoff.md",
+      "artifacts/runs/pr-gdar-001-runtime-contracts/unit_test_report.md",
+      "artifacts/runs/pr-gdar-001-runtime-contracts/self_review_report.md"
+    ],
+    "failure_evidence": [
+      "runtime codeを変更していない",
+      "AICX Study Botの機能追加をしていない",
+      "Slack adapter migrationをしていない",
+      "対象Program/Epic/Case/TaskへのATO CLI予定コマンドを実行していない",
+      "ATO MCP writeをしていない",
+      "ATO Program/Epic/Case/Task materialization writeをしていない",
+      "Forge Gateを実評価していない",
+      "ATO DBを変更していない",
+      "auto-merge policyはnoneのままにしている"
+    ],
+    "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+    "related_epic_id": "EPIC-GDAR-001"
+  }
+}

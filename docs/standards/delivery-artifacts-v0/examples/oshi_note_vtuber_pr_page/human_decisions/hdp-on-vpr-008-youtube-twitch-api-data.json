@@ -1,0 +1,57 @@
+{
+  "human_decision_id": "HDP-ON-VPR-008",
+  "title": "YouTube/Twitch API Data利用有無",
+  "status": "resolved",
+  "selected_option_id": "no_api_data_in_mvp",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "MVPではYouTube / Twitch API Dataを使わない。動画名、サムネイル、ランキング、投稿カードへAPI Dataを出さない。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-005",
+  "required_before": "PR-ON-VPR-005",
+  "requested_decision": "動画名、サムネイル、ランキング、投稿カードでYouTube / Twitch API Dataを使うか。",
+  "recommended_option": "MVPではAPI Dataを使わない",
+  "options": [
+    {
+      "id": "no_api_data_in_mvp",
+      "description": "MVPではAPI Dataを使わない",
+      "pros": [
+        "保持期限、refresh、公式統計誤認のリスクを後段へ分離できる"
+      ],
+      "cons": [
+        "動画名やサムネイル付き表現は弱くなる"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "use_with_refresh_delete_policy",
+      "description": "refresh / delete方針込みで使う",
+      "pros": [
+        "投稿カードやdashboardの表現力が上がる"
+      ],
+      "cons": [
+        "API規約、保持期限、表示要件の実装負荷が増える"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "creator_provided_material_only",
+      "description": "VTuber提供素材だけ使う",
+      "pros": [
+        "API Data規約を避けながら見た目を補える"
+      ],
+      "cons": [
+        "素材提供と許諾管理が必要になる"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "MVPではYouTube / Twitch API Dataを使わない。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-005 --run-id \"<RUN_ID:TASK-ON-VPR-005>\" --reason risk_approval --title \"HDP-ON-VPR-008 YouTube/Twitch API Data利用有無\" --question \"動画名、サムネイル、ランキング、投稿カードでYouTube / Twitch API Dataを使うか。\" --recommended-option \"MVPではAPI Dataを使わない\" --option \"MVPではAPI Dataを使わない\" --option \"refresh / delete方針込みで使う\" --option \"VTuber提供素材だけ使う\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "risk_register.md",
+    "planned_prs.json",
+    "ato_cli_materialization_plan.json"
+  ]
+}

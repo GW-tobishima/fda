@@ -1,0 +1,17 @@
+{
+  "adapter": "slack_incoming_webhook",
+  "channel": "slack",
+  "dry_run": false,
+  "http_status": 200,
+  "notification_id": "NOTIFY-FDA-V1-011-001",
+  "provider_response_digest": "fnv1a64:08b05d07b5566bef",
+  "receipt_id": "NOTIFY-RECEIPT-FDA-V1-SLACK-001",
+  "recipient": "slack:webhook",
+  "recipient_source": "channel-default",
+  "schema_version": "fda.notification_receipt.v0",
+  "sendable": true,
+  "sent": true,
+  "sent_at": "unix:1782966321",
+  "status": "sent",
+  "webhook_source": "env:FDA_SLACK_WEBHOOK_URL"
+}

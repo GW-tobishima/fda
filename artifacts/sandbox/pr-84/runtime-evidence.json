@@ -1,0 +1,43 @@
+{
+  "schema_version": "fda.runtime_evidence.v0",
+  "task_key": "issue-68-fu006-lib-facade-gate-20260628",
+  "run_id": "run_01KW6P2TYM2HVCSXNRRM7VDPGW",
+  "pr_number": 84,
+  "workspace": "/tmp/issue68-fu006-lib-facade-gate",
+  "branch": "codex/issue68-fu006-lib-facade-gate",
+  "source_head_sha_at_validation": "20e95d8",
+  "verdict": "pass",
+  "evidence": [
+    {
+      "surface": "architecture_gate",
+      "command": "python3 scripts/check_architecture_boundaries.py",
+      "verdict": "pass",
+      "claim_ids": ["CLM-REQ-01", "CLM-REQ-04", "CLM-SEC-01"]
+    },
+    {
+      "surface": "unit_tests",
+      "command": "python3 -m unittest tests.test_architecture_boundaries",
+      "verdict": "pass",
+      "claim_ids": ["CLM-REQ-02"]
+    },
+    {
+      "surface": "rust_tests",
+      "command": "cargo test -- --test-threads=1",
+      "verdict": "pass",
+      "claim_ids": ["CLM-REQ-03"]
+    },
+    {
+      "surface": "docs_review",
+      "command": "manual diff review",
+      "verdict": "pass",
+      "claim_ids": ["CLM-REQ-05"]
+    },
+    {
+      "surface": "review_agent_gate",
+      "command": "python3 scripts/check_review_agent_gate.py --packet-path artifacts/review_packets/pr-84.md",
+      "verdict": "pass",
+      "claim_ids": ["CLM-REQ-01", "CLM-REQ-02", "CLM-REQ-03", "CLM-REQ-04", "CLM-REQ-05", "CLM-SEC-01"]
+    }
+  ],
+  "open_blockers": []
+}

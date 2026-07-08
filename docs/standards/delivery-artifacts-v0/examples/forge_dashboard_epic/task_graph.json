@@ -1,0 +1,61 @@
+{
+  "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "tasks": [
+    {
+      "task_id": "TASK-FD-001",
+      "title": "標準成果物パック v0 を作る",
+      "parent_type": "case",
+      "parent_id": "CASE-FD-001",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+        "epic_id": "EPIC-FORGE-DASHBOARD-001",
+        "case_id": "CASE-FD-001",
+        "claim_ids": [
+          "CLM-001"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FD-002",
+      "title": "Mission Control UI/UX 設計を固定する",
+      "parent_type": "case",
+      "parent_id": "CASE-FD-002",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+        "epic_id": "EPIC-FORGE-DASHBOARD-001",
+        "case_id": "CASE-FD-002",
+        "claim_ids": [
+          "CLM-002",
+          "CLM-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "solution_architect",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-FD-001"
+      }
+    }
+  ]
+}

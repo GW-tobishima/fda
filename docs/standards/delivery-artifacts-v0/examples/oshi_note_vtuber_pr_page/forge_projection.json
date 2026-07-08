@@ -1,0 +1,241 @@
+{
+  "schema_version": "forge_projection.v0",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_input_spec.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/epic_delivery_plan.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_prs.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json"
+  ],
+  "claim_contracts": [
+    {
+      "claim_id": "CLM-ON-VPR-001",
+      "type": "contract",
+      "statement": "紹介ページ発行は本人確認済みVTuber / 事務所アカウントに限定される。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-001"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-001"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-002",
+      "type": "functional",
+      "statement": "VTuberが宣伝用登録時に選択した推し色は、紹介URLページと紹介URL経由登録の初期推し状態へ反映される。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-006"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-002",
+        "PR-ON-VPR-006"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-002",
+        "PRF-ON-VPR-007"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-003",
+      "type": "security",
+      "statement": "通常メモ本文、個人ID、メールアドレス、自由入力URL、raw logはVTuber向けsurfaceに出ない。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-006"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-003",
+        "PR-ON-VPR-004",
+        "PR-ON-VPR-006"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-003",
+        "PRF-ON-VPR-005",
+        "PRF-ON-VPR-007"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-004",
+      "type": "non_functional",
+      "statement": "少数母数の集計bucketは非表示になり、個人推測を避ける。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-004"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-004"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-005"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-005",
+      "type": "ux",
+      "statement": "公開用コメントは通常メモと分離され、明示opt-inとmoderation方針の対象になる。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-005"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-003",
+        "PR-ON-VPR-005"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-004",
+        "PRF-ON-VPR-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-006",
+      "type": "contract",
+      "statement": "投稿カードとSNSテンプレは独自集計注記、公式統計ではない注記、必要なPR表示を含む。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-005"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-005"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-006"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-007",
+      "type": "operational",
+      "statement": "公式素材、ロゴ、サムネイル、YouTube / Twitch API Dataは許諾と規約方針が解決されるまで使用しない。",
+      "blocking": true,
+      "case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-005"
+      ],
+      "planned_pr_ids": [
+        "PR-ON-VPR-001",
+        "PR-ON-VPR-005"
+      ],
+      "proof_obligations": [
+        "PRF-ON-VPR-001",
+        "PRF-ON-VPR-006"
+      ]
+    }
+  ],
+  "proof_obligations": [
+    {
+      "proof_id": "PRF-ON-VPR-001",
+      "claim_id": "CLM-ON-VPR-001",
+      "type": "human_decision_and_ops_review",
+      "required_evidence": [
+        "human_decision_packet.json",
+        "partner verification policy",
+        "material permission record"
+      ],
+      "blocking": true,
+      "owner_agent": "human_liaison",
+      "validation_method": "human decision resolution plus operations review"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-002",
+      "claim_id": "CLM-ON-VPR-002",
+      "type": "functional_acceptance_and_ux_review",
+      "required_evidence": [
+        "campaign color contract",
+        "initial favorite acceptance test",
+        "UX review"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "future implementation acceptance tests and UX review"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-003",
+      "claim_id": "CLM-ON-VPR-003",
+      "type": "privacy_data_flow_and_security_review",
+      "required_evidence": [
+        "privacy data-flow review",
+        "API contract test",
+        "security review"
+      ],
+      "blocking": true,
+      "owner_agent": "security_qa",
+      "validation_method": "future API contract test and privacy review"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-004",
+      "claim_id": "CLM-ON-VPR-005",
+      "type": "comment_opt_in_and_moderation_review",
+      "required_evidence": [
+        "comment opt-in copy review",
+        "moderation policy",
+        "comment display test"
+      ],
+      "blocking": true,
+      "owner_agent": "human_liaison",
+      "validation_method": "future comment consent and moderation review"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-005",
+      "claim_id": "CLM-ON-VPR-004",
+      "type": "aggregation_threshold_test",
+      "required_evidence": [
+        "aggregation threshold unit test",
+        "authorization test",
+        "privacy data-flow review"
+      ],
+      "blocking": true,
+      "owner_agent": "functional_qa",
+      "validation_method": "future aggregation tests and authorization tests"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-006",
+      "claim_id": "CLM-ON-VPR-006",
+      "type": "compliance_template_review",
+      "required_evidence": [
+        "compliance review",
+        "card template snapshot",
+        "material permission review",
+        "API data retention review if applicable"
+      ],
+      "blocking": true,
+      "owner_agent": "security_qa",
+      "validation_method": "future compliance review and snapshot review"
+    },
+    {
+      "proof_id": "PRF-ON-VPR-007",
+      "claim_id": "CLM-ON-VPR-002",
+      "type": "analytics_payload_review",
+      "required_evidence": [
+        "analytics payload review",
+        "Stripe metadata review",
+        "funnel smoke test"
+      ],
+      "blocking": true,
+      "owner_agent": "requirements_analyst",
+      "validation_method": "future analytics payload and Stripe metadata review"
+    }
+  ],
+  "promotion_readiness": {
+    "verdict": "not_evaluated",
+    "reason": "Planning-only PoC. Forge real evaluation was intentionally not executed and human decisions remain unresolved.",
+    "evaluated_at": null,
+    "gate_inputs_ready": false
+  },
+  "gate_requirements": [
+    "Human Decision Packet must be resolved before implementation",
+    "Privacy, compliance, material permission, and API Data gates must pass before release",
+    "Referral selected color must have propagation and initial favorite acceptance tests",
+    "No normal memo body, direct identifiers, free-form URLs, or low-count aggregates may be exposed to VTubers",
+    "PoC-6A planning does not execute Forge real evaluation"
+  ]
+}

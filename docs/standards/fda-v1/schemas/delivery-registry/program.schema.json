@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/program.schema.json",
+  "title": "Program",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "program_id", "title", "status", "owner_role", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.program.v1" },
+    "program_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "planning", "running", "human_turn", "completed", "canceled"] },
+    "owner_role": { "type": "string", "minLength": 1 },
+    "epic_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "decision_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "artifact_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "knowledge_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

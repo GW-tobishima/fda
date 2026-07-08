@@ -1,0 +1,121 @@
+{
+  "schema_version": "fda.runtime_evidence.v0",
+  "task_key": "v1-slack-p0-operational-proof-rebaseline-20260704",
+  "run_id": "run_01KWMV6FN9RXDK675JJBPVCJJF",
+  "pr_number": 89,
+  "workspace": "/tmp/fda-v1-slack-p0-proof-rebaseline",
+  "branch": "codex/fda-v1-slack-p0-proof-rebaseline",
+  "source_head_sha_at_validation": "68a395d652f9f5e8a19f557254d4a2ea4a2bceea",
+  "source_head_note": "68a395d is the PR head reviewed by Codex review 4628390626 before this follow-up repair. The post-repair validation target is recorded in post_repair_validation_attestation because a Git commit cannot contain its own final SHA inside an evidence file without changing that SHA.",
+  "post_repair_validation_attestation": {
+    "review_id": 4628390626,
+    "review_comment_ids": [
+      "r3522130048",
+      "r3522130049",
+      "r3522130053"
+    ],
+    "repair_summary": "Added github_merge_receipt.json, aligned merged-state proof links and inventory freshness, and tied the validation baseline to the latest reviewed head with this post-repair worktree attestation.",
+    "validated_after_repair": true,
+    "final_commit_sha_note": "The final commit SHA is expected to differ from source_head_sha_at_validation because this evidence file is part of the repair commit."
+  },
+  "verdict": "pass",
+  "evidence": [
+    {
+      "surface": "artifact_validation",
+      "command": "cargo run -- validate-artifacts --artifacts docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e --out docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/validation_report.json",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "output_hub_projection",
+      "command": "cargo run -- open --artifacts docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e --out docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE"]
+    },
+    {
+      "surface": "rust_readiness",
+      "command": "cargo check && cargo clippy --all-targets --all-features -- -D warnings && cargo test -- --test-threads=1",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE"]
+    },
+    {
+      "surface": "security_secret_scan",
+      "command": "rg -n \"hooks\\\\.slack\\\\.com/services/|xox[baprs]-|(gho|ghp|ghu|ghs|ghr)_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+|FDA_SLACK_WEBHOOK_URL[[:space:]]*=|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}\" docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e docs/v1/fda_v1_operational_epic.md artifacts/review_packets/pr-89.md artifacts/sandbox/pr-89/runtime-evidence.json",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-SEC-EVIDENCE"]
+    },
+    {
+      "surface": "ato_loop_verify",
+      "command": "ATO_CLI_BACKEND=local ATO_DB_PATH=/root/code/forge-delivery-agent/.ato/ato.db ato loop verify --task v1-slack-p0-operational-proof-rebaseline-20260704 --json",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-HUMAN-DECISIONS"]
+    },
+    {
+      "surface": "review_agent_gate",
+      "command": "python3 scripts/check_review_agent_gate.py --pr-number 89",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-SEC-EVIDENCE", "CLM-RP-HUMAN-DECISIONS"]
+    },
+    {
+      "surface": "forge_reviewer_gate",
+      "command": "ATO_CLI_BACKEND=local ATO_DB_PATH=/root/code/forge-delivery-agent/.ato/ato.db ato case evaluate --task v1-slack-p0-operational-proof-rebaseline-20260704 --pr 89 --review-packet-path artifacts/review_packets/pr-89.md --no-write --json",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-SEC-EVIDENCE", "CLM-RP-HUMAN-DECISIONS"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628059435 comments r3521863094, r3521863097, r3521863102: freshness timestamps, no-sendable completed proof notification, and empty decision IDs for no open Human Decision.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628097832 comments r3521900195 and r3521900199: live no-open-decision skip receipt dry_run=false and refreshed inventory updated_at timestamps for modified proof artifacts.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628133314 comments r3521933057, r3521933058, r3521933062, r3521933068: inventory validation_report freshness, validation SHA, existing decision document path, and removal of literal legacy email address from review evidence.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-SEC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628184582 comments r3521967679, r3521967681, r3521967686: validation SHA, PR #87 merged external PR receipt, and live skip receipt sent_at/webhook_source.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628252488 comments r3522018745, r3522018747, r3522018752, r3522018753: validation source head, merged-state merge/status proof, E2E receipt timestamp ordering, and current artifact_dir decision document path.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628328801 comments r3522083454, r3522083456, r3522083457, r3522083459: validation source head, merged-state rollback plan, live execution inventory freshness, and email literal secret scan coverage.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-SEC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628390626 comments r3522130048, r3522130049, r3522130053: GitHub merge receipt proof, inventory timestamp freshness for changed artifacts, and post-repair validation attestation tied to latest reviewed head 68a395d.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628447442 comments r3522179428, r3522179429, r3522179435: v0 GitHub merge receipt shape, inventory freshness for live execution/implementation/human decision artifacts, and expanded GitHub token secret scan prefixes.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-SEC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    },
+    {
+      "surface": "codex_review_repair",
+      "command": "Addressed Codex review 4628478657 comment r3522212166: PR #87 has a one-parent GitHub merge result commit, so github_merge_receipt.json records merge_method=squash and rollback evidence refers to the squash merge result commit.",
+      "verdict": "pass",
+      "claim_ids": ["CLM-RP-AC-EVIDENCE", "CLM-RP-CHANGE-INTENT"]
+    }
+  ],
+  "open_blockers": []
+}

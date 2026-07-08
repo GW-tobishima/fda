@@ -1,0 +1,431 @@
+{
+  "schema_version": "forge_delivery.planned_prs.v0",
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "source_requirements": [
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/requirements_definition.md",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68"
+  ],
+  "planned_prs": [
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-001",
+      "sequence": 1,
+      "title": "lib.rs root dependency cleanup for extracted use cases",
+      "case_id": "CASE-FDA-ARCH-FU-001",
+      "purpose": "Start/Decide/Design/Plan/Validate 周辺の result 型と pure helper を application/support へ移し、lib.rs 依存を薄くする。",
+      "scope": {
+        "in": [
+          "StartResult / DecideResult / DesignResult / PlanResult / ValidationReport の適切な module への移動",
+          "display_path / resolve_path など pure helper の support 化",
+          "抽出済み use case の crate root import 削減"
+        ],
+        "out": [
+          "implement/review/merge/open/notify の大移動",
+          "process IO port 化",
+          "CLI 表示変更"
+        ]
+      },
+      "risk": {
+        "level": "medium",
+        "summary": "型移動の visibility 調整で既存 unit tests や CLI runner が壊れやすい。",
+        "mitigations": [
+          "挙動変更なしの module move に限定する",
+          "cargo test と cargo clippy を必須にする",
+          "public CLI output を変更しない"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-001",
+          "type": "compile_and_test",
+          "description": "result 型と support helper 移動後も既存 tests がすべて通る。",
+          "blocking": true,
+          "expected_evidence": [
+            "cargo test",
+            "cargo clippy -- -D warnings",
+            "python3 scripts/check_architecture_boundaries.py"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "抽出済み application module が crate root helper に強く依存しない",
+        "src/lib.rs の command-independent helper が減っている",
+        "CLI behavior snapshot が変わらない"
+      ],
+      "expected_files": [
+        "src/application/**/*.rs",
+        "src/support/**/*.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-002",
+      "sequence": 2,
+      "title": "move implement use case and rendering out of lib.rs",
+      "case_id": "CASE-FDA-ARCH-FU-002",
+      "purpose": "implement dry-run/live の use case orchestration を application へ、prompt/receipt JSON 生成を rendering へ移す。",
+      "scope": {
+        "in": [
+          "application/implement.rs",
+          "rendering/implement.rs",
+          "implement result 型",
+          "dry-run/live receipt builder"
+        ],
+        "out": [
+          "process runner abstraction",
+          "review/repair/merge command",
+          "Codex invocation behavior change"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "implement は MCP/Codex invocation、Human Decision guard、artifact generation が絡み、移動範囲が広い。",
+        "mitigations": [
+          "まず既存 function move と module visibility 調整に限定する",
+          "MCP process abstraction は次 PR に分離する",
+          "dry-run/live の既存 tests を維持する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-002",
+          "type": "behavior_preserving_move",
+          "description": "implement dry-run/live の既存 tests と artifact schema validation が移動後も通る。",
+          "blocking": true,
+          "expected_evidence": [
+            "cargo test implement",
+            "cargo test",
+            "python3 scripts/check_architecture_boundaries.py"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "cli::runner は implement を application::implement へ dispatch する",
+        "implement prompt/receipt builder は rendering 層にある",
+        "src/lib.rs に implement command 本体が残っていない"
+      ],
+      "expected_files": [
+        "src/application/implement.rs",
+        "src/rendering/implement.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-003",
+      "sequence": 3,
+      "title": "introduce process port and infra adapter for Codex MCP invocation",
+      "case_id": "CASE-FDA-ARCH-FU-003",
+      "purpose": "MCP / Codex process invocation と child process lifecycle を application::ports と infra adapter へ切り出す。",
+      "scope": {
+        "in": [
+          "ProcessRunner port",
+          "infra/process.rs",
+          "MCP frame read/write helper の adapter 化",
+          "approval prompt fail-close behavior の維持"
+        ],
+        "out": [
+          "MCP protocol redesign",
+          "new execution provider",
+          "live Codex behavior change"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "process lifecycle と approval prompt fail-close は安全境界なので、小さな差分でも regress しやすい。",
+        "mitigations": [
+          "既存 approval prompt tests を維持する",
+          "process adapter を application core から呼ぶ最小 port にする",
+          "stdout/stderr 全文を artifact / DB へ混ぜない"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-004"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-003",
+          "type": "process_boundary_test",
+          "description": "Codex MCP approval prompt が fail-close し、process IO が infra adapter に隔離されている。",
+          "blocking": true,
+          "expected_evidence": [
+            "approval prompt unit tests",
+            "cargo test",
+            "architecture boundary check"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "application core が std::process を直接使わない",
+        "MCP frame handling は process adapter または support helper に隔離される",
+        "approval prompt fail-close の既存挙動が維持される"
+      ],
+      "expected_files": [
+        "src/application/ports.rs",
+        "src/infra/process.rs",
+        "src/application/implement.rs",
+        "src/lib.rs"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-004",
+      "sequence": 4,
+      "title": "move review repair and merge use cases out of lib.rs",
+      "case_id": "CASE-FDA-ARCH-FU-004",
+      "purpose": "review / continue / merge の gate orchestration を application へ、receipt / runner explanation を rendering へ移す。",
+      "scope": {
+        "in": [
+          "application/review.rs",
+          "application/repair.rs",
+          "application/merge.rs",
+          "rendering/review.rs",
+          "rendering/repair.rs",
+          "rendering/merge.rs"
+        ],
+        "out": [
+          "merge policy semantic change",
+          "QA policy redesign",
+          "GitHub merge automation"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "review/repair/merge は gate 判定と human-required boundary を扱うため、責務移動でも意味変更が起きやすい。",
+        "mitigations": [
+          "既存 gate tests を必須にする",
+          "merge_approval を自動承認に変換しない",
+          "receipt JSON の schema 互換を維持する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-004",
+          "type": "gate_behavior_regression",
+          "description": "QA fail、retry limit、merge risk、security high の既存判定が移動後も維持される。",
+          "blocking": true,
+          "expected_evidence": [
+            "cargo test review",
+            "cargo test merge",
+            "cargo test continue",
+            "architecture boundary check"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "cli::runner は review/continue/merge を application use case へ dispatch する",
+        "receipt / runner explanation builder は rendering 層にある",
+        "merge approval と blocker confirmation の意味が変わらない"
+      ],
+      "expected_files": [
+        "src/application/review.rs",
+        "src/application/repair.rs",
+        "src/application/merge.rs",
+        "src/rendering/review.rs",
+        "src/rendering/repair.rs",
+        "src/rendering/merge.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-005",
+      "sequence": 5,
+      "title": "move output hub and notify use cases out of lib.rs",
+      "case_id": "CASE-FDA-ARCH-FU-005",
+      "purpose": "open/output hub と notify test の use case と HTML/notice rendering を分離する。",
+      "scope": {
+        "in": [
+          "application/output_hub.rs",
+          "application/notify.rs",
+          "rendering/output_hub.rs",
+          "rendering/notify.rs",
+          "HTML shell / escape helper の配置整理"
+        ],
+        "out": [
+          "UI redesign",
+          "notification delivery provider integration",
+          "browser launch"
+        ]
+      },
+      "risk": {
+        "level": "medium",
+        "summary": "HTML helper と artifact scanning が混ざると rendering と IO の境界が再び曖昧になる。",
+        "mitigations": [
+          "filesystem scan は application/ports 経由にする",
+          "HTML 文字列組み立ては rendering に限定する",
+          "open_output_hub tests を維持する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-005",
+          "type": "output_artifact_regression",
+          "description": "Output Hub と notification dry-run artifacts が移動後も同じ構造で出る。",
+          "blocking": true,
+          "expected_evidence": [
+            "cargo test open_output_hub",
+            "cargo test notify_test",
+            "architecture boundary check"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "open/notify は application use case へ dispatch される",
+        "HTML / notice body rendering は rendering 層にある",
+        "notification provider の live integration は追加しない"
+      ],
+      "expected_files": [
+        "src/application/output_hub.rs",
+        "src/application/notify.rs",
+        "src/rendering/output_hub.rs",
+        "src/rendering/notify.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-006",
+      "sequence": 6,
+      "title": "extend architecture gate for lib.rs facade",
+      "case_id": "CASE-FDA-ARCH-FU-006",
+      "purpose": "lib.rs の再肥大化を検出する architecture gate を追加する。",
+      "scope": {
+        "in": [
+          "lib.rs line count threshold",
+          "lib.rs forbidden snippet",
+          "command implementation detector",
+          "gate docs"
+        ],
+        "out": [
+          "clippy lint plugin",
+          "full dependency graph analyzer",
+          "unrelated gate tightening"
+        ]
+      },
+      "risk": {
+        "level": "medium",
+        "summary": "gate を強くしすぎると無関係な facade export まで阻害する。",
+        "mitigations": [
+          "禁止対象を command implementation / IO / process に絞る",
+          "docs と allowlist を同じ PR で更新する",
+          "既存 CI command と同じ script で検証する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003",
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-006",
+          "type": "architecture_gate_negative_check",
+          "description": "lib.rs に forbidden IO / command implementation が戻ると gate が fail する。",
+          "blocking": true,
+          "expected_evidence": [
+            "python3 scripts/check_architecture_boundaries.py",
+            "documented allowlist"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "architecture gate が lib.rs の再肥大化を検出する",
+        "新しい gate は docs と一致する",
+        "抽出済み module の既存 gate を弱めない"
+      ],
+      "expected_files": [
+        "scripts/check_architecture_boundaries.py",
+        "tests/**",
+        "docs/standards/fda-v1/architecture.md"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-007",
+      "sequence": 7,
+      "title": "finalize FDA architecture docs after lib.rs facade completion",
+      "case_id": "CASE-FDA-ARCH-FU-007",
+      "purpose": "docs の『移行段階』注記を完了状態へ更新し、source responsibility と gate を一致させる。",
+      "scope": {
+        "in": [
+          "architecture.md の current responsibility 更新",
+          "source_architecture.md の最終配置更新",
+          "FDA artifact の validation report 反映"
+        ],
+        "out": [
+          "新しい architecture policy 追加",
+          "unrelated docs cleanup",
+          "GitHub issue close automation"
+        ]
+      },
+      "risk": {
+        "level": "low",
+        "summary": "docs 更新だけでも gate と実装状態がずれると後続 agent が誤った境界で作業する。",
+        "mitigations": [
+          "最終実装状態を確認してから docs を更新する",
+          "architecture gate の pass を evidence にする",
+          "issue #68 の checklist と artifact の PR ID を照合する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-FDA-ARCH-FU-007",
+          "type": "docs_gate_consistency",
+          "description": "architecture docs と gate allowlist が実装状態に一致している。",
+          "blocking": true,
+          "expected_evidence": [
+            "docs review",
+            "python3 scripts/check_architecture_boundaries.py",
+            "validation_report.json"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "architecture docs が lib.rs legacy 実装残存を移行段階として扱わない",
+        "source_architecture.md の責務表が実コードと一致する",
+        "FDA artifact と GitHub Issue #68 の planned PR 粒度が一致する"
+      ],
+      "expected_files": [
+        "docs/standards/fda-v1/architecture.md",
+        "docs/standards/fda-v1/source_architecture.md",
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/**"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    }
+  ]
+}

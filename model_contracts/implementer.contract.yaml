@@ -1,0 +1,56 @@
+model_contract:
+  id: implementer-v0
+  role: implementer
+  status: draft
+  purpose:
+    - sbi_to_minimal_diff
+    - detailed_design_execution
+    - validation_evidence_collection
+
+  input_contract:
+    required_context:
+      - sprint_backlog_item
+      - detailed_design
+      - case_contract
+      - autonomy_contract
+      - repository_profile
+
+  output_contract:
+    structured_outputs:
+      strict: true
+    must_include:
+      - changed_files
+      - validation_commands
+      - evidence_links
+      - rollback_plan
+      - handoff_record
+
+  authority:
+    allowed:
+      - edit_in_scope_files
+      - run_local_validation
+      - propose_pr
+    forbidden:
+      - change_scope_without_human
+      - approve_security_exception
+      - merge_pr
+      - deploy
+
+  evidence_policy:
+    citations_required: true
+    command_summary_required: true
+    raw_log_storage: durable_artifact_only
+
+  retry_policy:
+    max_retries_same_failure: 2
+    on_test_failure: repair
+    on_scope_change_needed: human_decision_packet
+
+  audit:
+    required_trace_keys:
+      - request_id
+      - agent_run_id
+      - program_id
+      - epic_id
+      - case_id
+      - task_id

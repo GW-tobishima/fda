@@ -1,0 +1,77 @@
+{
+  "decision_packet_id": "HDPACKET-FD-001",
+  "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "case_id": "CASE-FD-002",
+  "status": "draft",
+  "required_before": "Mission Control UI v0 implementation",
+  "decision_needed": "Mission Control UI の最初の実装面を選ぶ。",
+  "trigger": "UI 実装に着手する前",
+  "context": {
+    "current_state": "標準成果物 v0 では UI/UX 設計だけを進め、UI 実装は後回しにしている。",
+    "relevant_requirement": "FR-002, NFR-UX-001",
+    "relevant_evidence": [
+      "uiux_mission_control_design.md",
+      "design_agreement.md"
+    ]
+  },
+  "options": [
+    {
+      "id": "A",
+      "description": "Web UI として実装する。",
+      "pros": [
+        "レビューしやすい",
+        "ATO cockpit と統合しやすい"
+      ],
+      "cons": [
+        "デスクトップ統合は別途必要"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "B",
+      "description": "Tauri UI として実装する。",
+      "pros": [
+        "Windows desktop 運用に近い",
+        "ローカルファイルとの連携がしやすい"
+      ],
+      "cons": [
+        "初期検証のビルド負荷が高い"
+      ],
+      "recommended": false
+    }
+  ],
+  "impact": {
+    "scope": "UI 実装 Phase の対象技術が決まる。",
+    "security": "認証とローカルファイルアクセスの扱いが変わる。",
+    "schedule": "Web の方が初期検証は短い見込み。",
+    "ux": "Mission Control の密度と操作モデルを先に検証できる。",
+    "operations": "配布方法と observability の設計が変わる。"
+  },
+  "default_if_no_decision": "UI 実装には進まず、Design Agreement の更新だけを続ける。",
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-002",
+      "CLM-003"
+    ],
+    "proof_obligations": [
+      "PRF-002"
+    ],
+    "human_decision_points": [
+      "HDP-001"
+    ],
+    "ato_task_graph": [
+      "TASK-FD-002"
+    ],
+    "planned_prs": [],
+    "gate_requirements": [
+      "Human decision must be resolved before UI implementation starts"
+    ]
+  },
+  "recorded_decision": {
+    "decision": "",
+    "decided_by": "",
+    "decided_at": "",
+    "rationale": ""
+  }
+}

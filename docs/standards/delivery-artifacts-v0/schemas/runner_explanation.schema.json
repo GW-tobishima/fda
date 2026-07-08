@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/runner_explanation.schema.json",
+  "title": "Runner Explanation",
+  "type": "object",
+  "required": ["runner_explanation"],
+  "properties": {
+    "runner_explanation": {
+      "type": "object",
+      "required": [
+        "current_phase",
+        "previous_run_id",
+        "diff_from_previous_run",
+        "execution_actor",
+        "input_summary",
+        "changed_input_summary",
+        "stop_condition",
+        "next_action",
+        "automation_boundary",
+        "completion_evidence",
+        "failure_evidence",
+        "related_program_id",
+        "related_epic_id"
+      ],
+      "properties": {
+        "current_phase": {
+          "type": "string",
+          "enum": ["planning", "external_implementation_handoff", "external_implementation_live", "operational_v1_e2e_proof", "ato_cli_materialization_dry_run", "ato_materialization_dry_run", "single_planned_pr_execution", "fixture_execution", "slack_outbound_smoke", "slack_reply_grading", "slack_socket_mode_reply_intake", "slack_socket_mode_reply_grading", "scheduled_daily_dispatch", "daily_run_state_idempotency", "slack_socket_run_state_grading", "daily_operation_runbook", "adaptive_study_loop_fixture", "adaptive_daily_dispatch", "resumable_runtime_catchup"]
+        },
+        "previous_run_id": { "type": ["string", "null"] },
+        "diff_from_previous_run": { "type": ["string", "null"] },
+        "execution_actor": { "type": "string", "minLength": 1 },
+        "input_summary": { "type": "string", "minLength": 1 },
+        "changed_input_summary": { "type": ["string", "null"] },
+        "stop_condition": { "type": "string", "minLength": 1 },
+        "next_action": { "type": "string", "minLength": 1 },
+        "automation_boundary": { "type": "string", "minLength": 1 },
+        "completion_evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "failure_evidence": { "type": "array", "items": { "type": "string" } },
+        "related_program_id": { "type": "string", "minLength": 1 },
+        "related_epic_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

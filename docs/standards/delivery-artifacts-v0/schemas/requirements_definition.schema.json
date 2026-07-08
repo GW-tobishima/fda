@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/requirements_definition.schema.json",
+  "title": "Requirements Definition",
+  "type": "object",
+  "required": [
+    "document_id",
+    "version",
+    "status",
+    "business_objective",
+    "scope",
+    "functional_requirements",
+    "non_functional_requirements",
+    "human_decision_points",
+    "forge_mapping"
+  ],
+  "properties": {
+    "document_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "reviewed", "approved", "superseded"] },
+    "source": { "type": "string" },
+    "related_program": { "type": "string" },
+    "related_epic": { "type": "string" },
+    "business_objective": {
+      "type": "object",
+      "required": ["problem", "desired_outcome", "success_metrics", "non_goals"],
+      "properties": {
+        "problem": { "type": "string" },
+        "desired_outcome": { "type": "string" },
+        "success_metrics": { "type": "array", "items": { "type": "string" } },
+        "non_goals": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": ["in", "out"],
+      "properties": {
+        "in": { "type": "array", "items": { "type": "string" } },
+        "out": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "stakeholders": {
+      "type": "object",
+      "properties": {
+        "primary_users": { "type": "array", "items": { "type": "string" } },
+        "operators": { "type": "array", "items": { "type": "string" } },
+        "reviewers": { "type": "array", "items": { "type": "string" } },
+        "approvers": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "functional_requirements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/functional_requirement" }
+    },
+    "non_functional_requirements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/non_functional_requirement" }
+    },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "assumptions": { "type": "array", "items": { "type": "string" } },
+    "open_questions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/open_question" }
+    },
+    "human_decision_points": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/human_decision_point" }
+    },
+    "forge_mapping": { "$ref": "#/$defs/forge_mapping" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "approved" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "open_questions": {
+            "items": {
+              "properties": {
+                "blocking": { "const": false }
+              },
+              "required": ["blocking"]
+            }
+          }
+        },
+        "required": ["open_questions"]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "functional_requirement": {
+      "type": "object",
+      "required": ["id", "requirement", "priority", "acceptance_criteria"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^FR-[0-9]{3}$" },
+        "requirement": { "type": "string" },
+        "rationale": { "type": "string" },
+        "priority": { "type": "string", "enum": ["Must", "Should", "Could", "Won't"] },
+        "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "non_functional_requirement": {
+      "type": "object",
+      "required": ["id", "quality_attribute", "requirement", "measure", "target", "verification"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^NFR-[A-Z]+-[0-9]{3}$|^NFR-[0-9]{3}$" },
+        "quality_attribute": { "type": "string" },
+        "requirement": { "type": "string" },
+        "measure": { "type": "string" },
+        "target": { "type": "string" },
+        "verification": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "open_question": {
+      "type": "object",
+      "required": ["id", "question", "owner", "blocking"],
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "owner": { "type": "string" },
+        "blocking": { "type": "boolean" },
+        "due": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "human_decision_point": {
+      "type": "object",
+      "required": ["id", "trigger", "decision_needed", "options", "required_before"],
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string" },
+        "decision_needed": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+        "required_before": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "forge_mapping": {
+      "type": "object",
+      "required": ["claim_ids", "proof_obligations", "human_decision_points", "ato_task_graph", "planned_prs", "gate_requirements"],
+      "properties": {
+        "claim_ids": { "type": "array", "items": { "type": "string" } },
+        "proof_obligations": { "type": "array", "items": { "type": "string" } },
+        "human_decision_points": { "type": "array", "items": { "type": "string" } },
+        "ato_task_graph": { "type": "array", "items": { "type": "string" } },
+        "planned_prs": { "type": "array", "items": { "type": "string" } },
+        "gate_requirements": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

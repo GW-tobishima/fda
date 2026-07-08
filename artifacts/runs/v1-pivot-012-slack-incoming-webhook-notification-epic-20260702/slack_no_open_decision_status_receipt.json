@@ -1,0 +1,17 @@
+{
+  "schema_version": "fda.slack_status_receipt.v0",
+  "receipt_id": "SLACK-STATUS-FDA-V1-012-001",
+  "status": "sent",
+  "channel": "slack",
+  "adapter": "slack_incoming_webhook",
+  "http_status": 200,
+  "provider_response": "ok",
+  "secret_persisted": false,
+  "message_summary": {
+    "repo_name": "forge-delivery-agent",
+    "repo_root": "/tmp/fda-v1-slack-p0-notification",
+    "task_key": "v1-slack-notification-context-path-20260702",
+    "open_decisions": 0,
+    "decision_document_full_path": "not_applicable_no_open_decision"
+  }
+}

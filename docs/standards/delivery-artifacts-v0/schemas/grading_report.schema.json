@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/grading_report.schema.json",
+  "title": "AICX Fixture Grading Report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "grading_report_id",
+    "quiz_set_id",
+    "submission_id",
+    "graded_for_date",
+    "total_questions",
+    "correct_count",
+    "accuracy",
+    "topic_results",
+    "graded_answers"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.grading_report.v0" },
+    "grading_report_id": { "type": "string", "minLength": 1 },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "submission_id": { "type": "string", "minLength": 1 },
+    "graded_for_date": { "type": "string", "format": "date" },
+    "total_questions": { "type": "integer", "minimum": 1, "maximum": 60 },
+    "correct_count": { "type": "integer", "minimum": 0, "maximum": 60 },
+    "accuracy": { "type": "number", "minimum": 0, "maximum": 1 },
+    "topic_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["topic_id", "label", "page_ranges", "total", "correct", "accuracy"],
+        "properties": {
+          "topic_id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "page_ranges": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/page_range" }
+          },
+          "total": { "type": "integer", "minimum": 1 },
+          "correct": { "type": "integer", "minimum": 0 },
+          "accuracy": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "graded_answers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "required": ["question_id", "topic_id", "selected_choice", "correct_choice", "is_correct"],
+        "properties": {
+          "question_id": { "type": "string", "minLength": 1 },
+          "topic_id": { "type": "string", "minLength": 1 },
+          "selected_choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+          "correct_choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+          "is_correct": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

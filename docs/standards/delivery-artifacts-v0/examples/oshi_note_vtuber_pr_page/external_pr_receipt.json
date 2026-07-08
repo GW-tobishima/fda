@@ -1,0 +1,228 @@
+{
+  "schema_version": "external_pr_receipt.v0",
+  "receipt_id": "EPR-ON-VPR-PR506-20260627",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "source_packet_id": "PPEP-ON-VPR-001",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "actual_pr_url": "https://github.com/hrkk7t/oshi-note/pull/506",
+  "status": "merged",
+  "checks": {
+    "tests": "passed",
+    "lint": "passed",
+    "security": "passed"
+  },
+  "evidence": [
+    "PR URL: https://github.com/hrkk7t/oshi-note/pull/506",
+    "CI URL: https://github.com/hrkk7t/oshi-note/actions/runs/28218792489",
+    "CI job quality: https://github.com/hrkk7t/oshi-note/actions/runs/28218792489/job/83595320686",
+    "CI job pr-template-check: https://github.com/hrkk7t/oshi-note/actions/runs/28218792489/job/83595320696",
+    "Review packet: https://github.com/hrkk7t/oshi-note/blob/74ecdaea9a546c0393a4692ef23727def65e877a/artifacts/review_packets/pr-506.md",
+    "Runtime evidence: https://github.com/hrkk7t/oshi-note/blob/74ecdaea9a546c0393a4692ef23727def65e877a/artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-sandbox/runtime-evidence.json",
+    "Evidence return packet: docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/evidence_return_packet.json",
+    "Diff summary: production-disabled VTuber referral MVP; public /vtuber/<slug> page; referral campaign API and share kit; signup and onboarding attribution handoff; profile referral fields; post-first-log Premium CTA; docs, OpenAPI, OKF, runbook, and tests."
+  ],
+  "human_decisions_resolved": [
+    "HDP-ON-VPR-001",
+    "HDP-ON-VPR-002",
+    "HDP-ON-VPR-003",
+    "HDP-ON-VPR-004",
+    "HDP-ON-VPR-005",
+    "HDP-ON-VPR-006",
+    "HDP-ON-VPR-007",
+    "HDP-ON-VPR-008"
+  ],
+  "open_issues": [
+    "Scope deviation is intentionally recorded: oshi-note PR #506 bundles runtime referral page, signup/onboarding attribution, profile fields, and Premium CTA work that PPEP-ON-VPR-001 originally scoped out. Delivery tracking must not auto-close PR-ON-VPR-001 from this receipt; planning artifacts should be split or backfilled for PR-ON-VPR-002 and PR-ON-VPR-006 coverage."
+  ],
+  "scope_disposition": {
+    "kind": "scope_deviation",
+    "closure_recommendation": "do_not_close_planned_pr",
+    "affected_planned_pr_ids": [
+      "PR-ON-VPR-001",
+      "PR-ON-VPR-002",
+      "PR-ON-VPR-006"
+    ],
+    "summary": "PR #506 is a merged oshi-note implementation receipt with broader scope than the source PPEP-ON-VPR-001 policy-only handoff. It records evidence for the merged target PR but is not a clean completion receipt for PR-ON-VPR-001."
+  },
+  "target_pr": {
+    "url": "https://github.com/hrkk7t/oshi-note/pull/506",
+    "number": 506,
+    "head_sha": "74ecdaea9a546c0393a4692ef23727def65e877a",
+    "state": "merged"
+  },
+  "changed_files": [
+    "artifacts/review_packets/pr-506.md",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-development-handoff.md",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-pr-prep.md",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-sandbox/runtime-evidence.json",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-sandbox/summary.json",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626-self-review.md",
+    "artifacts/review_packets/vtuber-referral-prod-disabled-pr-20260626.md",
+    "docs/environment_variables.md",
+    "docs/okf/backend/api-surface.md",
+    "docs/okf/billing/stripe.md",
+    "docs/okf/docs/source-structure.md",
+    "docs/okf/frontend/app-shell.md",
+    "docs/okf/frontend/feature-islands.md",
+    "docs/okf/index.md",
+    "docs/okf/knowledge/okf-harness.md",
+    "docs/okf/product/overview.md",
+    "docs/okf/product/sitemap.md",
+    "docs/okf/product/specification.md",
+    "docs/okf/quality/e2e.md",
+    "docs/okf/quality/python-js-tests.md",
+    "docs/openapi.yaml",
+    "docs/runbooks/vtuber-partner-intake.md",
+    "docs/source_structure_guide.md",
+    "docs/spec/oshinote_sitemap.md",
+    "docs/spec/specification.md",
+    "docs/spec/test_sync_map.json",
+    "docs/spec/vtuber-material-permission.md",
+    "docs/spec/vtuber-partner-verification.md",
+    "docs/spec/vtuber-pr-disclosure.md",
+    "docs/spec/vtuber-referral-pr-page.md",
+    "e2e/sitemap.spec.js",
+    "handoffs/records/20260626/vtuber-referral-prod-disabled-pr-to-human.json",
+    "src/application/profile_service.py",
+    "src/application/vtuber_referral.py",
+    "src/domain/entities/profile.py",
+    "src/presentation/app.py",
+    "src/presentation/frontend_runtime_config.py",
+    "src/presentation/routes.py",
+    "static/features/billing/plan-copy.js",
+    "static/features/home/index.js",
+    "static/features/onboarding/completion.js",
+    "static/features/onboarding/form.js",
+    "static/features/onboarding/index.js",
+    "static/features/onboarding/referral.js",
+    "static/scss/styles/40-entry-home.scss",
+    "static/scss/styles/70-theme-overrides.scss",
+    "static/styles/40-entry-home.css",
+    "static/styles/70-theme-overrides.css",
+    "templates/login.html",
+    "templates/partials/index/app_shell.html",
+    "templates/partials/index/onboarding.html",
+    "templates/partials/index/scripts.html",
+    "templates/privacy.html",
+    "templates/terms.html",
+    "templates/vtuber_referral.html",
+    "tests/js/home-shell-react-island.test.js",
+    "tests/js/onboarding-form.test.js",
+    "tests/js/onboarding-referral.test.js",
+    "tests/test_api.py"
+  ],
+  "acceptance_criteria_status": [
+    {
+      "criterion": "productionでは明示flagなしでVTuber referral surfaceを無効にする",
+      "status": "pass",
+      "evidence": "PR #506 adds VTUBER_REFERRAL_FEATURE_ENABLED gating; tests include production default-off and explicit disable cases; PR body records production disabled release state."
+    },
+    {
+      "criterion": "publishable campaignのみ /vtuber/<slug> と公開APIで表示する",
+      "status": "pass",
+      "evidence": "src/application/vtuber_referral.py validates verified_status=verified, material_permission_status=permitted, public_page_enabled=true; tests cover pending, invalid JSON, and string false."
+    },
+    {
+      "criterion": "紹介ページからsignup/login/onboardingへcampaign contextを引き継ぐ",
+      "status": "pass",
+      "evidence": "templates/vtuber_referral.html, templates/login.html, and static/features/onboarding/referral.js store and apply low-cardinality referral context; JS and API tests cover prefill and attribution."
+    },
+    {
+      "criterion": "profile attributionは低カーディナリティtokenだけを保存し、非公開情報を紹介元へ共有しない",
+      "status": "pass",
+      "evidence": "src/domain/entities/profile.py and src/presentation/routes.py store referral_source, referral_campaign_id, referral_creator_slug only; PR review packet and tests cover invalid/unpublishable attribution rejection."
+    },
+    {
+      "criterion": "first log後のPremium CTAをreferral user向けに表示する",
+      "status": "pass",
+      "evidence": "static/features/home/index.js and static/features/billing/plan-copy.js add vtuber_referral_after_first_log context; JS tests verify CTA mount and plan copy."
+    },
+    {
+      "criterion": "PR表示、本人確認、素材許諾、YouTube/Twitch API Data scope outをdocs/specに残す",
+      "status": "pass",
+      "evidence": "docs/spec/vtuber-referral-pr-page.md, docs/spec/vtuber-partner-verification.md, docs/spec/vtuber-material-permission.md, docs/spec/vtuber-pr-disclosure.md, and docs/runbooks/vtuber-partner-intake.md were added."
+    }
+  ],
+  "validation": [
+    {
+      "command": "GitHub Actions PR Gate / pr-template-check",
+      "status": "pass",
+      "summary": "Run 28218792489 job 83595320696 completed successfully."
+    },
+    {
+      "command": "GitHub Actions PR Gate / quality",
+      "status": "pass",
+      "summary": "Run 28218792489 job 83595320686 completed successfully, including pytest, ruff, mypy, spec/E2E sync, OKF check, CSS checks, and affected UI E2E."
+    },
+    {
+      "command": "python scripts/check_spec_test_sync.py --base-ref <base-ref>",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence."
+    },
+    {
+      "command": "python scripts/check_spec_test_sync.py --staged",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence after sitemap spec sync remediation."
+    },
+    {
+      "command": "python scripts/check_pr_review_packet.py --packet-path artifacts/review_packets/pr-506.md",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence and PR Gate."
+    },
+    {
+      "command": "python -m pytest tests/",
+      "status": "pass",
+      "summary": "Full pytest run recorded as 421 tests passed in PR #506 Validation Evidence."
+    },
+    {
+      "command": "python -m ruff check src tests",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence and PR Gate quality job."
+    },
+    {
+      "command": "python -m mypy --python-version 3.14 --ignore-missing-imports src tests",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence and PR Gate quality job."
+    },
+    {
+      "command": "npm run e2e",
+      "status": "pass",
+      "summary": "Full local E2E recorded in PR #506 Validation Evidence."
+    },
+    {
+      "command": "npm run e2e:affected",
+      "status": "pass",
+      "summary": "GitHub Actions affected UI E2E passed in PR Gate quality job."
+    },
+    {
+      "command": "npm run okf:check",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence and PR Gate quality job."
+    },
+    {
+      "command": "npm run scss:lint",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence with existing warnings only."
+    },
+    {
+      "command": "npm run css:check",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence and PR Gate quality job."
+    },
+    {
+      "command": "npm run test:js",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence as 138 tests passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass",
+      "summary": "Recorded in PR #506 Validation Evidence."
+    }
+  ],
+  "security_privacy_legal_review": "PR #506 records Functional QA PASS and Security QA PASS. The implementation gates production exposure behind VTUBER_REFERRAL_FEATURE_ENABLED, publishes only verified/permitted/enabled campaigns, rejects direct API attribution for disabled or unpublishable campaigns, stores only low-cardinality referral tokens on profiles, keeps normal memo content private, and documents PR/material/API-data boundaries.",
+  "rollback_plan": "Set VTUBER_REFERRAL_FEATURE_ENABLED=false to disable referral pages, public campaign APIs, signup attribution handoff, and profile referral attribution acceptance. If code rollback is required, revert merge commit b0ef34d61a81748a6bcfcc3a5b8012507bc14440.",
+  "notes": "PR #506 was merged on 2026-06-26T05:21:51Z into develop. Merge commit: b0ef34d61a81748a6bcfcc3a5b8012507bc14440. Source packet planned_pr_id is PR-ON-VPR-001; user request used alias PPR-ON-VPR-001 and compact program/epic aliases PROGRAM-ON-VPR-001 / EPIC-ON-VPR-001, while FDA source artifacts currently use PROGRAM-OSHI-VTUBER-PR-001 / EPIC-OSHI-VTUBER-PR-6A. Because this target PR includes implementation work that PPEP-ON-VPR-001 scoped out, consumers must treat this as a deviation receipt requiring manual tracking review rather than an automatic closure signal for PR-ON-VPR-001."
+}

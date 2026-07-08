@@ -1,0 +1,35 @@
+{
+  "schema_version": "aicx.slack_reply_intake_receipt.v0",
+  "intake_receipt_id": "SLACKREPLYINTAKE-QUIZ-ASB-2026-06-21-DRY-RUN",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "generated_for_date": "2026-06-21",
+  "delivery_channel": "slack",
+  "mode": "dry-run",
+  "status": "dry_run_ready",
+  "socket_mode_used": false,
+  "slack_used": false,
+  "target_channel_env": "SLACK_CHANNEL_ID",
+  "target_app_token_env": "SLACK_APP_TOKEN",
+  "started_at_unix_seconds": 1782078237,
+  "completed_at_unix_seconds": 1782078237,
+  "timeout_seconds": 5,
+  "env_readiness": {
+    "bot_token_present": true,
+    "channel_id_present": true,
+    "slack_sdk_available": true,
+    "required_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID",
+      "SLACK_APP_TOKEN"
+    ],
+    "missing_env": [
+      "SLACK_APP_TOKEN"
+    ],
+    "app_token_present": false,
+    "socket_mode_sdk_available": true
+  },
+  "received_reply_event_id": null,
+  "grading_response_id": null,
+  "slack_response": null,
+  "errors": []
+}

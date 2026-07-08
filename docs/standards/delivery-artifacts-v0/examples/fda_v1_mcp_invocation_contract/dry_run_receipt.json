@@ -1,0 +1,54 @@
+{
+  "schema_version": "fda.mcp_dry_run_receipt.v0",
+  "receipt_id": "MCPDRY-FDA-V1-005-EXAMPLE-001",
+  "plan_id": "MCP-FDA-V1-PLAN-001",
+  "invocation_id": "INV-FDA-V1-IMPLEMENTER-001",
+  "provider": "codex",
+  "mcp_server_command": ["codex", "mcp-server"],
+  "cwd": "/workspace/target-repo",
+  "status": "succeeded",
+  "started_at": "2026-06-27T10:00:00Z",
+  "completed_at": "2026-06-27T10:01:00Z",
+  "target_repo_mutated": false,
+  "expected_tools": ["codex", "codex-reply"],
+  "detected_tools": ["codex", "codex-reply"],
+  "missing_tools": [],
+  "checks": [
+    {
+      "check_id": "human_decision_guard",
+      "status": "pass",
+      "summary": "未解決または非承認 Human Decision がないこと"
+    },
+    {
+      "check_id": "cwd",
+      "status": "pass",
+      "summary": "/workspace/target-repo"
+    },
+    {
+      "check_id": "prompt_artifact",
+      "status": "pass",
+      "summary": "codex_prompt.md exists"
+    },
+    {
+      "check_id": "approval_policy",
+      "status": "pass",
+      "summary": "on-request"
+    },
+    {
+      "check_id": "forbidden_actions",
+      "status": "pass",
+      "summary": "merge/release/scope_change_without_human_decision/source mutation during dry-run are forbidden"
+    },
+    {
+      "check_id": "tools_list",
+      "status": "pass",
+      "summary": "MCP tools/list returned codex and codex-reply"
+    },
+    {
+      "check_id": "target_repo_mutation",
+      "status": "pass",
+      "summary": "Dry-run wrote no target repo files"
+    }
+  ],
+  "evidence_links": ["mcp_tool_call_receipt.json", "mcp_agent_invocation_plan.json"]
+}

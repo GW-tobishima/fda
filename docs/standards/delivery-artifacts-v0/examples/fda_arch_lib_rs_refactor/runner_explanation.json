@@ -1,0 +1,21 @@
+{
+  "runner_explanation": {
+    "current_phase": "planning",
+    "previous_run_id": "run_01KW5GWCHJ2S5HR3W8HRSWHJNR",
+    "diff_from_previous_run": "Converted GitHub Issue #68 from an issue-only EPIC into FDA delivery artifacts with explicit Case, Task, Planned PR, Claim, and Proof mapping.",
+    "execution_actor": "codex-cli",
+    "input_summary": "Human asked to create a formal FDA artifact Epic for #68 so PR granularity is decided by the artifact.",
+    "changed_input_summary": "Issue #68 remains the human-facing GitHub tracker; planned_prs.json becomes the machine-readable PR granularity source.",
+    "stop_condition": "Planning artifact creation and validation complete; no implementation PR is executed in this run.",
+    "next_action": "Start PR-FDA-ARCH-FU-001: move result types and pure support helpers out of lib.rs.",
+    "automation_boundary": "This run creates planning artifacts only. It does not modify runtime source code, create a PR, merge, or close #68.",
+    "completion_evidence": [
+      "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/epic_delivery_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/planned_prs.json",
+      "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/validation_report.json"
+    ],
+    "failure_evidence": [],
+    "related_program_id": "PROGRAM-FDA-ARCH-001",
+    "related_epic_id": "EPIC-FDA-ARCH-FU-001"
+  }
+}

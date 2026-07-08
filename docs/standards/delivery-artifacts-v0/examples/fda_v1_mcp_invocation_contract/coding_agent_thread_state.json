@@ -1,0 +1,25 @@
+{
+  "schema_version": "fda.coding_agent_thread_state.v0",
+  "thread_state_id": "THREAD-FDA-V1-MCP-IMPLEMENTER-001",
+  "provider": "codex",
+  "role": "implementer",
+  "status": "waiting_for_reply",
+  "started_from_invocation_id": "INV-FDA-V1-IMPLEMENTER-001",
+  "planned_pr_id": "PR-V1-005",
+  "actual_pr_url": null,
+  "cwd": "/workspace/target-repo",
+  "thread_id": "codex-thread-placeholder",
+  "continuation_tool_name": "codex-reply",
+  "current_turn": 1,
+  "repair_attempt_count": 0,
+  "failure_classification": null,
+  "last_prompt_artifact": "codex_prompt.md",
+  "last_receipt_id": "MCPR-FDA-V1-IMPLEMENTER-001",
+  "summary": "Codex MCP dry-run threadを継続可能な状態として保持する。",
+  "open_items": [
+    "PR-V1-005でtools/listの実結果をreceiptへ反映する"
+  ],
+  "evidence_links": [
+    "mcp_tool_call_receipt.json"
+  ]
+}

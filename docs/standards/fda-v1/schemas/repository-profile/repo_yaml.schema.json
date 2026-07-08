@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/repo_yaml.schema.json",
+  "title": ".fda/repo.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["repo"],
+  "properties": {
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "default_branch", "stack", "commands"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "default_branch": { "type": "string", "minLength": 1 },
+        "stack": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["language"],
+          "properties": {
+            "language": { "type": "string", "minLength": 1 },
+            "framework": { "type": "string", "minLength": 1 },
+            "package_manager": { "type": "string", "minLength": 1 }
+          }
+        },
+        "risk_profile": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" }
+        },
+        "docs": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "commands": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

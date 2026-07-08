@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/mcp_tool_call_receipt.schema.json",
+  "title": "MCP Tool Call Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "plan_id",
+    "invocation_id",
+    "role",
+    "provider",
+    "mcp_server",
+    "tool_name",
+    "cwd",
+    "status",
+    "started_at",
+    "completed_at",
+    "input_artifacts",
+    "output_artifacts",
+    "tool_result_digest",
+    "semantic_result",
+    "evidence_links",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.mcp_tool_call_receipt.v0" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "plan_id": { "type": "string", "minLength": 1 },
+    "invocation_id": { "type": "string", "minLength": 1 },
+    "role": { "type": "string", "enum": ["implementer", "functional_qa", "security_qa"] },
+    "provider": { "type": "string", "enum": ["codex", "claude", "other"] },
+    "mcp_server": { "type": "string", "minLength": 1 },
+    "tool_name": { "type": "string", "minLength": 1 },
+    "thread_id": { "type": ["string", "null"] },
+    "cwd": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["succeeded", "failed", "blocked", "adapter_unavailable"] },
+    "started_at": { "type": "string", "minLength": 1 },
+    "completed_at": { "type": "string", "minLength": 1 },
+    "input_artifacts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "output_artifacts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "tool_result_digest": {
+      "type": "object",
+      "required": ["raw_result_stored", "summary"],
+      "properties": {
+        "raw_result_stored": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 },
+        "exit_code": { "type": ["integer", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "semantic_result": {
+      "type": "object",
+      "required": ["semantic_verdict", "summary", "scope_drift", "tests", "gate_effect"],
+      "properties": {
+        "semantic_verdict": { "type": "string", "enum": ["pass", "fail", "blocked", "needs_human", "adapter_unavailable"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "scope_drift": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["command", "verdict"],
+            "properties": {
+              "command": { "type": "string", "minLength": 1 },
+              "verdict": { "type": "string", "enum": ["pass", "fail", "not_run"] },
+              "evidence": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "gate_effect": { "type": "string", "enum": ["advance", "repair", "human_turn", "hold"] }
+      },
+      "additionalProperties": false
+    },
+    "evidence_links": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "next_action": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "enum": ["failed", "adapter_unavailable"] } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "semantic_result": {
+            "properties": {
+              "semantic_verdict": { "enum": ["fail", "blocked", "needs_human", "adapter_unavailable"] },
+              "gate_effect": { "enum": ["repair", "human_turn", "hold"] }
+            },
+            "required": ["semantic_verdict", "gate_effect"]
+          }
+        },
+        "required": ["semantic_result"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "semantic_result": {
+            "properties": { "semantic_verdict": { "const": "pass" } },
+            "required": ["semantic_verdict"]
+          }
+        },
+        "required": ["semantic_result"]
+      },
+      "then": {
+        "properties": { "status": { "const": "succeeded" } },
+        "required": ["status"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

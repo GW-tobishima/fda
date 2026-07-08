@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/live_execution_evidence.schema.json",
+  "title": "FDA Live Execution Evidence",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "program_id",
+    "epic_id",
+    "planned_pr_id",
+    "operational_completion_pr_id",
+    "status",
+    "implementation_status",
+    "fixture_free_required_for_operational_v1",
+    "fixture_used",
+    "fixture_free_gate",
+    "mcp",
+    "target_repo",
+    "dry_run_gate",
+    "implementation_result",
+    "started_at",
+    "completed_at",
+    "evidence_links",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.live_execution_evidence.v0" },
+    "evidence_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "operational_completion_pr_id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["succeeded", "failed", "blocked", "adapter_unavailable", "fixture_mode"]
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": ["succeeded", "failed", "blocked", "adapter_unavailable"]
+    },
+    "fixture_free_required_for_operational_v1": { "type": "boolean", "const": true },
+    "fixture_used": { "type": "boolean" },
+    "fixture_free_gate": {
+      "type": "object",
+      "required": ["status", "summary"],
+      "properties": {
+        "status": { "type": "string", "enum": ["pass", "fail", "blocked"] },
+        "summary": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "mcp": {
+      "type": "object",
+      "required": [
+        "server_command",
+        "tools_list_source",
+        "codex_tool_source",
+        "codex_tool_call_sent",
+        "expected_tools",
+        "detected_tools",
+        "missing_tools",
+        "thread_id",
+        "exit_code"
+      ],
+      "properties": {
+        "server_command": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "tools_list_source": {
+          "type": "string",
+          "enum": ["not_invoked", "fixture", "codex_mcp_server"]
+        },
+        "codex_tool_source": {
+          "type": "string",
+          "enum": [
+            "not_invoked",
+            "fixture",
+            "codex_mcp_server_before_tool_call",
+            "codex_mcp_tool_call"
+          ]
+        },
+        "codex_tool_call_sent": { "type": "boolean" },
+        "expected_tools": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "detected_tools": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "missing_tools": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "thread_id": { "type": ["string", "null"] },
+        "exit_code": { "type": ["integer", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "dry_run_gate": {
+      "type": "object",
+      "required": ["status", "issues", "evidence_links"],
+      "properties": {
+        "status": { "type": "string", "minLength": 1 },
+        "issues": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidence_links": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "implementation_result": {
+      "type": "object",
+      "required": ["actual_pr_url", "test_status", "changed_files", "scope_drift", "summary"],
+      "properties": {
+        "actual_pr_url": { "type": ["string", "null"] },
+        "test_status": { "type": "string", "enum": ["passed", "failed", "not_run"] },
+        "changed_files": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "scope_drift": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "summary": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "started_at": { "type": "string", "minLength": 1 },
+    "completed_at": { "type": "string", "minLength": 1 },
+    "evidence_links": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "next_action": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "fixture_used": { "const": true }
+        },
+        "required": ["fixture_used"]
+      },
+      "then": {
+        "properties": {
+          "status": { "const": "fixture_mode" },
+          "fixture_free_gate": {
+            "properties": {
+              "status": { "const": "blocked" }
+            },
+            "required": ["status"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "succeeded" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "fixture_used": { "const": false },
+          "fixture_free_gate": {
+            "properties": {
+              "status": { "const": "pass" }
+            },
+            "required": ["status"]
+          },
+          "implementation_result": {
+            "properties": {
+              "actual_pr_url": { "type": "string", "minLength": 1 },
+              "test_status": { "const": "passed" }
+            },
+            "required": ["actual_pr_url", "test_status"]
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

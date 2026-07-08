@@ -1,0 +1,65 @@
+{
+  "schema_version": "fda.agent_role_policy.v0",
+  "policy_id": "ARP-FDA-V1-MCP-001",
+  "status": "approved",
+  "roles": [
+    {
+      "role": "implementer",
+      "workspace_policy": "write",
+      "source_mutation_allowed": true,
+      "allowed_actions": [
+        "実装差分を作る",
+        "テストを実行する",
+        "PR作成用receiptを返す"
+      ],
+      "forbidden_actions": [
+        "未解決Human Decisionを独断で解決する",
+        "scopeを無断変更する",
+        "merge approvalを自己承認する"
+      ],
+      "allowed_mcp_tools": ["codex", "codex-reply"],
+      "approval_policy": "on-request",
+      "receipt_required": true
+    },
+    {
+      "role": "functional_qa",
+      "workspace_policy": "read_only",
+      "source_mutation_allowed": false,
+      "allowed_actions": [
+        "Acceptance Criteriaを検証する",
+        "再現手順とFAIL分類を返す",
+        "Functional QA receiptを返す"
+      ],
+      "forbidden_actions": [
+        "source mutation",
+        "Security QAの代替",
+        "merge approval"
+      ],
+      "allowed_mcp_tools": ["claude", "codex"],
+      "approval_policy": "read-only",
+      "receipt_required": true
+    },
+    {
+      "role": "security_qa",
+      "workspace_policy": "read_only",
+      "source_mutation_allowed": false,
+      "allowed_actions": [
+        "security/privacy/legal観点を検証する",
+        "High/Critical findingをHuman Turn候補として返す",
+        "Security QA receiptを返す"
+      ],
+      "forbidden_actions": [
+        "source mutation",
+        "Functional QAのコピペ代替",
+        "risk self-approval"
+      ],
+      "allowed_mcp_tools": ["claude", "codex"],
+      "approval_policy": "read-only",
+      "receipt_required": true
+    }
+  ],
+  "human_decision_guard": {
+    "unresolved_decisions_block_invocation": true,
+    "non_approval_answers_block_invocation": true
+  }
+}

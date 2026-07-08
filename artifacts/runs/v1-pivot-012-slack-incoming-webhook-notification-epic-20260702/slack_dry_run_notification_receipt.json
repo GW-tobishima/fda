@@ -1,0 +1,14 @@
+{
+  "adapter_boundary": "PR-V1-011 writes notification artifacts only; real email/Codex app delivery is handled by a later adapter.",
+  "channel": "slack",
+  "dry_run": true,
+  "notification_id": "NOTIFY-FDA-V1-011-001",
+  "receipt_id": "NOTIFY-RECEIPT-FDA-V1-011-001",
+  "recipient": "slack:webhook",
+  "recipient_source": "channel-default",
+  "schema_version": "fda.notification_receipt.v0",
+  "sendable": false,
+  "sent": false,
+  "skip_reason": "dry_run_no_delivery_attempted",
+  "status": "skipped"
+}

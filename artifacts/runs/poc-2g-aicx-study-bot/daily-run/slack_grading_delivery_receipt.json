@@ -1,0 +1,32 @@
+{
+  "schema_version": "aicx.slack_grading_delivery_receipt.v0",
+  "delivery_receipt_id": "SLACKGRADINGRECEIPT-QUIZ-ASB-2026-06-22-DRY-RUN",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "reply_event_id": "SLACKREPLY-QUIZ-ASB-2026-06-22-FIXTURE",
+  "grading_response_id": "SLACKGRADING-QUIZ-ASB-2026-06-22",
+  "generated_for_date": "2026-06-22",
+  "delivery_channel": "slack",
+  "mode": "dry-run",
+  "status": "dry_run_ready",
+  "response_kind": "grading_result",
+  "slack_used": false,
+  "target_channel_env": "SLACK_CHANNEL_ID",
+  "thread_ts": "1782074738.865009",
+  "message_text": "採点結果: 6/10 (60%)\n\ntopic別正答率:\n- 5D前半 / Discovery・Definition: 0/2 (0%)\n- 導入設計 / 運用統制: 2/2 (100%)\n- 条件分岐 / コンテキストエンジニアリング: 2/2 (100%)\n- 組織設計 / KPI: 0/2 (0%)\n- チェック / ワークフロー検証: 2/2 (100%)\n\n復習推奨ページ:\n- 5D前半 / Discovery・Definition: p.351-368\n- 組織設計 / KPI: p.312-327",
+  "posted_at_unix_seconds": null,
+  "env_readiness": {
+    "bot_token_present": false,
+    "channel_id_present": false,
+    "slack_sdk_available": false,
+    "required_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ],
+    "missing_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ]
+  },
+  "slack_response": null,
+  "errors": []
+}

@@ -1,0 +1,82 @@
+{
+  "adapter": "ato_cli",
+  "artifact_dir": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+  "checkpoint_id": "cp_01KW8NX76GFXZVCY7GQDKBMJZF",
+  "commands": [
+    {
+      "command": [
+        "ato",
+        "work",
+        "checkpoint",
+        "--task",
+        "v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629",
+        "--run-id",
+        "run_01KW8NCT3E3DFFCSEY213JBT8H",
+        "--kind",
+        "operational_v1_finalize",
+        "--summary",
+        "<redacted>",
+        "--evidence-surface",
+        "fda_artifact",
+        "--evidence-id",
+        "<redacted>",
+        "--evidence-verdict",
+        "pass",
+        "--validation-status",
+        "passed",
+        "--freshness",
+        "current",
+        "--durability-class",
+        "artifact",
+        "--trust-level",
+        "self_reported",
+        "--json"
+      ],
+      "command_kind": "work_checkpoint",
+      "exit_code": 0,
+      "status": "succeeded",
+      "stderr_summary": null,
+      "stdout_json_detected": true,
+      "stdout_top_level_keys": [
+        "checkpoint",
+        "evidence",
+        "next_recommended_command"
+      ]
+    }
+  ],
+  "decision_mappings": [
+    {
+      "ato_decision_id": "dec_01KW6DT3J235P3C0AA9KGM5WGZ",
+      "fda_decision_id": "HD-FDA-001",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KW6DT3KKEJ5KGHNHG3G5DR4C",
+      "fda_decision_id": "HD-FDA-002",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KW6DT3N6DXRB058K2HXGTPSF",
+      "fda_decision_id": "HD-FDA-003",
+      "status": "applied"
+    }
+  ],
+  "decision_sync": null,
+  "evidence_edges": [
+    {
+      "evidence_id": "live_execution_evidence.json",
+      "evidence_surface": "fda_artifact",
+      "verdict": "pass"
+    }
+  ],
+  "failure_reason": null,
+  "raw_output_stored": false,
+  "receipt_id": "ATO-FDA-OPERATIONAL-V1-FINALIZE-001",
+  "receipt_path": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/ato_state_receipt.json",
+  "resume_command": null,
+  "run_id": "run_01KW8NCT3E3DFFCSEY213JBT8H",
+  "schema_version": "fda.ato_state_receipt.v0",
+  "stage": "operational_v1_finalize",
+  "status": "succeeded",
+  "task_key": "v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629"
+}

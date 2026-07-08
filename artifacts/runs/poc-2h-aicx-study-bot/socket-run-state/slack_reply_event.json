@@ -1,0 +1,14 @@
+{
+  "schema_version": "aicx.slack_reply_event_fixture.v0",
+  "reply_event_id": "SLACKREPLY-QUIZ-ASB-2026-06-21-EV-QUIZ-ASB-2026-06-21-FIXTURE",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "message_id": "SLACKMSG-QUIZ-ASB-2026-06-21",
+  "delivery_channel": "slack",
+  "channel_id": "C_FIXTURE",
+  "user_id": "U_FIXTURE",
+  "thread_ts": "1782074738.865009",
+  "event_ts": "1782074800.000000",
+  "text": "1:A 2:B 3:B 4:C 5:C 6:C 7:B 8:B 9:B 10:C",
+  "source": "socket_mode_event",
+  "socket_envelope_id": "ENV-QUIZ-ASB-2026-06-21-FIXTURE"
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": "fda.implementation_handoff.v1",
+  "handoff_id": "IH-ON-VPR-001",
+  "target_repo": "oshi-note",
+  "planned_pr_id": "PR-ON-VPR-001",
+  "title": "VTuber partner intake, verification, and permission policy",
+  "scope_in": [
+    "docs/spec or equivalent policy documentation for VTuber partner intake",
+    "verified-only referral issuance policy",
+    "material permission record policy",
+    "PR disclosure policy",
+    "stop, delete, and display-name change request runbook"
+  ],
+  "scope_out": [
+    "referral campaign page and sign-up flow implementation",
+    "public comment creation or moderation implementation",
+    "creator dashboard and aggregation implementation",
+    "YouTube / Twitch API Data integration",
+    "automatic verification provider integration"
+  ],
+  "files_to_change_candidates": [
+    "docs/spec/vtuber-referral-pr-page.md",
+    "docs/spec/vtuber-partner-verification.md",
+    "docs/spec/vtuber-material-permission.md",
+    "docs/spec/vtuber-pr-disclosure.md",
+    "docs/runbooks/vtuber-partner-intake.md",
+    "templates/terms.html",
+    "templates/privacy.html"
+  ],
+  "acceptance_criteria": [
+    "未確認VTuberは紹介URLを発行できない方針が明記されている。",
+    "素材許諾範囲が未記録の素材はPRページやカードで使えない方針が明記されている。",
+    "停止、削除、表示名変更の受付導線が定義されている。",
+    "公開コメントはMVP scope outであり、moderationは将来判断として明記されている。",
+    "YouTube / Twitch API DataはMVP scope outであることが明記されている。",
+    "案件性がある表示面ではPR表示する方針が明記されている。"
+  ],
+  "security_checks": [
+    "本人確認済みVTuber以外への発行禁止がpolicyに入っていること。",
+    "通常メモ本文の非公開がpolicyに入っていること。",
+    "素材許諾記録なしの素材利用禁止がpolicyに入っていること。",
+    "PR表示方針がterms/privacyまたは関連specへ反映されていること。",
+    "YouTube / Twitch API DataをMVPで使わないことが明記されていること。"
+  ],
+  "human_decisions_required": [],
+  "rollback_plan_required": true,
+  "evidence_expected": [
+    "external_pr_receipt.json conforming to fda.external_pr_receipt.v1",
+    "evidence_return_packet.json conforming to fda.evidence_return_packet.v1",
+    "target PR URL and commit SHA",
+    "changed file list",
+    "acceptance criteria mapping",
+    "validation commands and results",
+    "security/privacy/legal self-review",
+    "rollback/no-op statement"
+  ],
+  "claim_ids": [
+    "CLAIM-ON-VPR-VERIFIED-ONLY",
+    "CLAIM-ON-VPR-MATERIAL-PERMISSION",
+    "CLAIM-ON-VPR-PR-DISCLOSURE"
+  ],
+  "proof_obligation_ids": [
+    "PROOF-ON-VPR-POLICY-DOC",
+    "PROOF-ON-VPR-SECURITY-PRIVACY-SELF-REVIEW",
+    "PROOF-ON-VPR-ROLLBACK-NOOP"
+  ]
+}

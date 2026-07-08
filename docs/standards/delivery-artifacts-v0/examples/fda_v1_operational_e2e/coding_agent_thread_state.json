@@ -1,0 +1,26 @@
+{
+  "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+  "continuation_tool_name": "codex-reply",
+  "current_turn": 1,
+  "cwd": "/root/code/forge-delivery-agent",
+  "evidence_links": [
+    "implementation_receipt.json",
+    "external_pr_receipt.json",
+    "live_execution_evidence.json",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+  ],
+  "failure_classification": null,
+  "last_prompt_artifact": "implementation_handoff.md",
+  "last_receipt_id": "IMPL-FDA-V1-006-001",
+  "open_items": [],
+  "planned_pr_id": "PR-V1-018",
+  "provider": "codex",
+  "repair_attempt_count": 0,
+  "role": "implementer",
+  "schema_version": "fda.coding_agent_thread_state.v0",
+  "started_from_invocation_id": "INV-FDA-V1-IMPLEMENTER-LIVE-001",
+  "status": "completed",
+  "summary": "現在のCodex CLI sessionがV1 rebaseline実装を完了し、PR #87と証跡を作成した。",
+  "thread_id": null,
+  "thread_state_id": "THREAD-FDA-V1-006-001"
+}

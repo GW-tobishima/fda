@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/issue.schema.json",
+  "title": "Issue",
+  "type": "object",
+  "required": [
+    "type",
+    "title",
+    "objective",
+    "scope",
+    "autonomy",
+    "acceptance_criteria",
+    "risk",
+    "forge_mapping"
+  ],
+  "properties": {
+    "type": { "type": "string", "enum": ["intake", "human_decision", "ai_repair", "bug", "follow_up"] },
+    "title": { "type": "string" },
+    "objective": { "type": "string" },
+    "source": {
+      "type": "object",
+      "properties": {
+        "requirement": { "type": "string" },
+        "epic": { "type": "string" },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": ["in", "out"],
+      "properties": {
+        "in": { "type": "array", "items": { "type": "string" } },
+        "out": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "autonomy": {
+      "type": "object",
+      "required": ["level", "allowed_actions", "forbidden_actions", "required_human_decisions"],
+      "properties": {
+        "level": { "type": "string" },
+        "allowed_actions": { "type": "array", "items": { "type": "string" } },
+        "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+        "required_human_decisions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "risk": {
+      "type": "object",
+      "required": ["functional", "security", "operational", "ux"],
+      "properties": {
+        "functional": { "type": "string" },
+        "security": { "type": "string" },
+        "operational": { "type": "string" },
+        "ux": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "forge_mapping": {
+      "type": "object",
+      "required": ["program_id", "epic_id", "case_ids", "claim_ids", "proof_obligations", "human_decision_points", "ato_task_graph", "planned_prs", "gate_requirements"],
+      "properties": {
+        "program_id": { "type": "string" },
+        "epic_id": { "type": "string" },
+        "case_ids": { "type": "array", "items": { "type": "string" } },
+        "claim_ids": { "type": "array", "items": { "type": "string" } },
+        "proof_obligations": { "type": "array", "items": { "type": "string" } },
+        "human_decision_points": { "type": "array", "items": { "type": "string" } },
+        "ato_task_graph": { "type": "array", "items": { "type": "string" } },
+        "planned_prs": { "type": "array", "items": { "type": "string" } },
+        "gate_requirements": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

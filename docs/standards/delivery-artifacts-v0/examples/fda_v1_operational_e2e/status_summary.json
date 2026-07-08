@@ -1,0 +1,37 @@
+{
+  "schema_version": "fda.status_result.v0",
+  "verdict": "pass",
+  "artifact_dir": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+  "current_phase": "operational_v1_complete",
+  "phase_reason": "end_to_end_receipt.json status=succeeded です。",
+  "unresolved_decisions": [],
+  "notification": {
+    "request_status": "not_sendable",
+    "receipt_status": "skipped",
+    "channel": "slack",
+    "recipient": "slack:webhook",
+    "sent": false
+  },
+  "qa": {
+    "functional_qa_status": "passed",
+    "security_qa_status": "passed",
+    "qa_status": "passed",
+    "return_to_role": null
+  },
+  "repair": {
+    "repair_loop_status": "no_repair_needed",
+    "failure_classification": null,
+    "retry_attempt_count": 0,
+    "retry_limit": 3
+  },
+  "merge": {
+    "merge_gate_status": "merged",
+    "policy_disposition": "already_merged",
+    "ci_status": "hosted_ci_passed",
+    "risk_classification": "low_risk",
+    "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+  },
+  "next_actions": [
+    "Slack P0再ベースラインPR #89のReview Agent Gate、CI、Codex reviewを通す"
+  ]
+}

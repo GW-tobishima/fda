@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo fmt --all -- --check
+      - run: cargo test
+      - run: cargo run -- validate-artifacts --out /tmp/fda-validation-report.json
+      - if: github.event_name == 'pull_request'
+        run: python3 scripts/check_review_agent_gate.py --pr-number "${{ github.event.pull_request.number }}"
+      - run: |
+          cargo run -- plan \
+            --requirements docs/standards/delivery-artifacts-v0/examples/forge_dashboard_epic/requirements_definition.md \
+            --out /tmp/fda-fixture-plan \
+            --mode fixture

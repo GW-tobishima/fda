@@ -1,0 +1,114 @@
+{
+  "schema_version": "aicx.slack_outbound_message.v0",
+  "message_id": "SLACKMSG-QUIZ-ASB-2026-06-22",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "generated_for_date": "2026-06-22",
+  "delivery_channel": "slack",
+  "target_channel_env": "SLACK_CHANNEL_ID",
+  "artifact_path": "artifacts/runs/poc-2g-aicx-study-bot/daily-run/quiz_prompt.md",
+  "preview_count": 3,
+  "total_questions": 10,
+  "bank_question_count": 10,
+  "fallback_question_count": 0,
+  "message_text": "おはようございます。今日のAICX朝トレです。\n\n範囲: p.258-368\n今日の問題: 10問\nBank品質問題: 10問\nFallback問題: 0問\n回答形式: 1:B 2:C ...\n\n問題プレビュー:\n\nQ1. 問い合わせ対応エージェントで、入力内容によって処理を変えたい。If/Else、ルーティング、フィルタリングの違いとして最も適切な説明はどれですか。\nA. If/Else は条件で処理を分け、ルーティングは担当経路へ振り分け、フィルタリングは対象外を除外する\nB. If/Else、ルーティング、フィルタリングはいずれも同じ意味で、呼び方だけが違う\nC. ルーティングは必ずLLMで判断し、If/Elseは使ってはいけない\nD. フィルタリングは回答品質を上げるため、全入力を通過させる設計を指す\n\nQ2. 条件分岐が増えすぎて、現場がどの経路に進むか説明できなくなっています。次に取る設計判断として最も適切なものはどれですか。\nA. 分岐をすべてプロンプトに押し込み、例外は運用で吸収する\nB. 分岐条件、優先順位、例外時の戻し先を表で管理し、テストケースで確認する\nC. 判断不能なケースも必ず自動実行し、人間確認はなくす\nD. 分岐が複雑なほど高機能なので、整理せずに追加し続ける\n\nQ3. AIワークフローのPoCで、通常ケースは成功していますが例外入力の扱いが未確認です。次に優先すべき確認はどれですか。\nA. 通常ケースが動いたので、例外入力の確認は本番後に回す\nB. 例外入力、判断不能、権限不足のケースを用意し、停止・人間確認・再実行の経路を確認する\nC. 例外はすべてLLMに自由記述で解釈させ、ログは残さない\nD. 例外入力が起きたら利用者に再入力させるだけで十分とする\n\n全文: artifacts/runs/poc-2g-aicx-study-bot/daily-run/quiz_prompt.md",
+  "preview_questions": [
+    {
+      "question_number": 1,
+      "question_id": "QB-ASB-BRANCHING-001",
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "topic_label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "prompt": "問い合わせ対応エージェントで、入力内容によって処理を変えたい。If/Else、ルーティング、フィルタリングの違いとして最も適切な説明はどれですか。",
+      "choices": [
+        {
+          "choice": "A",
+          "text": "If/Else は条件で処理を分け、ルーティングは担当経路へ振り分け、フィルタリングは対象外を除外する"
+        },
+        {
+          "choice": "B",
+          "text": "If/Else、ルーティング、フィルタリングはいずれも同じ意味で、呼び方だけが違う"
+        },
+        {
+          "choice": "C",
+          "text": "ルーティングは必ずLLMで判断し、If/Elseは使ってはいけない"
+        },
+        {
+          "choice": "D",
+          "text": "フィルタリングは回答品質を上げるため、全入力を通過させる設計を指す"
+        }
+      ]
+    },
+    {
+      "question_number": 2,
+      "question_id": "QB-ASB-BRANCHING-002",
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "topic_label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "prompt": "条件分岐が増えすぎて、現場がどの経路に進むか説明できなくなっています。次に取る設計判断として最も適切なものはどれですか。",
+      "choices": [
+        {
+          "choice": "A",
+          "text": "分岐をすべてプロンプトに押し込み、例外は運用で吸収する"
+        },
+        {
+          "choice": "B",
+          "text": "分岐条件、優先順位、例外時の戻し先を表で管理し、テストケースで確認する"
+        },
+        {
+          "choice": "C",
+          "text": "判断不能なケースも必ず自動実行し、人間確認はなくす"
+        },
+        {
+          "choice": "D",
+          "text": "分岐が複雑なほど高機能なので、整理せずに追加し続ける"
+        }
+      ]
+    },
+    {
+      "question_number": 3,
+      "question_id": "QB-ASB-WORKFLOW-001",
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "topic_label": "チェック / ワークフロー検証",
+      "page_ranges": [
+        {
+          "from": 289,
+          "to": 311
+        }
+      ],
+      "prompt": "AIワークフローのPoCで、通常ケースは成功していますが例外入力の扱いが未確認です。次に優先すべき確認はどれですか。",
+      "choices": [
+        {
+          "choice": "A",
+          "text": "通常ケースが動いたので、例外入力の確認は本番後に回す"
+        },
+        {
+          "choice": "B",
+          "text": "例外入力、判断不能、権限不足のケースを用意し、停止・人間確認・再実行の経路を確認する"
+        },
+        {
+          "choice": "C",
+          "text": "例外はすべてLLMに自由記述で解釈させ、ログは残さない"
+        },
+        {
+          "choice": "D",
+          "text": "例外入力が起きたら利用者に再入力させるだけで十分とする"
+        }
+      ]
+    }
+  ],
+  "required_env": [
+    "SLACK_BOT_TOKEN",
+    "SLACK_CHANNEL_ID"
+  ],
+  "live_send_supported": true
+}

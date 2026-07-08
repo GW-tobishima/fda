@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/run_state.schema.json",
+  "title": "AICX Run State",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "quiz_set_id",
+    "date",
+    "timezone",
+    "scheduled_time",
+    "scheduled_at",
+    "status",
+    "steps",
+    "slack",
+    "artifacts",
+    "idempotency",
+    "failure",
+    "last_event",
+    "created_at_unix_seconds",
+    "updated_at_unix_seconds"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.daily_run_state.v0" },
+    "run_id": { "type": "string", "pattern": "^AICX-DAILY-[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "const": "Asia/Tokyo" },
+    "scheduled_time": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$" },
+    "scheduled_at": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["initialized", "not_due", "late_window_expired", "dispatched", "graded", "invalid_reply", "failed"]
+    },
+    "steps": {
+      "type": "object",
+      "required": ["quiz_generated", "slack_sent", "reply_received", "graded", "grading_response_sent"],
+      "properties": {
+        "quiz_generated": { "type": "boolean" },
+        "slack_sent": { "type": "boolean" },
+        "reply_received": { "type": "boolean" },
+        "graded": { "type": "boolean" },
+        "grading_response_sent": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "slack": {
+      "type": "object",
+      "required": ["channel_id", "message_ts", "thread_ts", "slack_used"],
+      "properties": {
+        "channel_id": { "type": ["string", "null"] },
+        "message_ts": { "type": ["string", "null"] },
+        "thread_ts": { "type": ["string", "null"] },
+        "slack_used": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "required": ["quiz_set", "quiz_prompt_json", "quiz_prompt_md", "slack_outbound_message", "slack_delivery_receipt", "run_state"],
+      "properties": {
+        "quiz_set": { "type": "string", "minLength": 1 },
+        "quiz_prompt_json": { "type": "string", "minLength": 1 },
+        "quiz_prompt_md": { "type": "string", "minLength": 1 },
+        "slack_outbound_message": { "type": "string", "minLength": 1 },
+        "slack_delivery_receipt": { "type": "string", "minLength": 1 },
+        "slack_reply_event": { "type": "string" },
+        "answer_submission": { "type": "string" },
+        "grading_report": { "type": "string" },
+        "study_recommendation": { "type": "string" },
+        "slack_grading_response": { "type": "string" },
+        "slack_grading_delivery_receipt": { "type": "string" },
+        "slack_reply_intake_receipt": { "type": "string" },
+        "slack_thread_poll_receipt": { "type": "string" },
+        "maintenance_receipt": { "type": "string" },
+        "run_state": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "idempotency": {
+      "type": "object",
+      "required": [
+        "dispatch_key",
+        "grading_key",
+        "duplicate_dispatch_skipped",
+        "duplicate_grading_skipped",
+        "processed_reply_event_ids"
+      ],
+      "properties": {
+        "dispatch_key": { "type": "string", "minLength": 1 },
+        "grading_key": { "type": "string", "minLength": 1 },
+        "duplicate_dispatch_skipped": { "type": "boolean" },
+        "duplicate_grading_skipped": { "type": "boolean" },
+        "processed_reply_event_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "failure": {
+      "type": ["object", "null"],
+      "required": ["event_type", "errors", "at_unix_seconds"],
+      "properties": {
+        "event_type": { "type": "string", "minLength": 1 },
+        "errors": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "at_unix_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "last_event": {
+      "type": "object",
+      "required": ["event_type", "status", "at_unix_seconds"],
+      "properties": {
+        "event_type": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "at_unix_seconds": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "created_at_unix_seconds": { "type": "integer", "minimum": 0 },
+    "updated_at_unix_seconds": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false
+}

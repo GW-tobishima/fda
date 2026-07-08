@@ -1,0 +1,58 @@
+{
+  "human_decision_id": "HDP-ON-VPR-002",
+  "title": "少数母数非表示閾値",
+  "status": "resolved",
+  "selected_option_id": "users_or_records_under_10",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "unique users < 10 または records < 10 は非表示。どちらか一方でも10未満なら集計値を出さない。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-004",
+  "required_before": "PR-ON-VPR-004",
+  "requested_decision": "VTuber dashboardやランキングで少数母数を非表示にする閾値を決める。",
+  "recommended_option": "unique users 10未満またはrecords 10未満は非表示",
+  "options": [
+    {
+      "id": "users_or_records_under_10",
+      "description": "unique users 10未満またはrecords 10未満は非表示",
+      "pros": [
+        "個人推測リスクを強めに抑えられる",
+        "要件と検証条件が単純になる"
+      ],
+      "cons": [
+        "小規模VTuberでは成果表示が出にくい"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "users_under_5",
+      "description": "unique users 5未満を非表示",
+      "pros": [
+        "小規模VTuberでも表示価値を出しやすい"
+      ],
+      "cons": [
+        "記録日や動画単位で個人推測リスクが高くなる"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "per_metric_thresholds",
+      "description": "項目ごとに別閾値を設定する",
+      "pros": [
+        "日付、動画、コメントでリスクに応じた制御ができる"
+      ],
+      "cons": [
+        "実装と説明が複雑になる"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "集計dashboard実装に進まない。計画上は10未満非表示を仮置きする。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-004 --run-id \"<RUN_ID:TASK-ON-VPR-004>\" --reason risk_approval --title \"HDP-ON-VPR-002 少数母数非表示閾値\" --question \"VTuber dashboardやランキングで少数母数を非表示にする閾値を決める。\" --recommended-option \"unique users 10未満またはrecords 10未満は非表示\" --option \"unique users 10未満またはrecords 10未満は非表示\" --option \"unique users 5未満を非表示\" --option \"項目ごとに別閾値を設定する\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "non_functional_requirements.md",
+    "risk_register.md",
+    "planned_prs.json"
+  ]
+}

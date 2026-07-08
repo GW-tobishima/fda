@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/question_bank.fixture.schema.json",
+  "title": "AICX Question Bank Fixture",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "program_id",
+    "epic_id",
+    "source_mode",
+    "question_count",
+    "questions"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.question_bank_fixture.v0" },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "source_mode": { "type": "string", "const": "manual_fixture" },
+    "question_count": { "type": "integer", "const": 10 },
+    "questions": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "question_id",
+          "topic_id",
+          "page_ranges",
+          "prompt",
+          "choices",
+          "correct_choice",
+          "rationale",
+          "scenario_tags"
+        ],
+        "properties": {
+          "question_id": { "type": "string", "minLength": 1 },
+          "topic_id": { "type": "string", "minLength": 1 },
+          "page_ranges": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/page_range" }
+          },
+          "prompt": { "type": "string", "minLength": 1 },
+          "choices": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["choice", "text"],
+              "properties": {
+                "choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+                "text": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "correct_choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+          "rationale": { "type": "string", "minLength": 1 },
+          "scenario_tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

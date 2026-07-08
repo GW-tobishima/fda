@@ -1,0 +1,222 @@
+{
+  "schema_version": "forge_delivery.planned_prs.v0",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "source_requirements": [
+    "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md"
+  ],
+  "planned_prs": [
+    {
+      "planned_pr_id": "PR-GDAR-001",
+      "sequence": 1,
+      "title": "generic runtime schemas and artifact contracts",
+      "case_id": "CASE-GDAR-001",
+      "purpose": "run_state、receipt、runner_explanation、artifact_inventoryをGeneric Daily Agent Runtimeとして再利用できる契約へ整理する。",
+      "scope": {
+        "in": [
+          "generic run_state schema",
+          "dispatch/poll/action/maintenance/status receipt schema",
+          "artifact catalog entry",
+          "fixture validation report"
+        ],
+        "out": [
+          "runtime command implementation",
+          "Slack adapter migration",
+          "ATO materialization write"
+        ]
+      },
+      "risk": {
+        "level": "medium",
+        "summary": "AICX固有artifact名を急に汎用名へ置き換えると既存PoCの検証が壊れる。",
+        "mitigations": [
+          "既存AICX artifactは削除せず、generic schemaを追加する",
+          "validate-artifactsで既存exampleとgeneric exampleを両方検証する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-GDAR-001",
+        "CLM-GDAR-002",
+        "CLM-GDAR-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-GDAR-001",
+          "type": "schema_validation",
+          "description": "generic runtime artifact schemaとfixtureがJSON schema validationを通る。",
+          "blocking": true,
+          "expected_evidence": [
+            "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+            "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json",
+            "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json"
+          ]
+        },
+        {
+          "proof_id": "PRF-GDAR-002",
+          "type": "traceability_review",
+          "description": "artifact_inventoryとrunner_explanationから生成物、入力、次actionを辿れる。",
+          "blocking": true,
+          "expected_evidence": [
+            "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+            "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json",
+            "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runtime_artifact_contracts.md"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "run_state/receipt系artifactの汎用化対象が明示されている",
+        "artifact_inventoryから計画成果物を辿れる",
+        "validate-artifactsがpassする"
+      ],
+      "expected_files": [
+        "docs/standards/delivery-artifacts-v0/schemas/**",
+        "docs/standards/delivery-artifacts-v0/artifact_catalog.md",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": []
+    },
+    {
+      "planned_pr_id": "PR-GDAR-002",
+      "sequence": 2,
+      "title": "generic maintain/status command boundary",
+      "case_id": "CASE-GDAR-002",
+      "purpose": "dispatch、event intake、catch-up、maintain、statusを単発commandとして安全に再実行できる境界へ落とす。",
+      "scope": {
+        "in": [
+          "dispatch-if-due contract",
+          "poll/action contract",
+          "maintain command decision table",
+          "status projection fields",
+          "idempotency and failure classification fixtures"
+        ],
+        "out": [
+          "daemon implementation",
+          "Slack Socket Mode reconnect handling",
+          "UI implementation"
+        ]
+      },
+      "risk": {
+        "level": "medium",
+        "summary": "maintain commandが多責務化するとdispatchとactionの二重実行防止が曖昧になる。",
+        "mitigations": [
+          "run_stateの読み取り順とidempotency keyを先に固定する",
+          "not_due、dispatch candidate、waiting_for_inbound、action_completed、failed、noopのfixtureを分ける"
+        ]
+      },
+      "claim_ids": [
+        "CLM-GDAR-002",
+        "CLM-GDAR-003",
+        "CLM-GDAR-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-GDAR-003",
+          "type": "idempotency_fixture",
+          "description": "同一date/target/inputでdispatch/actionが二重実行されないfixtureを追加する。",
+          "blocking": true,
+          "expected_evidence": [
+            "generic daily runtime fixture matrix",
+            "maintenance receipt examples"
+          ]
+        },
+        {
+          "proof_id": "PRF-GDAR-004",
+          "type": "status_projection_review",
+          "description": "人間がJSONを直接読まずにcurrent state、last event、next action、artifact pathを確認できる。",
+          "blocking": true,
+          "expected_evidence": [
+            "status report fixture",
+            "runner explanation"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "maintain/statusの責務境界がdocsまたはcontractに固定されている",
+        "二重dispatchと二重actionを防ぐ証跡方針がある",
+        "missing env、SDK不足、network、rate limit、thread not found、invalid inputが分類される"
+      ],
+      "expected_files": [
+        "src/**",
+        "docs/runtime/**",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HD-GDAR-001"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-GDAR-003",
+      "sequence": 3,
+      "title": "migrate AICX Study Bot onto generic runtime boundary",
+      "case_id": "CASE-GDAR-003",
+      "purpose": "AICX Study Botの既存daily dispatch、thread poll、grading、daily-status相当の挙動をgeneric runtime boundary上へ移す。",
+      "scope": {
+        "in": [
+          "AICX adapter migration plan",
+          "legacy CLI mapping",
+          "compatibility tests",
+          "failure recovery runbook"
+        ],
+        "out": [
+          "問題品質改善",
+          "PDF/OCR/LLM問題生成",
+          "Slack以外のadapter",
+          "自動マージ"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "既存AICX PoCのCLIやartifact pathを壊すと過去のreceipt検証が使えなくなる。",
+        "mitigations": [
+          "旧コマンド互換かdeprecated方針をHuman Decisionで決める",
+          "AICX fixtureをgeneric boundary移行前後で比較する",
+          "runtime codeは人間確認なしにmerge候補化しない"
+        ]
+      },
+      "claim_ids": [
+        "CLM-GDAR-003",
+        "CLM-GDAR-004",
+        "CLM-GDAR-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-GDAR-005",
+          "type": "compatibility_regression",
+          "description": "AICX Study Botのdispatch、poll、grading、status相当の既存fixtureが移行後も同じ意味で通る。",
+          "blocking": true,
+          "expected_evidence": [
+            "AICX compatibility validation report",
+            "legacy CLI mapping table"
+          ]
+        },
+        {
+          "proof_id": "PRF-GDAR-006",
+          "type": "runbook_review",
+          "description": "PC sleep、listener停止、network失敗後の復旧手順が人間向けに読める。",
+          "blocking": true,
+          "expected_evidence": [
+            "failure recovery runbook",
+            "maintenance receipt fixtures"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "AICX Study Botの既存挙動維持またはdeprecated方針が明示されている",
+        "generic runtime boundary上でAICX adapterがどう呼ばれるか追跡できる",
+        "互換性QAとfailure recoveryの証跡がある"
+      ],
+      "expected_files": [
+        "scripts/aicx_study_fixture.py",
+        "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/**",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/**",
+        "artifacts/review_packets/**"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HD-GDAR-002",
+        "HD-GDAR-003"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "aicx.slack_grading_response.v0",
+  "response_id": "SLACKGRADING-QUIZ-ASB-2026-06-22",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "reply_event_id": "SLACKREPLY-QUIZ-ASB-2026-06-22-FIXTURE",
+  "submission_id": "SUB-QUIZ-ASB-2026-06-22-SLACK-REPLY-FIXTURE",
+  "grading_report_id": "GRADING-QUIZ-ASB-2026-06-22",
+  "study_recommendation_id": "RECO-QUIZ-ASB-2026-06-22",
+  "generated_for_date": "2026-06-22",
+  "delivery_channel": "slack",
+  "thread_ts": "1782074738.865009",
+  "response_text": "採点結果: 6/10 (60%)\n\ntopic別正答率:\n- 5D前半 / Discovery・Definition: 0/2 (0%)\n- 導入設計 / 運用統制: 2/2 (100%)\n- 条件分岐 / コンテキストエンジニアリング: 2/2 (100%)\n- 組織設計 / KPI: 0/2 (0%)\n- チェック / ワークフロー検証: 2/2 (100%)\n\n復習推奨ページ:\n- 5D前半 / Discovery・Definition: p.351-368\n- 組織設計 / KPI: p.312-327",
+  "total_questions": 10,
+  "correct_count": 6,
+  "accuracy": 0.6,
+  "recommended_pages": [
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "reason": "topic accuracy 0% is below the 80% fixture threshold"
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "reason": "topic accuracy 0% is below the 80% fixture threshold"
+    }
+  ],
+  "slack_send_required": false
+}

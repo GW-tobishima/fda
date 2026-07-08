@@ -1,0 +1,77 @@
+{
+  "contract_id": "AUTO-FORGE-DASHBOARD-001",
+  "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "status": "draft",
+  "applies_to": [
+    "delivery-artifacts-v0",
+    "forge-dashboard-epic"
+  ],
+  "expires_at": null,
+  "allowed_actions": [
+    "create_markdown_templates",
+    "create_json_schemas",
+    "create_examples",
+    "record_ato_progress"
+  ],
+  "forbidden_actions": [
+    "implement_ui",
+    "merge_pr",
+    "deploy",
+    "expand_scope_without_human_decision"
+  ],
+  "escalation_rules": [
+    {
+      "trigger": "scope_change",
+      "required_action": "stop_and_request_human_decision",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "ui_implementation_start",
+      "required_action": "request_ui_surface_decision",
+      "human_decision_packet_required": true
+    }
+  ],
+  "auto_merge_policy": {
+    "allowed": false,
+    "conditions": [],
+    "forbidden": [
+      "docs that define autonomy expansion",
+      "security exception",
+      "release approval"
+    ]
+  },
+  "evidence_policy": {
+    "citations_required": true,
+    "source_trace_required": true,
+    "verification_required": true,
+    "summary_update_required": true
+  },
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-001",
+      "CLM-002",
+      "CLM-003"
+    ],
+    "proof_obligations": [
+      "PRF-001",
+      "PRF-002"
+    ],
+    "human_decision_points": [
+      "HDP-001"
+    ],
+    "ato_task_graph": [
+      "TASK-FD-001",
+      "TASK-FD-002"
+    ],
+    "planned_prs": [
+      "PR-FD-001",
+      "PR-FD-002"
+    ],
+    "gate_requirements": [
+      "forge_epic_validate",
+      "ato_task_graph_materialize",
+      "human_decision_packet_required"
+    ]
+  }
+}

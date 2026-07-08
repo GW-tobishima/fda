@@ -1,0 +1,71 @@
+{
+  "human_decision_guard": {
+    "non_approval_answers_block_invocation": true,
+    "unresolved_decisions_block_invocation": true
+  },
+  "policy_id": "ARP-FDA-V1-MCP-DRY-RUN-001",
+  "roles": [
+    {
+      "allowed_actions": [
+        "prepare implementation handoff",
+        "run tests in later live phase"
+      ],
+      "allowed_mcp_tools": [
+        "codex",
+        "codex-reply"
+      ],
+      "approval_policy": "on-request",
+      "forbidden_actions": [
+        "merge",
+        "release",
+        "scope_change_without_human_decision"
+      ],
+      "receipt_required": true,
+      "role": "implementer",
+      "source_mutation_allowed": true,
+      "workspace_policy": "write"
+    },
+    {
+      "allowed_actions": [
+        "read PR evidence",
+        "verify acceptance criteria"
+      ],
+      "allowed_mcp_tools": [
+        "codex",
+        "claude"
+      ],
+      "approval_policy": "read-only",
+      "forbidden_actions": [
+        "source_mutation",
+        "merge",
+        "security_exception_approval"
+      ],
+      "receipt_required": true,
+      "role": "functional_qa",
+      "source_mutation_allowed": false,
+      "workspace_policy": "read_only"
+    },
+    {
+      "allowed_actions": [
+        "read PR evidence",
+        "verify security and privacy risks"
+      ],
+      "allowed_mcp_tools": [
+        "codex",
+        "claude"
+      ],
+      "approval_policy": "read-only",
+      "forbidden_actions": [
+        "source_mutation",
+        "functional_qa_copy_paste",
+        "risk_self_approval"
+      ],
+      "receipt_required": true,
+      "role": "security_qa",
+      "source_mutation_allowed": false,
+      "workspace_policy": "read_only"
+    }
+  ],
+  "schema_version": "fda.agent_role_policy.v0",
+  "status": "approved"
+}

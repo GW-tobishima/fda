@@ -1,0 +1,48 @@
+{
+  "completed_at": "unix:1782627314",
+  "cwd": "transient-worktree:fda-v1-017-forge-gate-adapter",
+  "evidence_links": [
+    "implementation_receipt.json",
+    "external_pr_receipt.json"
+  ],
+  "input_artifacts": [
+    "mcp_agent_invocation_plan.json",
+    "codex_live_prompt.md",
+    "planned_pr_execution_packet.json"
+  ],
+  "invocation_id": "INV-FDA-V1-IMPLEMENTER-LIVE-001",
+  "mcp_server": "codex mcp-server",
+  "next_action": "resolve live implementation failure and rerun fda implement --live",
+  "output_artifacts": [
+    "implementation_receipt.json",
+    "external_pr_receipt.json",
+    "coding_agent_thread_state.json"
+  ],
+  "plan_id": "MCP-FDA-V1-LIVE-001",
+  "provider": "codex",
+  "receipt_id": "MCPR-FDA-V1-LIVE-001",
+  "role": "implementer",
+  "schema_version": "fda.mcp_tool_call_receipt.v0",
+  "semantic_result": {
+    "gate_effect": "repair",
+    "scope_drift": [],
+    "semantic_verdict": "fail",
+    "summary": "failed waiting for MCP response id 1: channel is empty and sending half is closed",
+    "tests": [
+      {
+        "command": "FDA_TESTS_RUN marker not returned",
+        "evidence": "not_run",
+        "verdict": "not_run"
+      }
+    ]
+  },
+  "started_at": "unix:1782627313",
+  "status": "failed",
+  "thread_id": null,
+  "tool_name": "codex",
+  "tool_result_digest": {
+    "exit_code": null,
+    "raw_result_stored": false,
+    "summary": "failed waiting for MCP response id 1: channel is empty and sending half is closed"
+  }
+}

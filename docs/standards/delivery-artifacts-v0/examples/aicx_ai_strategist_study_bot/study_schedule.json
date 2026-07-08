@@ -1,0 +1,177 @@
+{
+  "schema_version": "aicx.study_schedule.v0",
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "timezone": "Asia/Tokyo",
+  "default_daily_delivery_time": "04:30",
+  "default_question_count": 10,
+  "slack_completion_preference": {
+    "preferred_daily_question_count": 10,
+    "fallback_batches": [
+      {
+        "batch_label": "前半",
+        "question_count": 5
+      },
+      {
+        "batch_label": "後半",
+        "question_count": 5
+      }
+    ],
+    "reason": "毎日Slackで完結しやすくし、負荷が高い場合は5問ずつに分ける"
+  },
+  "answer_format": "multiple_choice_a_d",
+  "delivery_channel": "slack",
+  "weeks": [
+    {
+      "week_id": "WEEK-ASB-2026-06-10",
+      "date_from": "2026-06-10",
+      "date_to": "2026-06-16",
+      "study_pages": [
+        {
+          "from": 93,
+          "to": 254
+        }
+      ],
+      "focus_topics": [
+        "BPR",
+        "As-Is/To-Be",
+        "HTA",
+        "ECRS",
+        "データ",
+        "RAG",
+        "法務",
+        "成功定義",
+        "ワークフロー導入"
+      ],
+      "daily_quiz": {
+        "enabled": true,
+        "question_count": 10,
+        "format": "multiple_choice_a_d"
+      },
+      "weekend_test": null
+    },
+    {
+      "week_id": "WEEK-ASB-2026-06-17",
+      "date_from": "2026-06-17",
+      "date_to": "2026-06-23",
+      "study_pages": [
+        {
+          "from": 258,
+          "to": 368
+        }
+      ],
+      "focus_topics": [
+        "条件分岐",
+        "コンテキストエンジニアリング",
+        "組織設計",
+        "KPI",
+        "チェック"
+      ],
+      "daily_quiz": {
+        "enabled": true,
+        "question_count": 10,
+        "format": "multiple_choice_a_d"
+      },
+      "weekend_test": {
+        "question_count_min": 25,
+        "question_count_max": 30,
+        "purpose": "p.258-368 の理解度確認と弱点ページ特定"
+      }
+    },
+    {
+      "week_id": "WEEK-ASB-2026-06-24",
+      "date_from": "2026-06-24",
+      "date_to": "2026-06-30",
+      "study_pages": [
+        {
+          "from": 369,
+          "to": 400
+        }
+      ],
+      "focus_topics": [
+        "終盤範囲",
+        "全範囲横断",
+        "第1回模試"
+      ],
+      "daily_quiz": {
+        "enabled": true,
+        "question_count": 10,
+        "format": "multiple_choice_a_d"
+      },
+      "weekend_test": {
+        "question_count_min": 40,
+        "question_count_max": 60,
+        "purpose": "第1回模試。全範囲から出題し、弱点ページを特定する"
+      }
+    },
+    {
+      "week_id": "WEEK-ASB-2026-07-01",
+      "date_from": "2026-07-01",
+      "date_to": "2026-07-05",
+      "study_pages": [
+        {
+          "from": 93,
+          "to": 132
+        },
+        {
+          "from": 133,
+          "to": 183
+        },
+        {
+          "from": 217,
+          "to": 228
+        },
+        {
+          "from": 258,
+          "to": 288
+        },
+        {
+          "from": 312,
+          "to": 327
+        },
+        {
+          "from": 351,
+          "to": 400
+        }
+      ],
+      "focus_topics": [
+        "横断復習",
+        "第2回模試",
+        "受験日判断"
+      ],
+      "daily_quiz": {
+        "enabled": true,
+        "question_count": 10,
+        "format": "multiple_choice_a_d"
+      },
+      "weekend_test": {
+        "question_count_min": 40,
+        "question_count_max": 60,
+        "purpose": "第2回模試。90%以上なら 2026-07-10 本命、85%未満なら 2026-07-17 検討"
+      }
+    },
+    {
+      "week_id": "WEEK-ASB-2026-07-06",
+      "date_from": "2026-07-06",
+      "date_to": "2026-07-10",
+      "study_pages": [],
+      "focus_topics": [
+        "5D",
+        "KPI",
+        "ワークフロー分岐",
+        "RAG",
+        "リスク分類"
+      ],
+      "daily_quiz": {
+        "enabled": true,
+        "question_count": 10,
+        "format": "multiple_choice_a_d"
+      },
+      "weekend_test": {
+        "question_count_min": 10,
+        "question_count_max": 20,
+        "purpose": "直前の軽い確認。新規学習なし"
+      }
+    }
+  ]
+}

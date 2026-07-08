@@ -1,0 +1,104 @@
+{
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "cases": [
+    {
+      "case_id": "CASE-FDA-ARCH-FU-001",
+      "purpose": "result 型と pure support helper を移し、抽出済み use case の crate root 依存を薄くする。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-001",
+      "risk": "medium",
+      "state": "ready"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-002",
+      "purpose": "implement dry-run/live use case と rendering を分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-001"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-002",
+      "risk": "high",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-003",
+      "purpose": "MCP / Codex process invocation を ports と infra adapter に切り出す。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-002"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-004"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-003",
+      "risk": "high",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-004",
+      "purpose": "review / continue / merge use case と receipt rendering を分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-003"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-004",
+      "risk": "high",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-005",
+      "purpose": "open / notify を application と rendering へ分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-004"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-005",
+      "risk": "medium",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-006",
+      "purpose": "architecture gate を拡張し、lib.rs facade 化を fail-close に検査する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-005"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003",
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-006",
+      "risk": "medium",
+      "state": "planned"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-007",
+      "purpose": "docs の移行段階注記を完了状態へ更新し、source responsibility と gate を一致させる。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-006"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-007",
+      "risk": "low",
+      "state": "planned"
+    }
+  ]
+}

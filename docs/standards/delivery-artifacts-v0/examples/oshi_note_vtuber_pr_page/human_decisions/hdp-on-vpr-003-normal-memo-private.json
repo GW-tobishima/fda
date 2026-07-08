@@ -1,0 +1,47 @@
+{
+  "human_decision_id": "HDP-ON-VPR-003",
+  "title": "通常メモ非公開",
+  "status": "resolved",
+  "selected_option_id": "always_private",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "メモは常に非公開。通常メモ本文をVTuber、公開ページ、dashboard、投稿カードへ出さない。",
+  "reason_type": "risk_approval",
+  "target_task_key": "TASK-ON-VPR-003",
+  "required_before": "PR-ON-VPR-003",
+  "requested_decision": "通常メモ本文をVTuber側、投稿カード、集計dashboardへ出さない方針を固定するか。",
+  "recommended_option": "通常メモは常に非公開",
+  "options": [
+    {
+      "id": "always_private",
+      "description": "通常メモは常に非公開",
+      "pros": [
+        "自分用記録としての信頼を守れる",
+        "VTuber向けAPIの禁止項目を明確にできる"
+      ],
+      "cons": [
+        "コメント活用には別入力が必要になる"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "explicit_per_memo_share",
+      "description": "個別明示同意がある場合だけ一部公開",
+      "pros": [
+        "既存メモからコメント化する柔軟性がある"
+      ],
+      "cons": [
+        "同意UIと誤操作防止が複雑になる"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "通常メモは非公開として扱い、公開用コメントとは分離する。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-003 --run-id \"<RUN_ID:TASK-ON-VPR-003>\" --reason risk_approval --title \"HDP-ON-VPR-003 通常メモ非公開\" --question \"通常メモ本文をVTuber側、投稿カード、集計dashboardへ出さない方針を固定するか。\" --recommended-option \"通常メモは常に非公開\" --option \"通常メモは常に非公開\" --option \"個別明示同意がある場合だけ一部公開\" --json",
+  "source_refs": [
+    "requirements_definition.md",
+    "risk_register.md",
+    "planned_prs.json",
+    "forge_projection.json"
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": "aicx.grading_report.v0",
+  "grading_report_id": "GRADING-QUIZ-ASB-2026-06-22",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "submission_id": "SUB-QUIZ-ASB-2026-06-22-SLACK-SOCKET",
+  "graded_for_date": "2026-06-22",
+  "total_questions": 10,
+  "correct_count": 6,
+  "accuracy": 0.6,
+  "topic_results": [
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "total": 2,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "label": "導入設計 / 運用統制",
+      "page_ranges": [
+        {
+          "from": 328,
+          "to": 350
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0
+    },
+    {
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "total": 2,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "label": "チェック / ワークフロー検証",
+      "page_ranges": [
+        {
+          "from": 289,
+          "to": 311
+        }
+      ],
+      "total": 2,
+      "correct": 2,
+      "accuracy": 1.0
+    }
+  ],
+  "graded_answers": [
+    {
+      "question_id": "QB-ASB-BRANCHING-001",
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "selected_choice": "A",
+      "correct_choice": "A",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-BRANCHING-002",
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "selected_choice": "B",
+      "correct_choice": "B",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-WORKFLOW-001",
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "selected_choice": "B",
+      "correct_choice": "B",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-WORKFLOW-002",
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "selected_choice": "C",
+      "correct_choice": "C",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-ORG-KPI-001",
+      "topic_id": "TOPIC-ORG-KPI",
+      "selected_choice": "C",
+      "correct_choice": "B",
+      "is_correct": false
+    },
+    {
+      "question_id": "QB-ASB-ORG-KPI-002",
+      "topic_id": "TOPIC-ORG-KPI",
+      "selected_choice": "C",
+      "correct_choice": "B",
+      "is_correct": false
+    },
+    {
+      "question_id": "QB-ASB-GOVERNANCE-001",
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "selected_choice": "B",
+      "correct_choice": "B",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-GOVERNANCE-002",
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "selected_choice": "B",
+      "correct_choice": "B",
+      "is_correct": true
+    },
+    {
+      "question_id": "QB-ASB-5D-001",
+      "topic_id": "TOPIC-5D",
+      "selected_choice": "B",
+      "correct_choice": "A",
+      "is_correct": false
+    },
+    {
+      "question_id": "QB-ASB-5D-002",
+      "topic_id": "TOPIC-5D",
+      "selected_choice": "C",
+      "correct_choice": "B",
+      "is_correct": false
+    }
+  ]
+}

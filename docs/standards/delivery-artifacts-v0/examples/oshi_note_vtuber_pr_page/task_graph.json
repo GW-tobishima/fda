@@ -1,0 +1,174 @@
+{
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "tasks": [
+    {
+      "task_id": "TASK-ON-VPR-001",
+      "title": "必須Human Decisionsを解決する",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-001",
+      "status": "human_turn",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-001",
+        "claim_ids": [
+          "CLM-ON-VPR-001",
+          "CLM-ON-VPR-007"
+        ],
+        "promotion_state": "block",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "human_liaison",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-ON-VPR-6A"
+      }
+    },
+    {
+      "task_id": "TASK-ON-VPR-002",
+      "title": "VTuber登録、紹介URL、推し色、初期推し登録の設計を固める",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-002",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-002",
+        "claim_ids": [
+          "CLM-ON-VPR-002"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "solution_architect",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-ON-VPR-003",
+      "title": "通常メモ非公開と公開用コメントopt-in / moderationを設計する",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-003",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-003",
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "security_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-ON-VPR-6A"
+      }
+    },
+    {
+      "task_id": "TASK-ON-VPR-004",
+      "title": "匿名集計dashboardと少数母数非表示を設計する",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-004",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-004",
+        "claim_ids": [
+          "CLM-ON-VPR-003",
+          "CLM-ON-VPR-004"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "functional_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-ON-VPR-6A"
+      }
+    },
+    {
+      "task_id": "TASK-ON-VPR-005",
+      "title": "PRカード、SNSテンプレ、素材許諾、API Data利用方針を設計する",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-005",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-005",
+        "claim_ids": [
+          "CLM-ON-VPR-005",
+          "CLM-ON-VPR-006",
+          "CLM-ON-VPR-007"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "human_liaison",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": true,
+        "decision_packet_id": "HDPACKET-ON-VPR-6A"
+      }
+    },
+    {
+      "task_id": "TASK-ON-VPR-006",
+      "title": "first log後Premium CTAと低カーディナリティKPIを設計する",
+      "parent_type": "case",
+      "parent_id": "CASE-ON-VPR-006",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+        "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+        "case_id": "CASE-ON-VPR-006",
+        "claim_ids": [
+          "CLM-ON-VPR-002",
+          "CLM-ON-VPR-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "missing"
+      },
+      "execution": {
+        "owner_agent": "requirements_analyst",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "HANDOFF_ID": "pr84-fu006-implementer-to-qax2-20260628",
+  "HANDOFF_TYPE": "IMPLEMENTER_TO_QAX2",
+  "TASK_KEY": "issue-68-fu006-lib-facade-gate-20260628",
+  "RUN_ID": "run_01KW6P2TYM2HVCSXNRRM7VDPGW",
+  "FROM_ROLE": "implementer",
+  "TO_ROLE": ["qax2"],
+  "HUMAN_NEEDED": false,
+  "HUMAN_TURN_REASON": "none",
+  "SUMMARY": "PR #84 FU-006 implements the lib facade architecture gate and repairs the Codex P2 infra-to-cli dependency finding.",
+  "EVIDENCE": [
+    "artifacts/review_packets/pr-84.md",
+    "artifacts/sandbox/pr-84/fu006-summary.json",
+    "artifacts/sandbox/pr-84/runtime-evidence.json",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/84"
+  ],
+  "VALIDATION": [
+    "python3 scripts/check_architecture_boundaries.py",
+    "python3 -m unittest tests.test_architecture_boundaries",
+    "python3 -m unittest discover -s tests",
+    "cargo fmt --all --check",
+    "cargo check",
+    "cargo clippy --all-targets --all-features -- -D warnings",
+    "cargo test -- --test-threads=1",
+    "cargo build --bin fda",
+    "git diff --check",
+    "python3 scripts/check_review_agent_gate.py --packet-path artifacts/review_packets/pr-84.md"
+  ],
+  "FORGE_CONTRACT": {
+    "CLAIM_CONTRACT_STATUS": "frozen",
+    "CLAIM_IDS": [
+      "CLM-REQ-01",
+      "CLM-REQ-02",
+      "CLM-REQ-03",
+      "CLM-REQ-04",
+      "CLM-REQ-05",
+      "CLM-SEC-01"
+    ],
+    "PROOF_COVERAGE_STATUS": "complete",
+    "PROMOTION_DECISION": "promote"
+  },
+  "OPEN_RISKS": [
+    "Codex re-review is required before merge.",
+    "FU-007 will finish migration-stage documentation cleanup."
+  ]
+}

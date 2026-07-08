@@ -1,0 +1,110 @@
+{
+  "contract_id": "AUTO-GDAR-001",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "autonomy_level": "planning_only",
+  "status": "draft",
+  "applies_to": [
+    "generic_daily_agent_runtime",
+    "poc-5a-epic-planning"
+  ],
+  "expires_at": null,
+  "allowed_actions": [
+    "generate_epic_delivery_plan",
+    "generate_case_graph",
+    "generate_task_graph",
+    "generate_planned_prs",
+    "propose_human_decision_points",
+    "propose_forge_projection",
+    "generate_ato_cli_materialization_dry_run",
+    "run_local_artifact_validation"
+  ],
+  "forbidden_actions": [
+    "modify_runtime_code",
+    "create_implementation_pr",
+    "create_github_pr",
+    "merge_pr",
+    "change_scope_without_human",
+    "remove_AICX_existing_behavior",
+    "write_ato_materialization_to_live_state",
+    "evaluate_forge_gate_as_final"
+  ],
+  "escalation_rules": [
+    {
+      "trigger": "scope_change",
+      "required_action": "stop_and_request_human_decision",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "runtime_code_change_needed",
+      "required_action": "defer_to_single_planned_pr_execution",
+      "human_decision_packet_required": true
+    },
+    {
+      "trigger": "merge_or_auto_merge_policy_needed",
+      "required_action": "request_merge_policy_decision",
+      "human_decision_packet_required": true
+    }
+  ],
+  "auto_merge_policy": {
+    "allowed": false,
+    "conditions": [],
+    "forbidden": [
+      "planning-only artifact creation",
+      "runtime code",
+      "scope or autonomy expansion",
+      "security exception",
+      "release approval"
+    ]
+  },
+  "evidence_policy": {
+    "citations_required": true,
+    "source_trace_required": true,
+    "verification_required": true,
+    "summary_update_required": true
+  },
+  "next_allowed_phase": [
+    "ato_cli_materialization_dry_run",
+    "single_planned_pr_execution"
+  ],
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-GDAR-001",
+      "CLM-GDAR-002",
+      "CLM-GDAR-003",
+      "CLM-GDAR-004",
+      "CLM-GDAR-005"
+    ],
+    "proof_obligations": [
+      "PRF-GDAR-001",
+      "PRF-GDAR-002",
+      "PRF-GDAR-003",
+      "PRF-GDAR-004",
+      "PRF-GDAR-005",
+      "PRF-GDAR-006"
+    ],
+    "human_decision_points": [
+      "HD-GDAR-001",
+      "HD-GDAR-002",
+      "HD-GDAR-003"
+    ],
+    "ato_task_graph": [
+      "TASK-GDAR-001",
+      "TASK-GDAR-002",
+      "TASK-GDAR-003",
+      "TASK-GDAR-004",
+      "TASK-GDAR-005",
+      "TASK-GDAR-006"
+    ],
+    "planned_prs": [
+      "PR-GDAR-001",
+      "PR-GDAR-002",
+      "PR-GDAR-003"
+    ],
+    "gate_requirements": [
+      "validate-artifacts pass",
+      "Planning-only scope must remain closed",
+      "Human decision required before implementation PR execution"
+    ]
+  }
+}

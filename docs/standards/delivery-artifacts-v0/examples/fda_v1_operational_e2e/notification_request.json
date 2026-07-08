@@ -1,0 +1,23 @@
+{
+  "schema_version": "fda.notification_request.v0",
+  "notification_id": "NOTIFY-FDA-V1-011-001",
+  "status": "not_sendable",
+  "mode": "live",
+  "channel": "slack",
+  "recipient": "slack:webhook",
+  "recipient_source": "channel-default",
+  "sendable": false,
+  "reason": "human_turn_notice",
+  "summary": "No open Human Decision found in artifact dir",
+  "repo_name": "forge-delivery-agent",
+  "project": "forge-delivery-agent",
+  "repo_root": "/root/code/forge-delivery-agent",
+  "artifact_dir": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+  "decision_document_path": "/root/code/forge-delivery-agent/docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/human_decision_packet.md",
+  "decision_ids": [],
+  "decisions": [],
+  "options": [],
+  "recommended_option": "",
+  "resume_command": "",
+  "resume_commands": []
+}

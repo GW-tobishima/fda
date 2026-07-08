@@ -1,0 +1,36 @@
+skill:
+  name: ato_cli_materialization
+  version: v0.1.0
+  purpose: fda成果物を ATO CLI の task/run/decision/evidence write plan に変換する。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json
+  output_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/ato_cli_materialization_plan.schema.json
+    - artifact_contract:ato_cli_commands.md
+    - artifact_contract:ato_summary_preview.md
+  allowed_actions:
+    - ato_dry_run_plan
+    - ato_command_render
+    - evidence_edge_render
+    - summary_preview_render
+  forbidden_actions:
+    - ato_execute_without_explicit_mode
+    - human_turn_for_ai_repair
+    - raw_stdout_persist
+    - human_decision_approval
+  required_artifacts:
+    - ato_cli_materialization_plan.json
+    - ato_cli_commands.md
+    - ato_summary_preview.md
+  validation_commands:
+    - cargo run -- validate-artifacts --artifacts artifacts/runs/<run_id> --out artifacts/runs/<run_id>/validation_report.json
+  escalation_conditions:
+    - ato_backend_unknown
+    - permission_escalation_required
+    - human_required_decision_open

@@ -1,0 +1,123 @@
+{
+  "schema_version": "aicx.topic_map.v0",
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "source_mode": "manual_fixture",
+  "pdf_source": {
+    "local_path": "data/study_bot/source/pdf/aicx_ai_agent_strategist_official_text.pdf",
+    "git_tracked": false,
+    "content_policy": "本文の長文抜粋を通知、repo、外部 API に保存しない"
+  },
+  "topics": [
+    {
+      "topic_id": "TOPIC-BPR",
+      "label": "BPR / As-Is / To-Be",
+      "page_ranges": [
+        {
+          "from": 93,
+          "to": 132
+        }
+      ],
+      "question_style": "業務プロセス改善の判断問題"
+    },
+    {
+      "topic_id": "TOPIC-HTA-ECRS",
+      "label": "HTA / ECRS",
+      "page_ranges": [
+        {
+          "from": 133,
+          "to": 183
+        }
+      ],
+      "question_style": "作業分解と改善原則の適用問題"
+    },
+    {
+      "topic_id": "TOPIC-DATA-RAG",
+      "label": "データ / RAG",
+      "page_ranges": [
+        {
+          "from": 184,
+          "to": 216
+        },
+        {
+          "from": 217,
+          "to": 228
+        }
+      ],
+      "question_style": "検索拡張生成とデータ設計の判断問題"
+    },
+    {
+      "topic_id": "TOPIC-LEGAL-RISK",
+      "label": "法務 / リスク分類",
+      "page_ranges": [
+        {
+          "from": 229,
+          "to": 254
+        }
+      ],
+      "question_style": "利用規約、著作権、リスク分類のケース問題"
+    },
+    {
+      "topic_id": "TOPIC-BRANCHING-CONTEXT",
+      "label": "条件分岐 / コンテキストエンジニアリング",
+      "page_ranges": [
+        {
+          "from": 258,
+          "to": 288
+        }
+      ],
+      "question_style": "ワークフロー分岐と文脈設計の実践問題"
+    },
+    {
+      "topic_id": "TOPIC-WORKFLOW-CHECK",
+      "label": "チェック / ワークフロー検証",
+      "page_ranges": [
+        {
+          "from": 289,
+          "to": 311
+        }
+      ],
+      "question_style": "分岐、検証、例外処理の運用判断問題"
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "question_style": "組織導入、KPI 設計、成功判定の問題"
+    },
+    {
+      "topic_id": "TOPIC-ADOPTION-GOVERNANCE",
+      "label": "導入設計 / 運用統制",
+      "page_ranges": [
+        {
+          "from": 328,
+          "to": 350
+        }
+      ],
+      "question_style": "現場導入、役割分担、運用統制の判断問題"
+    },
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 400
+        }
+      ],
+      "question_style": "模試、5D、KPI、RAG、ワークフロー分岐の横断問題"
+    }
+  ],
+  "fixture_generation_order": [
+    "study_schedule.json を読む",
+    "topic_map.json を読む",
+    "対象日から page_ranges と topics を解決する",
+    "PDF/OCR ingest なしで A-D 選択式 fixture quiz を生成する",
+    "fixture answer key で採点と推奨ページを返す"
+  ]
+}

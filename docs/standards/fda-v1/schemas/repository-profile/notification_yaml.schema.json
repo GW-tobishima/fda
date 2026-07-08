@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/notification_yaml.schema.json",
+  "title": ".fda/notification.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["notification"],
+  "properties": {
+    "notification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default_channels", "human_turn_channels"],
+      "properties": {
+        "default_channels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "human_turn_channels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "slack": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "webhook_url_env", "store_secret_values"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "credential_source": { "type": "string", "minLength": 1 },
+            "webhook_url_env": { "type": "string", "minLength": 1 },
+            "channel_label_env": { "type": "string", "minLength": 1 },
+            "allowed_domains": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "store_secret_values": { "type": "boolean" }
+          }
+        },
+        "email": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "store_secret_values"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "credential_source": { "type": "string", "minLength": 1 },
+            "required_env": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            },
+            "recipient_env": { "type": "string", "minLength": 1 },
+            "store_secret_values": { "type": "boolean" }
+          }
+        },
+        "output_hub": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "default_artifact": { "type": "string", "minLength": 1 }
+          }
+        },
+        "fail_closed_on": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

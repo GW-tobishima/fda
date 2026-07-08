@@ -1,0 +1,27 @@
+{
+  "schema_version": "fda.github_merge_receipt.v0",
+  "receipt_id": "GHMERGE-FDA-V1-087-001",
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "planned_pr_id": "PR-V1-018",
+  "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+  "status": "succeeded",
+  "merge_executed": true,
+  "merge_method": "squash",
+  "expected_head_sha": "0e90b774453c2455c9db530b2ad2569cc46a0419",
+  "merge_sha": "5c3a06956c917e567c1e91480215109265035d8c",
+  "merged_at": "2026-06-29T23:06:45Z",
+  "actor": "msamunetogetoge",
+  "started_at": "2026-06-29T23:06:45Z",
+  "completed_at": "2026-06-29T23:06:45Z",
+  "failure_reason": null,
+  "resume_command": null,
+  "receipt_collection_command": null,
+  "evidence_links": [
+    "merge_gate_summary.json",
+    "external_pr_receipt.json",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+  ],
+  "rollback_plan": "PR #87のmergeを取り消す場合は、main上でGitHubのsquash merge result commit 5c3a06956c917e567c1e91480215109265035d8cをrevertする。PR closeやbranch deleteはmerged状態のrollbackではない。",
+  "collected_at_unix_seconds": 1783122598
+}

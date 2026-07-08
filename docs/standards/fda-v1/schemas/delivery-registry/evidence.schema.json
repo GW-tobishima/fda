@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/evidence.schema.json",
+  "title": "Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_id", "surface", "verdict", "validation_status", "freshness", "durability_class", "trust_level", "produced_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.evidence.v1" },
+    "evidence_id": { "type": "string", "minLength": 1 },
+    "surface": { "type": "string", "minLength": 1 },
+    "external_id": { "type": "string" },
+    "summary": { "type": "string" },
+    "verdict": { "type": "string", "enum": ["pass", "fail", "warning", "blocked", "read", "not_run", "informational", "unknown"] },
+    "validation_status": { "type": "string", "enum": ["passed", "failed", "skipped", "not_run", "unknown"] },
+    "freshness": { "type": "string", "enum": ["current", "stale", "unknown"] },
+    "durability_class": { "type": "string", "enum": ["artifact", "external", "ephemeral"] },
+    "trust_level": { "type": "string", "enum": ["system_generated", "self_reported", "human_attested", "external"] },
+    "negative_evidence": { "type": "boolean" },
+    "artifact_id": { "type": "string" },
+    "produced_at": { "type": "string", "format": "date-time" }
+  }
+}

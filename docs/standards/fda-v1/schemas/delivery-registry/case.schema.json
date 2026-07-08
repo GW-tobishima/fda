@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/case.schema.json",
+  "title": "Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "case_id", "program_id", "epic_id", "title", "status", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.case.v1" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "planned", "ready", "running", "ai_repair", "human_turn", "done", "blocked", "canceled"] },
+    "task_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "claim_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "proof_obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["proof_id", "description", "required"],
+        "properties": {
+          "proof_id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" }
+        }
+      }
+    },
+    "decision_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "artifact_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

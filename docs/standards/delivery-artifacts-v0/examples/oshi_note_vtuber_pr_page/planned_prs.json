@@ -1,0 +1,402 @@
+{
+  "schema_version": "forge_delivery.planned_prs.v0",
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "source_requirements": [
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+    "/root/code/oshi-note/artifacts/reports/vtuber-pr-page-feasibility-20260620.md",
+    "/root/code/oshi-note/artifacts/designs/vtuber-referral-monetization-flow-20260624.excalidraw"
+  ],
+  "planned_prs": [
+    {
+      "planned_pr_id": "PR-ON-VPR-001",
+      "sequence": 1,
+      "title": "VTuber partner intake, verification, and permission policy",
+      "case_id": "CASE-ON-VPR-001",
+      "purpose": "本人確認済みVTuber限定、代理人権限、素材許諾、停止受付を実装前に固定する。",
+      "scope": {
+        "in": [
+          "creator / partner application state",
+          "verification status",
+          "material permission record",
+          "terms / privacy / operations docs"
+        ],
+        "out": [
+          "automated verification integration",
+          "PR page implementation",
+          "dashboard implementation"
+        ]
+      },
+      "risk": {
+        "level": "critical",
+        "summary": "未確認VTuberや無許諾素材を許すと、なりすまし、権利侵害、PR表示違反につながる。",
+        "mitigations": [
+          "本人確認済みVTuber / 事務所アカウントだけに紹介URL発行を限定する",
+          "素材許諾範囲が未記録の素材をPRページやカードで使えないようにする",
+          "停止、削除、表示名変更の受付導線を定義する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-001",
+        "CLM-ON-VPR-007"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-001",
+          "type": "human_decision_and_ops_review",
+          "description": "本人確認済み限定、素材許諾、停止受付のHuman Decisionと運用レビューを完了する。",
+          "blocking": true,
+          "expected_evidence": [
+            "human_decision_packet.json",
+            "partner verification policy",
+            "material permission record"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "未確認VTuberは紹介URLを発行できない",
+        "素材許諾範囲が未記録の素材はPRページやカードで使えない",
+        "停止、削除、表示名変更の受付導線が定義されている"
+      ],
+      "expected_files": [
+        "docs/spec/**",
+        "templates/terms.html",
+        "templates/privacy.html",
+        "admin or ops runbook files"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-001",
+        "HDP-ON-VPR-007"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-002",
+      "sequence": 2,
+      "title": "Referral campaign page with selected creator color and initial favorite registration",
+      "case_id": "CASE-ON-VPR-002",
+      "purpose": "紹介URL、campaign slug、推し色、初期推し登録を一貫させる。",
+      "scope": {
+        "in": [
+          "referral_campaign model or equivalent",
+          "creator selected color",
+          "referral landing page",
+          "initial favorite registration flow"
+        ],
+        "out": [
+          "creator dashboard",
+          "public comments",
+          "paid referral reward"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "推し色がVTuber設定とファン側初期表示でずれると、紹介体験とcampaign attributionが壊れる。",
+        "mitigations": [
+          "campaign設定値を紹介ページと初期推し登録の同一sourceにする",
+          "色反映と初期推し登録の受入テストを追加する",
+          "登録後にファンが推し色を変更できる余地を残す"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-002"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-002",
+          "type": "functional_acceptance_and_ux_review",
+          "description": "VTuberが選択した推し色が紹介ページと紹介URL経由登録の初期推し状態へ反映される。",
+          "blocking": true,
+          "expected_evidence": [
+            "campaign color contract",
+            "initial favorite acceptance test",
+            "UX review"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "VTuberが宣伝用登録時に推し色を選択できる",
+        "紹介ページに同じ推し色が表示される",
+        "紹介URL経由登録後、対象VTuberが初期推しとして登録され、選択色が反映される",
+        "ファンは登録後に推し色を変更できる設計になっている"
+      ],
+      "expected_files": [
+        "creator/referral campaign model or config",
+        "referral page route",
+        "initial favorite registration flow",
+        "color propagation tests"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-001"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-003",
+      "sequence": 3,
+      "title": "Normal memo privacy and public comment opt-in",
+      "case_id": "CASE-ON-VPR-003",
+      "purpose": "通常メモ非公開と公開用コメントの明示opt-inを分離する。",
+      "scope": {
+        "in": [
+          "public comment input separate from normal memo",
+          "opt-in copy",
+          "delete path",
+          "moderation state"
+        ],
+        "out": [
+          "showing normal memo to VTubers",
+          "automatic comment publication without review"
+        ]
+      },
+      "risk": {
+        "level": "critical",
+        "summary": "通常メモを外部表示すると、自分用記録という前提とプロダクト信頼を壊す。",
+        "mitigations": [
+          "通常メモ本文をVTuber向けsurfaceから除外する",
+          "公開用コメントを別入力かつ明示opt-inにする",
+          "moderation未完了コメントをカードやdashboardに表示しない"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-005"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-003",
+          "type": "privacy_data_flow_and_security_review",
+          "description": "通常メモ本文と直接識別子がVTuber向けread modelに出ないことを確認する。",
+          "blocking": true,
+          "expected_evidence": [
+            "privacy data-flow review",
+            "API contract test",
+            "security review"
+          ]
+        },
+        {
+          "proof_id": "PRF-ON-VPR-004",
+          "type": "comment_opt_in_and_moderation_review",
+          "description": "公開用コメントのopt-in、削除導線、moderation状態を確認する。",
+          "blocking": true,
+          "expected_evidence": [
+            "comment opt-in copy review",
+            "moderation policy",
+            "comment display test"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "通常メモ本文はVTuber向けsurfaceに出ない",
+        "公開用コメントは別入力で明示opt-inが必要",
+        "moderation未完了コメントはカードやdashboardに表示されない",
+        "ユーザーが公開用コメントを削除できる"
+      ],
+      "expected_files": [
+        "comment opt-in UI / API",
+        "moderation state",
+        "privacy copy",
+        "normal memo exclusion tests"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-003",
+        "HDP-ON-VPR-004",
+        "HDP-ON-VPR-005"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-004",
+      "sequence": 4,
+      "title": "Anonymous creator dashboard and low-count suppression",
+      "case_id": "CASE-ON-VPR-004",
+      "purpose": "VTuber側の成果確認を匿名集計に限定し、少数母数を非表示にする。",
+      "scope": {
+        "in": [
+          "creator-scoped read-only dashboard",
+          "aggregate job or query",
+          "low-count suppression",
+          "authorization boundary"
+        ],
+        "out": [
+          "raw log export",
+          "individual fan list",
+          "normal memo display"
+        ]
+      },
+      "risk": {
+        "level": "critical",
+        "summary": "少数母数やraw logが見えると個人の推し活行動が推測される。",
+        "mitigations": [
+          "unique users / records閾値未満のbucketを非表示にする",
+          "VTuber dashboardを匿名集計だけに限定する",
+          "creator-scoped authorizationを必須にする"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-004"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-005",
+          "type": "aggregation_threshold_test",
+          "description": "少数母数非表示とcreator-scoped authorizationを検証する。",
+          "blocking": true,
+          "expected_evidence": [
+            "aggregation threshold unit test",
+            "authorization test",
+            "privacy data-flow review"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "VTuber dashboardは匿名集計のみ表示する",
+        "少数母数閾値未満のbucketは非表示になる",
+        "個別ファンID、メールアドレス、通常メモ、自由入力URLは返らない",
+        "creatorは他creatorのcampaign集計を読めない"
+      ],
+      "expected_files": [
+        "aggregation job or query",
+        "creator dashboard read model",
+        "threshold tests",
+        "authorization tests"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-002",
+        "HDP-ON-VPR-003"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-005",
+      "sequence": 5,
+      "title": "PR card, disclosure, material permission, and API Data policy",
+      "case_id": "CASE-ON-VPR-005",
+      "purpose": "投稿カードとSNS投稿テンプレのPR表示、素材許諾、API Data利用方針をGate化する。",
+      "scope": {
+        "in": [
+          "monthly card template",
+          "SNS post template",
+          "PR / provided-by disclosure",
+          "material permission enforcement",
+          "API Data usage policy"
+        ],
+        "out": [
+          "unpermitted official art use",
+          "YouTube / Twitch official metric display",
+          "card generation from normal memo body"
+        ]
+      },
+      "risk": {
+        "level": "critical",
+        "summary": "PR表示、素材許諾、API Data規約を誤ると法務・権利・プラットフォーム規約リスクが高い。",
+        "mitigations": [
+          "案件性がある投稿ではPR / 提供表記を必須にする",
+          "許諾済み素材以外をカードに使えないようにする",
+          "YouTube / Twitch API Dataを使う場合はrefresh / delete / display requirementを文書化する"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-005",
+        "CLM-ON-VPR-006",
+        "CLM-ON-VPR-007"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-006",
+          "type": "compliance_template_review",
+          "description": "PR表示、素材許諾、API Data利用方針をcompliance reviewで確認する。",
+          "blocking": true,
+          "expected_evidence": [
+            "compliance review",
+            "card template snapshot",
+            "material permission review",
+            "API data retention review if applicable"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "投稿カードは対象期間、oshinote内の独自集計、公式統計ではない注記を含む",
+        "案件性がある投稿ではPR / 提供表記が必須",
+        "許諾済み素材以外をカードに使えない",
+        "YouTube / Twitch API Dataを使う場合はrefresh / delete / display requirementが文書化される"
+      ],
+      "expected_files": [
+        "card template",
+        "SNS template",
+        "material permission enforcement",
+        "API data retention docs if API Data is used"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-005",
+        "HDP-ON-VPR-006",
+        "HDP-ON-VPR-007",
+        "HDP-ON-VPR-008"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-006",
+      "sequence": 6,
+      "title": "Premium CTA and low-cardinality funnel analytics",
+      "case_id": "CASE-ON-VPR-006",
+      "purpose": "first log後にPremium価値を提示し、低カーディナリティmetadataでfunnelを測る。",
+      "scope": {
+        "in": [
+          "first log after referral",
+          "Premium CTA",
+          "paywall_open / checkout_start / subscription_created event contract",
+          "Stripe metadata constraint"
+        ],
+        "out": [
+          "creator referral rewards",
+          "high-cardinality metadata",
+          "sending memo/comment/url to analytics or Stripe metadata"
+        ]
+      },
+      "risk": {
+        "level": "high",
+        "summary": "analyticsやStripe metadataに推し名、メモ本文、URL、コメント本文を入れるとプライバシーリスクが上がる。",
+        "mitigations": [
+          "metadataをsource=creator_referral等の低カーディナリティ値に限定する",
+          "推し名、メモ本文、URL、コメント本文を外部metadataへ送らない",
+          "analytics payload reviewを必須にする"
+        ]
+      },
+      "claim_ids": [
+        "CLM-ON-VPR-002",
+        "CLM-ON-VPR-003"
+      ],
+      "proof_strategy": [
+        {
+          "proof_id": "PRF-ON-VPR-007",
+          "type": "analytics_payload_review",
+          "description": "first log後Premium CTAと低カーディナリティfunnel eventを検証する。",
+          "blocking": true,
+          "expected_evidence": [
+            "analytics payload review",
+            "Stripe metadata review",
+            "funnel smoke test"
+          ]
+        }
+      ],
+      "acceptance_criteria": [
+        "first log後に推し追加枠、月次レポート、共有カードのPremium価値が提示される",
+        "creator_page_viewからsubscription_createdまでのfunnelが定義される",
+        "metadataはsource=creator_referral等の低カーディナリティ値に限定される",
+        "推し名、メモ本文、URL、コメント本文を外部metadataへ送らない"
+      ],
+      "expected_files": [
+        "paywall CTA flow",
+        "analytics event contract",
+        "Stripe metadata constraints",
+        "funnel tests"
+      ],
+      "auto_merge_candidate": false,
+      "human_decision_dependencies": [
+        "HDP-ON-VPR-003"
+      ]
+    }
+  ]
+}

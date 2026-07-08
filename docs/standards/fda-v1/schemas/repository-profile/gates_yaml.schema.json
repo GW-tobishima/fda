@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/gates_yaml.schema.json",
+  "title": ".fda/gates.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gates"],
+  "properties": {
+    "gates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/gate" },
+      "required": ["pre_work_profile_gate", "human_decision_gate", "review_agent_gate", "merge_gate"],
+      "properties": {
+        "pre_work_profile_gate": { "$ref": "#/$defs/gate" },
+        "human_decision_gate": { "$ref": "#/$defs/gate" },
+        "design_gate": { "$ref": "#/$defs/gate" },
+        "review_agent_gate": { "$ref": "#/$defs/gate" },
+        "merge_gate": { "$ref": "#/$defs/gate" }
+      }
+    }
+  },
+  "$defs": {
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": { "type": "boolean" },
+        "description": { "type": "string", "minLength": 1 },
+        "required_files": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "if_missing": {
+          "type": "string",
+          "enum": ["create_before_work", "block", "skip"]
+        },
+        "blocks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "required_before": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "required_artifacts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "required_reviewers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "conditional_reviewers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "check_command": { "type": "string", "minLength": 1 },
+        "auto_merge_allowed": { "type": "boolean" },
+        "requires_human_approval": { "type": "boolean" },
+        "fail_closed_on": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

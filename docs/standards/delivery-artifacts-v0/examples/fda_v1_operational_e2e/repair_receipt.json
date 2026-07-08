@@ -1,0 +1,7 @@
+{
+  "status": "no_repair_needed",
+  "failure_classification": null,
+  "retry_attempt_count": 0,
+  "retry_limit": 3,
+  "summary": "代表runはQA pass / no_repair_neededで完了し、repair loopは追加修正不要として閉じている。"
+}

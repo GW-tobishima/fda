@@ -1,0 +1,23 @@
+repo:
+  id: forge-delivery-agent
+  name: forge-delivery-agent
+  default_branch: main
+  stack:
+    language: rust
+    framework: cli
+    package_manager: cargo
+  risk_profile:
+    delivery_control_plane: true
+    repository_profile_required: true
+    human_decision_sensitive: true
+  docs:
+    v1_architecture: docs/standards/fda-v1/architecture.md
+    v1_source_architecture: docs/standards/fda-v1/source_architecture.md
+    v1_repository_profile: docs/standards/fda-v1/repository_profile.md
+    review_packets: artifacts/review_packets
+  commands:
+    test: cargo test
+    check: cargo check
+    fmt: cargo fmt --all
+    architecture_gate: python3 scripts/check_architecture_boundaries.py
+    review_agent_gate: python3 scripts/check_review_agent_gate.py --pr-number <PR_NUMBER>

@@ -1,0 +1,42 @@
+{
+  "schema_version": "fda.target_repo_profile.v1",
+  "profile_id": "TARGET-REPO-OSHI-NOTE-V1",
+  "target_repo": {
+    "name": "oshi-note",
+    "local_path": "/root/code/oshi-note",
+    "role": "external_implementation_repo",
+    "owner": "oshi-note implementation agent or human maintainer"
+  },
+  "source_repo": {
+    "name": "forge-delivery-agent",
+    "artifact_root": "docs/standards/fda-v1/examples/cross_repo/oshi_note",
+    "role": "planning_and_handoff_repo"
+  },
+  "handoff_policy": {
+    "fda_may_modify_target_repo": false,
+    "target_repo_pr_creation_by_this_packet": false,
+    "target_repo_expected_to_copy_or_reference_artifacts": true,
+    "implementation_must_return_evidence_packet": true
+  },
+  "reference_artifacts": [
+    "docs/standards/fda-v1/examples/cross_repo/oshi_note/implementation_handoff.json",
+    "docs/standards/fda-v1/examples/cross_repo/oshi_note/external_pr_receipt.json",
+    "docs/standards/fda-v1/examples/cross_repo/oshi_note/evidence_return_packet.json",
+    "docs/standards/fda-v1/examples/repository_profiles/oshi_note/.fda/repo.yaml",
+    "docs/standards/fda-v1/examples/repository_profiles/oshi_note/.fda/delivery_policy.yaml"
+  ],
+  "scope_in": [
+    "VTuber partner intake policy",
+    "verified VTuber only policy",
+    "material permission policy",
+    "PR disclosure policy",
+    "stop, delete, and display-name change request runbook"
+  ],
+  "scope_out": [
+    "referral page implementation",
+    "creator dashboard implementation",
+    "public comment feature implementation",
+    "YouTube or Twitch API integration",
+    "payment or reward implementation"
+  ]
+}

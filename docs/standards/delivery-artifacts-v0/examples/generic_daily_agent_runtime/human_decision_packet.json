@@ -1,0 +1,167 @@
+{
+  "decision_packet_id": "HDPACKET-GDAR-001",
+  "program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+  "epic_id": "EPIC-GDAR-001",
+  "case_id": "CASE-GDAR-002",
+  "status": "draft",
+  "required_before": "CASE-GDAR-002 implementation planning",
+  "decision_needed": "Generic runtimeをAICX runnerからどこまで切り出すかを選ぶ。",
+  "trigger": "Planning-only PoC完了後、command boundaryまたはadapter migrationの実装PRへ進む前",
+  "context": {
+    "current_state": "AICX Study Bot PoCではrun_state、receipt、catch-up、status、artifact inventoryが成立した。次はGeneric Daily Agent Runtimeへ昇格するが、実装前に切り出し粒度と互換性方針を決める必要がある。",
+    "relevant_requirement": "FR-GDAR-001..010, NFR-GDAR-REL-001, NFR-GDAR-OBS-001, NFR-GDAR-OPS-001",
+    "relevant_evidence": [
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+    ]
+  },
+  "options": [
+    {
+      "id": "A",
+      "description": "run_state/receiptだけ汎用化する。",
+      "pros": [
+        "既存AICX runnerへの影響が最小",
+        "artifact contractを先に安定させられる"
+      ],
+      "cons": [
+        "maintain/statusの再利用性は後続PRまで限定される"
+      ],
+      "recommended": false
+    },
+    {
+      "id": "B",
+      "description": "command boundaryまで汎用化する。",
+      "pros": [
+        "dispatch、catch-up、statusを他の日次agentへ再利用しやすい",
+        "AICX固有処理をadapterに閉じ込めやすい"
+      ],
+      "cons": [
+        "既存CLI互換性の確認が必要"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "C",
+      "description": "Slack adapterまで汎用化する。",
+      "pros": [
+        "Slack系日次agentの再利用性が高い"
+      ],
+      "cons": [
+        "PoC-5Aのplanning-only境界を超えやすく、adapter抽象化の設計負荷が高い"
+      ],
+      "recommended": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "HD-GDAR-001",
+      "type": "scope_decision",
+      "summary": "汎用runtime化の切り出し粒度",
+      "required_before": "CASE-GDAR-002",
+      "options": [
+        {
+          "id": "A",
+          "description": "run_state/receiptだけ汎用化する"
+        },
+        {
+          "id": "B",
+          "description": "command boundaryまで汎用化する"
+        },
+        {
+          "id": "C",
+          "description": "Slack adapterまで汎用化する"
+        }
+      ],
+      "recommended_option_id": "B"
+    },
+    {
+      "decision_id": "HD-GDAR-002",
+      "type": "compatibility_decision",
+      "summary": "AICX Study Bot互換性の優先度",
+      "required_before": "CASE-GDAR-003",
+      "options": [
+        {
+          "id": "A",
+          "description": "既存CLI完全互換"
+        },
+        {
+          "id": "B",
+          "description": "breaking change許容"
+        },
+        {
+          "id": "C",
+          "description": "adapter移行後に旧コマンドdeprecated"
+        }
+      ],
+      "recommended_option_id": "A"
+    },
+    {
+      "decision_id": "HD-GDAR-003",
+      "type": "merge_policy_decision",
+      "summary": "自動マージ許可範囲",
+      "required_before": "implementation_merge_policy",
+      "options": [
+        {
+          "id": "A",
+          "description": "docs/schema/testのみ自動候補"
+        },
+        {
+          "id": "B",
+          "description": "runtime codeは人間確認"
+        },
+        {
+          "id": "C",
+          "description": "すべて人間確認"
+        }
+      ],
+      "recommended_option_id": "B"
+    }
+  ],
+  "impact": {
+    "scope": "runtime boundary、AICX adapter migration、次PRの実装対象が決まる。",
+    "security": "secretを扱うadapter層を今回抽象化するか後続へ残すかが変わる。",
+    "schedule": "command boundaryまでの汎用化は中程度、Slack adapter汎用化は追加設計が必要。",
+    "ux": "人間がdaily-status相当で読む状態projectionの共通項目が決まる。",
+    "operations": "PC sleepやlistener停止後の復旧手順をgeneric maintainへ寄せるかAICX専用に残すかが変わる。"
+  },
+  "default_if_no_decision": "実装PRへ進まず、Planning-only artifactの更新とATO materialization dry-runだけを続ける。",
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-GDAR-002",
+      "CLM-GDAR-003",
+      "CLM-GDAR-004",
+      "CLM-GDAR-005"
+    ],
+    "proof_obligations": [
+      "PRF-GDAR-003",
+      "PRF-GDAR-004",
+      "PRF-GDAR-005",
+      "PRF-GDAR-006"
+    ],
+    "human_decision_points": [
+      "HD-GDAR-001",
+      "HD-GDAR-002",
+      "HD-GDAR-003"
+    ],
+    "ato_task_graph": [
+      "TASK-GDAR-003",
+      "TASK-GDAR-005"
+    ],
+    "planned_prs": [
+      "PR-GDAR-002",
+      "PR-GDAR-003"
+    ],
+    "gate_requirements": [
+      "Human decision must be resolved before generic command boundary implementation",
+      "Human decision must be resolved before AICX migration implementation",
+      "Runtime code auto-merge is forbidden without explicit policy"
+    ]
+  },
+  "recorded_decision": {
+    "decision": "",
+    "decided_by": "",
+    "decided_at": "",
+    "rationale": ""
+  }
+}

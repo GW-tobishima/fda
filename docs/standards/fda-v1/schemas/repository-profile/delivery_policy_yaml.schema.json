@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/delivery_policy_yaml.schema.json",
+  "title": ".fda/delivery_policy.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["delivery_policy"],
+  "properties": {
+    "delivery_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default_autonomy_level",
+        "auto_merge_allowed",
+        "human_required_for",
+        "forbidden_without_human"
+      ],
+      "properties": {
+        "default_autonomy_level": {
+          "type": "string",
+          "enum": ["planning_only", "handoff_only", "pr_open_allowed", "merge_allowed"]
+        },
+        "auto_merge_allowed": { "type": "boolean" },
+        "human_required_for": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/policy_reason" },
+          "uniqueItems": true
+        },
+        "low_risk_paths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "forbidden_without_human": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/policy_reason" },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "policy_reason": {
+      "type": "string",
+      "enum": [
+        "scope_change",
+        "privacy_policy_change",
+        "terms_change",
+        "legal_judgment",
+        "security_boundary_change",
+        "security_high_or_critical",
+        "user_data_exposure",
+        "public_api_breaking_change",
+        "risk_approval",
+        "merge_approval",
+        "release_approval",
+        "precedent_conflict",
+        "database_destructive_migration",
+        "raw_user_log_exposure",
+        "third_party_data_export"
+      ]
+    }
+  }
+}

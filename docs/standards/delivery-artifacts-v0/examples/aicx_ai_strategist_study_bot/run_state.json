@@ -1,0 +1,57 @@
+{
+  "schema_version": "aicx.daily_run_state.v0",
+  "run_id": "AICX-DAILY-2026-06-21",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "date": "2026-06-21",
+  "timezone": "Asia/Tokyo",
+  "scheduled_time": "04:30",
+  "scheduled_at": "2026-06-21T04:30:00+09:00",
+  "status": "graded",
+  "steps": {
+    "quiz_generated": true,
+    "slack_sent": true,
+    "reply_received": true,
+    "graded": true,
+    "grading_response_sent": true
+  },
+  "slack": {
+    "channel_id": "C_FIXTURE",
+    "message_ts": "1782074738.865009",
+    "thread_ts": "1782074738.865009",
+    "slack_used": false
+  },
+  "artifacts": {
+    "quiz_set": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_set.json",
+    "quiz_prompt_json": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_prompt.json",
+    "quiz_prompt_md": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_prompt.md",
+    "slack_outbound_message": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_outbound_message.json",
+    "slack_delivery_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_delivery_receipt.json",
+    "slack_reply_event": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_reply_event.json",
+    "answer_submission": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/answer_submission.json",
+    "grading_report": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/grading_report.json",
+    "study_recommendation": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/study_recommendation.json",
+    "slack_grading_response": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_grading_response.json",
+    "slack_grading_delivery_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_grading_delivery_receipt.json",
+    "slack_reply_intake_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_reply_intake_receipt.json",
+    "slack_thread_poll_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_thread_poll_receipt.json",
+    "maintenance_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/maintenance_receipt.json",
+    "run_state": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/run_state.json"
+  },
+  "idempotency": {
+    "dispatch_key": "2026-06-21:QUIZ-ASB-2026-06-21:SLACK_CHANNEL_ID",
+    "grading_key": "2026-06-21:QUIZ-ASB-2026-06-21:thread",
+    "duplicate_dispatch_skipped": false,
+    "duplicate_grading_skipped": false,
+    "processed_reply_event_ids": [
+      "SLACKREPLY-QUIZ-ASB-2026-06-21-EV-QUIZ-ASB-2026-06-21-FIXTURE"
+    ]
+  },
+  "failure": null,
+  "last_event": {
+    "event_type": "socket_reply",
+    "status": "received_graded_and_sent",
+    "at_unix_seconds": 1781984700
+  },
+  "created_at_unix_seconds": 1781983800,
+  "updated_at_unix_seconds": 1781984700
+}

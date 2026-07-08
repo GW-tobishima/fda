@@ -1,0 +1,70 @@
+{
+  "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+  "changed_files": [
+    "src/application/merge.rs",
+    "src/rendering/merge.rs",
+    "src/lib.rs",
+    "docs/v1/fda_v1_product_contract.md",
+    "docs/v1/fda_v1_pr_sequence.md",
+    "artifacts/runs/fda-v1-codex-cli-primary-epic-20260629/human_decision_packet.md"
+  ],
+  "completed_at": "unix:1782627314",
+  "cwd": "/root/code/forge-delivery-agent",
+  "dry_run_gate": {
+    "evidence_links": [
+      "mcp_tool_call_receipt.json",
+      "mcp_agent_invocation_plan.json",
+      "dry_run_receipt.json"
+    ],
+    "issues": [],
+    "status": "succeeded"
+  },
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "evidence_links": [
+    "live_execution_evidence.json",
+    "external_pr_receipt.json",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+  ],
+  "input_artifacts": [
+    "implementation_handoff.md",
+    "planned_pr_execution_packet.json",
+    "artifacts/runs/v1-pivot-010-pr-review-packet-reflection-gate-20260629/development_handoff.md",
+    "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+  ],
+  "mcp_server_command": [
+    "current-codex-cli-session"
+  ],
+  "next_action": "PR #87はmerge済み。Slack P0再ベースラインPRのReview Agent Gate、CI、Codex reviewを通す",
+  "output_artifacts": [
+    "external_pr_receipt.json",
+    "coding_agent_thread_state.json",
+    "live_execution_evidence.json"
+  ],
+  "planned_pr_id": "PR-V1-018",
+  "program_id": "FDA-V1",
+  "provider": "codex",
+  "receipt_id": "IMPL-FDA-V1-006-001",
+  "schema_version": "fda.implementation_receipt.v0",
+  "scope_drift": [],
+  "started_at": "unix:1782627313",
+  "status": "succeeded",
+  "summary": "現在のCodex CLIがCodex CLI primary rebaseline、必須.fda profile gate、Review Agent Gate packet reflection gateを実装し、PR #87を作成した。",
+  "tests": [
+    {
+      "command": "cargo test -- --nocapture",
+      "status": "passed",
+      "summary": "156 tests passed after rebase onto origin/main."
+    },
+    {
+      "command": "cargo check",
+      "status": "passed",
+      "summary": "Rust type check passed."
+    },
+    {
+      "command": "cargo run -- validate-artifacts --out artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json",
+      "status": "passed",
+      "summary": "delivery artifacts validation passed before final proof pack refresh."
+    }
+  ],
+  "thread_id": null
+}

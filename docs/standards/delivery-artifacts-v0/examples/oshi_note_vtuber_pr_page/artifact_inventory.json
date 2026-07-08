@@ -1,0 +1,473 @@
+{
+  "schema_version": "fda.artifact_inventory.v0",
+  "generated_at_unix_seconds": 1782345600,
+  "artifacts": [
+    {
+      "artifact_id": "ART-ON-VPR-001",
+      "artifact_type": "epic_delivery_plan",
+      "title": "oshi-note VTuber PR Page Epic Delivery Plan",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005",
+        "CASE-ON-VPR-006"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001",
+        "TASK-ON-VPR-002",
+        "TASK-ON-VPR-003",
+        "TASK-ON-VPR-004",
+        "TASK-ON-VPR-005",
+        "TASK-ON-VPR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "High-risk Epic plan for verified VTuber referral page, selected creator color, initial favorite registration, privacy, comments, PR disclosure, material permission, and API Data decisions.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/epic_delivery_plan.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "/root/code/oshi-note/artifacts/reports/vtuber-pr-page-feasibility-20260620.md",
+        "/root/code/oshi-note/artifacts/designs/vtuber-referral-monetization-flow-20260624.excalidraw"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-002",
+      "artifact_type": "case_graph",
+      "title": "oshi-note VTuber PR Page Case Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005",
+        "CASE-ON-VPR-006"
+      ],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "Case graph separating verification, referral color, comments, aggregation, cards, and Premium measurement.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/case_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-003",
+      "artifact_type": "task_graph",
+      "title": "oshi-note VTuber PR Page Task Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005",
+        "CASE-ON-VPR-006"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001",
+        "TASK-ON-VPR-002",
+        "TASK-ON-VPR-003",
+        "TASK-ON-VPR-004",
+        "TASK-ON-VPR-005",
+        "TASK-ON-VPR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ATO task projection with unresolved human decision packet and planned downstream work.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/task_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-004",
+      "artifact_type": "autonomy_contract",
+      "title": "oshi-note VTuber PR Page Autonomy Contract",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Planning-only autonomy boundary forbidding implementation, GitHub PR, ATO CLI, Forge real evaluation, and unsafe privacy/compliance actions.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/autonomy_contract.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-005",
+      "artifact_type": "human_decision_packet",
+      "title": "oshi-note VTuber PR Page Human Decision Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001",
+        "TASK-ON-VPR-003",
+        "TASK-ON-VPR-004",
+        "TASK-ON-VPR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Aggregate human decision packet covering verified-only creators, low-count threshold, normal memo privacy, public comment opt-in, moderation, PR disclosure, material permission, and API Data use. Individual HDP JSON files refine each decision.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/risk_register.md",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-001-verified-vtuber-only.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-002-low-count-threshold.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-003-normal-memo-private.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-004-public-comment-opt-in.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-005-moderation-policy.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-006-pr-disclosure.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-007-material-permission.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-008",
+      "artifact_type": "ato_cli_materialization_plan",
+      "title": "oshi-note VTuber PR Page ATO CLI Materialization Dry-run Plan",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001",
+        "TASK-ON-VPR-003",
+        "TASK-ON-VPR-004",
+        "TASK-ON-VPR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Schema-validated dry-run plan mapping each Human Decision to planned ATO CLI work block commands. No ATO CLI execution is performed.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_materialization_plan.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_commands.md",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-009",
+      "artifact_type": "ato_cli_commands",
+      "title": "oshi-note VTuber PR Page ATO CLI Commands Draft",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004",
+        "CASE-ON-VPR-005"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001",
+        "TASK-ON-VPR-003",
+        "TASK-ON-VPR-004",
+        "TASK-ON-VPR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Markdown command draft for ATO work begin, individual work block decisions, and evidence checkpoint. Commands are not executed.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_commands.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_materialization_plan.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-010",
+      "artifact_type": "target_repo_profile",
+      "title": "oshi-note Target Repo Profile",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "External implementation target profile for oshi-note. It records that implementation happens in /root/code/oshi-note and this repo only owns planning artifacts.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/target_repo_profile.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/implementation_handoff.md"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-011",
+      "artifact_type": "development_handoff",
+      "title": "oshi-note External Implementation Handoff",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Human-readable handoff for PR-ON-VPR-001 docs/spec/policy foundation in oshi-note, including resolved MVP human decisions and evidence expected from the target PR.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/implementation_handoff.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json",
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_prs.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-012",
+      "artifact_type": "planned_pr_execution_packet",
+      "title": "oshi-note PR-ON-VPR-001 Execution Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Machine-readable execution packet for external oshi-note implementation of PR-ON-VPR-001, including scope, resolved decisions, AC, checks, rollback, and expected evidence.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/implementation_handoff.md",
+        "docs/standards/delivery-artifacts-v0/schemas/external_pr_receipt.schema.json",
+        "docs/standards/delivery-artifacts-v0/schemas/evidence_return_packet.schema.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-013",
+      "artifact_type": "external_pr_receipt_schema",
+      "title": "External PR Receipt Schema",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Schema for the receipt that the oshi-note implementation PR should return to the planning repo.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/schemas/external_pr_receipt.schema.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-014",
+      "artifact_type": "evidence_return_packet_schema",
+      "title": "Evidence Return Packet Schema",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Schema for structured evidence returned by the external oshi-note implementation PR.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/schemas/evidence_return_packet.schema.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json"
+      ],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-015",
+      "artifact_type": "external_pr_receipt",
+      "title": "oshi-note PR 506 External PR Receipt",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-006"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Structured return receipt for merged oshi-note PR #506, including scope deviation disposition so PR-ON-VPR-001 is not auto-closed.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/external_pr_receipt.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/evidence_return_packet.json",
+        "https://github.com/hrkk7t/oshi-note/pull/506"
+      ],
+      "created_at_unix_seconds": 1782518400,
+      "updated_at_unix_seconds": 1782518400
+    },
+    {
+      "artifact_id": "ART-ON-VPR-016",
+      "artifact_type": "evidence_return_packet",
+      "title": "oshi-note PR 506 Evidence Return Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-006"
+      ],
+      "related_task_ids": [
+        "TASK-ON-VPR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Evidence packet returned from oshi-note PR #506 with PR, CI, review packet, runtime evidence, human decision application, and open scope-deviation risk.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/evidence_return_packet.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/external_pr_receipt.json",
+        "https://github.com/hrkk7t/oshi-note/actions/runs/28218792489"
+      ],
+      "created_at_unix_seconds": 1782518400,
+      "updated_at_unix_seconds": 1782518400
+    },
+    {
+      "artifact_id": "ART-ON-VPR-006",
+      "artifact_type": "runner_explanation",
+      "title": "oshi-note VTuber PR Page Runner Explanation",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "Planning-only run explanation and automation boundary.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/runner_explanation.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    },
+    {
+      "artifact_id": "ART-ON-VPR-007",
+      "artifact_type": "validation_report",
+      "title": "oshi-note VTuber PR Page Validation Report",
+      "producer_agent": "fda validate-artifacts",
+      "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+      "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+      "related_case_ids": [],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "Local validation report for schema-aligned artifacts.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [],
+      "created_at_unix_seconds": 1782345600,
+      "updated_at_unix_seconds": 1782345600
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "GROUP-ON-VPR-CORE",
+      "title": "Core schema-validated planning artifacts",
+      "artifact_ids": [
+        "ART-ON-VPR-001",
+        "ART-ON-VPR-002",
+        "ART-ON-VPR-003",
+        "ART-ON-VPR-004",
+        "ART-ON-VPR-005",
+        "ART-ON-VPR-008",
+        "ART-ON-VPR-009",
+        "ART-ON-VPR-010",
+        "ART-ON-VPR-011",
+        "ART-ON-VPR-012",
+        "ART-ON-VPR-013",
+        "ART-ON-VPR-014",
+        "ART-ON-VPR-015",
+        "ART-ON-VPR-016",
+        "ART-ON-VPR-006",
+        "ART-ON-VPR-007"
+      ]
+    }
+  ]
+}

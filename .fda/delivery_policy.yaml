@@ -1,0 +1,27 @@
+delivery_policy:
+  default_autonomy_level: pr_open_allowed
+  auto_merge_allowed: false
+  human_required_for:
+    - scope_change
+    - privacy_policy_change
+    - terms_change
+    - legal_judgment
+    - security_boundary_change
+    - security_high_or_critical
+    - user_data_exposure
+    - public_api_breaking_change
+    - risk_approval
+    - merge_approval
+    - release_approval
+    - precedent_conflict
+  low_risk_paths:
+    - docs/**
+    - tests/**
+    - .fda/**
+    - artifacts/runs/**
+  forbidden_without_human:
+    - database_destructive_migration
+    - raw_user_log_exposure
+    - third_party_data_export
+    - merge_approval
+    - release_approval

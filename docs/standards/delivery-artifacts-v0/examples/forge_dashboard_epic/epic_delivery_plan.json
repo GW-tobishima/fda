@@ -1,0 +1,163 @@
+{
+  "program_id": "PROGRAM-FORGE-DASHBOARD-001",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "status": "ready",
+  "outcome": "Forge / ATO / AI Delivery Organization の状態を Mission Control として観測できる設計契約を作る。",
+  "success_metrics": [
+    "Human Decision と AI Repair が別レーンで定義されている",
+    "Claim から Case、Planned PR、Proof まで追跡できる",
+    "UI 実装なしで UI/UX 方針をレビューできる"
+  ],
+  "scope_in": [
+    "Mission Control の情報設計",
+    "Human Decision と AI Repair の分離",
+    "Forge / ATO mapping のサンプル"
+  ],
+  "scope_out": [
+    "UI 実装",
+    "自動マージ実装",
+    "GitHub PR 自動作成"
+  ],
+  "assumptions": [
+    "ATO は状態と Human Turn の SoT である",
+    "Forge は Claim、Proof、Gate、PromotionDecision の SoT である"
+  ],
+  "open_questions": [
+    {
+      "id": "Q-001",
+      "question": "Mission Control UI の最初の実装面を Web / Tauri / ATO cockpit extension のどれにするか",
+      "blocking": false,
+      "owner": "human"
+    }
+  ],
+  "claim_tree": [
+    {
+      "claim_id": "CLM-001",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "標準成果物 v0 は要件から Epic Delivery Plan まで追跡できる。",
+      "blocking": true,
+      "proof_required": [
+        "requirements_definition",
+        "epic_delivery_plan",
+        "case_graph"
+      ]
+    },
+    {
+      "claim_id": "CLM-002",
+      "parent_claim_id": "CLM-001",
+      "type": "ux",
+      "statement": "Mission Control は Human Decision と AI Repair を分離する。",
+      "blocking": true,
+      "proof_required": [
+        "design_agreement",
+        "uiux_mission_control_design"
+      ]
+    },
+    {
+      "claim_id": "CLM-003",
+      "parent_claim_id": "CLM-001",
+      "type": "operational",
+      "statement": "ATO Task Graph は Forge Case と Claim を保持できる。",
+      "blocking": true,
+      "proof_required": [
+        "task_graph"
+      ]
+    }
+  ],
+  "case_graph": [
+    {
+      "case_id": "CASE-FD-001",
+      "purpose": "標準成果物パック v0 の正本と schema を作る。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-001"
+      ],
+      "planned_pr": "PR-FD-001",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-FD-002",
+      "purpose": "Mission Control の UI/UX 設計方針を文書化する。",
+      "depends_on": [
+        "CASE-FD-001"
+      ],
+      "claim_ids": [
+        "CLM-002",
+        "CLM-003"
+      ],
+      "planned_pr": "PR-FD-002",
+      "risk": "medium"
+    }
+  ],
+  "pr_plan": [
+    {
+      "planned_pr_id": "PR-FD-001",
+      "case_id": "CASE-FD-001",
+      "purpose": "delivery-artifacts-v0 の catalog、templates、schemas を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/standards/delivery-artifacts-v0/artifact_catalog.md",
+        "docs/standards/delivery-artifacts-v0/templates/**",
+        "docs/standards/delivery-artifacts-v0/schemas/**"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FD-002",
+      "case_id": "CASE-FD-002",
+      "purpose": "Mission Control UI/UX 設計と example epic を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/standards/delivery-artifacts-v0/uiux_mission_control_design.md",
+        "docs/standards/delivery-artifacts-v0/examples/forge_dashboard_epic/**"
+      ]
+    }
+  ],
+  "proof_strategy": [
+    {
+      "claim_id": "CLM-001",
+      "proof_type": "file_presence_and_json_syntax",
+      "owner_agent": "contract_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-002",
+      "proof_type": "design_review",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-003",
+      "proof_type": "task_graph_schema_check",
+      "owner_agent": "contract_qa",
+      "blocking": true
+    }
+  ],
+  "human_decision_points": [
+    {
+      "id": "HDP-001",
+      "trigger": "Mission Control UI 実装に入る前",
+      "decision_needed": "最初の UI 実装面を選ぶ。",
+      "options": [
+        "Web",
+        "Tauri",
+        "ATO cockpit extension"
+      ],
+      "required_before": "Mission Control UI v0"
+    }
+  ],
+  "merge_policy": {
+    "auto_merge_level": "none",
+    "conditions": [
+      "JSON schema syntax is valid",
+      "example JSON syntax is valid",
+      "Human Decision and AI Repair are separated"
+    ],
+    "forbidden": [
+      "UI implementation in Phase 0",
+      "scope expansion without Human Decision Packet"
+    ]
+  }
+}

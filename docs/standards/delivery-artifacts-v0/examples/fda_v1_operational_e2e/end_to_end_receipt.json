@@ -1,0 +1,248 @@
+{
+  "schema_version": "fda.end_to_end_receipt.v0",
+  "receipt_id": "FDA-V1-018-E2E-001",
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "planned_pr_id": "PR-V1-018",
+  "status": "succeeded",
+  "generated_at_unix_seconds": 1783122598,
+  "summary": "Operational V1 proof pack は、Codex CLI primary rebaseline PR #87、Slack P0通知PR #88、fixture-free current Codex CLI実装、test、scope evidence、Output Hub、status、ATO、Forge、Review Agent Gate証跡を参照し、V1完了として扱える。",
+  "required_for_operational_v1": true,
+  "representative_runs": [
+    {
+      "run_id": "FDA-V1-IMPLEMENTATION-E2E-001",
+      "kind": "implementation",
+      "status": "passed",
+      "summary": "現在のCodex CLIがV1-PIVOT-010/011をfixtureなしで実装し、PR #87、test、scope evidenceを回収した。",
+      "fixture_used": false,
+      "test_status": "passed",
+      "scope_disposition": {
+        "kind": "within_scope",
+        "summary": "Codex CLI primary rebaseline、.fda profile gate、Review Agent Gate、PR review packet reflection gateの範囲内。",
+        "evidence_links": [
+          "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+          "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+        ]
+      },
+      "evidence_links": [
+        "live_execution_evidence.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+        "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-NOTIFICATION-001",
+      "kind": "notification",
+      "status": "passed",
+      "summary": "Slack Incoming Webhook P0通知はPR #88でlive送信成功receiptを残し、このOperational V1完了proof packでは未解決Human Decisionがないためnotification_requestはnot_sendableとして残る。",
+      "fixture_used": false,
+      "evidence_links": [
+        "notification_request.json",
+        "notification_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_live_notification_receipt.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_missing_env_notification_receipt.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_context_path_notification_request.json"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-STATUS-001",
+      "kind": "status",
+      "status": "passed",
+      "summary": "status_summary は current_phase=operational_v1_complete と次actionを返す。",
+      "fixture_used": null,
+      "evidence_links": [
+        "status_summary.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/74"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-MERGE-001",
+      "kind": "merge",
+      "status": "passed",
+      "summary": "GitHub merge execution adapter はPR-V1-014で実装済み。HDP-007によりV1主経路ではauto mergeせず、merge readiness / human approval handoffまでを通過条件にする。",
+      "fixture_used": false,
+      "evidence_links": [
+        "merge_gate_summary.json",
+        "github_merge_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/75",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-ATO-001",
+      "kind": "ato_state",
+      "status": "passed",
+      "summary": "ATO state adapter はPR-V1-016でmerge済みで、PR #87 Operational V1 finalize checkpoint receipt が残っている。",
+      "fixture_used": false,
+      "evidence_links": [
+        "ato_state_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/79"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-FORGE-001",
+      "kind": "forge_gate",
+      "status": "passed",
+      "summary": "Forge gate adapter はPR-V1-017でmerge済みで、PromotionDecisionをmerge判断へ反映するコードとschemaが入っている。",
+      "fixture_used": null,
+      "evidence_links": [
+        "artifacts/review_packets/pr-80.md",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/80"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-RESEARCH-001",
+      "kind": "research",
+      "status": "passed",
+      "summary": "非実装 research mode は成果物完了として扱える契約をPR-V1-010で固定済み。",
+      "fixture_used": null,
+      "evidence_links": [
+        "docs/v1/fda_v1_pr_sequence.md",
+        "docs/v1/fda_v1_operational_epic.md"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-UIUX-001",
+      "kind": "uiux",
+      "status": "passed",
+      "summary": "非実装 uiux mode は成果物完了として扱える契約をPR-V1-010で固定済み。",
+      "fixture_used": null,
+      "evidence_links": [
+        "docs/v1/fda_v1_pr_sequence.md",
+        "docs/v1/fda_v1_operational_epic.md"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-DESIGN-ONLY-001",
+      "kind": "design_only",
+      "status": "passed",
+      "summary": "非実装 design-only mode は成果物完了として扱える契約をPR-V1-010で固定済み。",
+      "fixture_used": null,
+      "evidence_links": [
+        "docs/v1/fda_v1_pr_sequence.md",
+        "docs/v1/fda_v1_operational_epic.md"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-OUTPUT-HUB-001",
+      "kind": "output_hub",
+      "status": "passed",
+      "summary": "Output Hub、Decision Inbox、Execution Status の各HTMLとreceiptをこのproof packから生成する。",
+      "fixture_used": null,
+      "evidence_links": [
+        "output_hub.html",
+        "decision_inbox.html",
+        "execution_status.html",
+        "output_hub_receipt.json"
+      ]
+    },
+    {
+      "run_id": "FDA-V1-REPAIR-001",
+      "kind": "repair",
+      "status": "passed",
+      "summary": "代表runはQA pass / no_repair_neededで完了し、repair loopは追加修正不要として閉じている。",
+      "fixture_used": null,
+      "evidence_links": [
+        "repair_receipt.json"
+      ]
+    }
+  ],
+  "stage_gates": [
+    {
+      "gate_id": "notification_gate",
+      "status": "pass",
+      "summary": "Slack Incoming WebhookはPR #88でlive送信成功を確認済み。このOperational V1完了proof pack自体は未解決Human Decisionがないため通知送信をskipする。",
+      "evidence_links": [
+        "notification_request.json",
+        "notification_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_live_notification_receipt.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_missing_env_notification_receipt.json"
+      ]
+    },
+    {
+      "gate_id": "status_gate",
+      "status": "pass",
+      "summary": "status_summary.json は operational_v1_complete と次actionを返す。",
+      "evidence_links": [
+        "status_summary.json"
+      ]
+    },
+    {
+      "gate_id": "merge_execution_gate",
+      "status": "pass",
+      "summary": "GitHub merge execution adapter はPR-V1-014で実装済み。V1 primaryはHDP-007によりauto mergeなしで、merge readinessとhuman approval handoffを通過条件にする。",
+      "evidence_links": [
+        "merge_gate_summary.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/75",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87"
+      ]
+    },
+    {
+      "gate_id": "live_execution_gate",
+      "status": "pass",
+      "summary": "fixture-free current Codex CLI primary execution はPR #87、test status、scope evidenceを回収した。",
+      "evidence_links": [
+        "live_execution_evidence.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+        "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+      ]
+    },
+    {
+      "gate_id": "ato_state_gate",
+      "status": "pass",
+      "summary": "ATO state receipt はPR #87 Operational V1 finalize checkpointを記録している。",
+      "evidence_links": [
+        "ato_state_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/79"
+      ]
+    },
+    {
+      "gate_id": "forge_gate",
+      "status": "pass",
+      "summary": "Forge PromotionDecision adapter はPR-V1-017でmerge済み。",
+      "evidence_links": [
+        "artifacts/review_packets/pr-80.md",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/80"
+      ]
+    },
+    {
+      "gate_id": "v1_evidence_gate",
+      "status": "pass",
+      "summary": "Output Hub / status / receipt と代表implementation runのPR #87証跡、Slack P0通知のPR #88証跡が揃った。",
+      "evidence_links": [
+        "output_hub.html",
+        "execution_status.html",
+        "status_summary.json",
+        "end_to_end_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88"
+      ]
+    }
+  ],
+  "output_hub_proof": {
+    "verdict": "pass",
+    "output_hub_path": "output_hub.html",
+    "decision_inbox_path": "decision_inbox.html",
+    "execution_status_path": "execution_status.html",
+    "output_hub_receipt_path": "output_hub_receipt.json",
+    "status_summary_path": "status_summary.json"
+  },
+  "blocking_issues": [],
+  "evidence_links": [
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/73",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/74",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/75",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/77",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/79",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/80",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88",
+    "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_live_notification_receipt.json",
+    "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_missing_env_notification_receipt.json",
+    "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json",
+    "live_execution_evidence.json"
+  ],
+  "next_action": "Slack P0再ベースラインPRのReview Agent Gate、CI、Codex reviewを通す"
+}

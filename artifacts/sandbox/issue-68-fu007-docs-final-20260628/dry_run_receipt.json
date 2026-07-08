@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "check_id": "human_decision_guard",
+      "status": "pass",
+      "summary": "未解決または非承認 Human Decision がないこと"
+    },
+    {
+      "check_id": "cwd",
+      "status": "pass",
+      "summary": "/tmp/issue68-fu007-docs-final"
+    },
+    {
+      "check_id": "prompt_artifact",
+      "status": "pass",
+      "summary": "codex_prompt.md generated"
+    },
+    {
+      "check_id": "approval_policy",
+      "status": "pass",
+      "summary": "on-request"
+    },
+    {
+      "check_id": "forbidden_actions",
+      "status": "pass",
+      "summary": "merge/release/scope_change_without_human_decision/source mutation during dry-run are forbidden"
+    },
+    {
+      "check_id": "tools_list",
+      "status": "pass",
+      "summary": "MCP initialize and tools/list completed."
+    },
+    {
+      "check_id": "target_repo_mutation",
+      "status": "pass",
+      "summary": "FDA dry-run wrote artifacts only to output dir outside target repo"
+    }
+  ],
+  "completed_at": "unix:1782677367",
+  "cwd": "/tmp/issue68-fu007-docs-final",
+  "detected_tools": [
+    "codex",
+    "codex-reply"
+  ],
+  "evidence_links": [
+    "mcp_tool_call_receipt.json",
+    "mcp_agent_invocation_plan.json"
+  ],
+  "expected_tools": [
+    "codex",
+    "codex-reply"
+  ],
+  "invocation_id": "INV-FDA-V1-IMPLEMENTER-DRY-RUN-001",
+  "mcp_server_command": [
+    "codex",
+    "mcp-server"
+  ],
+  "missing_tools": [],
+  "plan_id": "MCP-FDA-V1-DRY-RUN-001",
+  "provider": "codex",
+  "receipt_id": "MCPDRY-FDA-V1-005-001",
+  "schema_version": "fda.mcp_dry_run_receipt.v0",
+  "started_at": "unix:1782677367",
+  "status": "succeeded",
+  "target_repo_mutated": false
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/epic_delivery_plan.schema.json",
+  "title": "Epic Delivery Plan",
+  "type": "object",
+  "required": [
+    "program_id",
+    "epic_id",
+    "status",
+    "outcome",
+    "scope_in",
+    "scope_out",
+    "assumptions",
+    "open_questions",
+    "claim_tree",
+    "case_graph",
+    "pr_plan",
+    "proof_strategy",
+    "human_decision_points",
+    "merge_policy"
+  ],
+  "properties": {
+    "program_id": { "type": "string" },
+    "epic_id": { "type": "string" },
+    "schema_version": { "type": "string" },
+    "source_requirements": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "planning_mode": { "type": "string", "enum": ["planning_only", "implementation_planning", "execution_planning"] },
+    "objective": {
+      "type": "object",
+      "required": ["summary", "success_outcomes", "non_goals"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "success_outcomes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "non_goals": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": ["in", "out"],
+      "properties": {
+        "in": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "out": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "status": { "type": "string", "enum": ["draft", "ready", "running", "human_turn", "done", "superseded"] },
+    "outcome": { "type": "string" },
+    "success_metrics": { "type": "array", "items": { "type": "string" } },
+    "scope_in": { "type": "array", "items": { "type": "string" } },
+    "scope_out": { "type": "array", "items": { "type": "string" } },
+    "assumptions": { "type": "array", "items": { "type": "string" } },
+    "open_questions": { "type": "array", "items": { "$ref": "#/$defs/open_question" } },
+    "claim_tree": { "type": "array", "items": { "$ref": "#/$defs/claim" } },
+    "case_graph": { "type": "array", "items": { "$ref": "#/$defs/case" } },
+    "pr_plan": { "type": "array", "items": { "$ref": "#/$defs/planned_pr" } },
+    "proof_strategy": { "type": "array", "items": { "$ref": "#/$defs/proof_strategy" } },
+    "human_decision_points": { "type": "array", "items": { "$ref": "#/$defs/human_decision_point" } },
+    "merge_policy": { "$ref": "#/$defs/merge_policy" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "enum": ["ready", "running", "done"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "open_questions": {
+            "not": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "blocking": { "const": true }
+                },
+                "required": ["blocking"]
+              }
+            }
+          },
+          "claim_tree": { "minItems": 1 },
+          "case_graph": { "minItems": 1 },
+          "pr_plan": { "minItems": 1 },
+          "proof_strategy": { "minItems": 1 }
+        },
+        "required": ["open_questions", "claim_tree", "case_graph", "pr_plan", "proof_strategy"]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "open_question": {
+      "type": "object",
+      "required": ["id", "question", "blocking"],
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "blocking": { "type": "boolean" },
+        "owner": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": ["claim_id", "type", "statement", "blocking", "proof_required"],
+      "properties": {
+        "claim_id": { "type": "string" },
+        "parent_claim_id": { "type": ["string", "null"] },
+        "type": { "type": "string", "enum": ["functional", "non_functional", "security", "ux", "operational", "contract"] },
+        "statement": { "type": "string" },
+        "blocking": { "type": "boolean" },
+        "proof_required": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "case": {
+      "type": "object",
+      "required": ["case_id", "purpose", "depends_on", "claim_ids", "planned_pr", "risk"],
+      "properties": {
+        "case_id": { "type": "string" },
+        "purpose": { "type": "string" },
+        "depends_on": { "type": "array", "items": { "type": "string" } },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "planned_pr": { "type": "string", "minLength": 1 },
+        "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+      },
+      "additionalProperties": false
+    },
+    "planned_pr": {
+      "type": "object",
+      "required": ["planned_pr_id", "case_id", "purpose", "risk", "auto_merge_allowed"],
+      "properties": {
+        "planned_pr_id": { "type": "string" },
+        "case_id": { "type": "string" },
+        "purpose": { "type": "string" },
+        "risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "auto_merge_allowed": { "type": "boolean" },
+        "expected_files": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "proof_strategy": {
+      "type": "object",
+      "required": ["claim_id", "proof_type", "owner_agent", "blocking"],
+      "properties": {
+        "claim_id": { "type": "string" },
+        "proof_type": { "type": "string" },
+        "owner_agent": { "type": "string" },
+        "blocking": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "human_decision_point": {
+      "type": "object",
+      "required": ["id", "trigger", "decision_needed", "options", "required_before"],
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string" },
+        "decision_needed": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+        "required_before": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "merge_policy": {
+      "type": "object",
+      "required": ["auto_merge_level", "conditions", "forbidden"],
+      "properties": {
+        "auto_merge_level": { "type": "string", "enum": ["none", "level_1_docs_tests_internal", "level_2_feature_flag_low_risk"] },
+        "conditions": { "type": "array", "items": { "type": "string" } },
+        "forbidden": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

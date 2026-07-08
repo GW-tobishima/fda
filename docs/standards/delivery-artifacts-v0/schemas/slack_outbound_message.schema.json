@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/slack_outbound_message.schema.json",
+  "title": "AICX Slack Outbound Message",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "message_id",
+    "quiz_set_id",
+    "generated_for_date",
+    "delivery_channel",
+    "target_channel_env",
+    "artifact_path",
+    "preview_count",
+    "total_questions",
+    "bank_question_count",
+    "fallback_question_count",
+    "message_text",
+    "preview_questions",
+    "required_env",
+    "live_send_supported"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.slack_outbound_message.v0" },
+    "message_id": { "type": "string", "minLength": 1 },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "generated_for_date": { "type": "string", "format": "date" },
+    "delivery_channel": { "type": "string", "const": "slack" },
+    "target_channel_env": { "type": "string", "const": "SLACK_CHANNEL_ID" },
+    "artifact_path": { "type": "string", "minLength": 1 },
+    "preview_count": { "type": "integer", "minimum": 1, "maximum": 30 },
+    "total_questions": { "type": "integer", "minimum": 1 },
+    "bank_question_count": { "type": "integer", "minimum": 0 },
+    "fallback_question_count": { "type": "integer", "minimum": 0 },
+    "message_text": { "type": "string", "minLength": 1 },
+    "dispatch_notice": { "type": ["string", "null"] },
+    "preview_questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "question_number",
+          "question_id",
+          "topic_id",
+          "topic_label",
+          "page_ranges",
+          "prompt",
+          "choices"
+        ],
+        "properties": {
+          "question_number": { "type": "integer", "minimum": 1 },
+          "question_id": { "type": "string", "minLength": 1 },
+          "topic_id": { "type": "string", "minLength": 1 },
+          "topic_label": { "type": "string", "minLength": 1 },
+          "page_ranges": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/page_range" }
+          },
+          "prompt": { "type": "string", "minLength": 1 },
+          "choices": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["choice", "text"],
+              "properties": {
+                "choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+                "text": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "required_env": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["SLACK_BOT_TOKEN", "SLACK_CHANNEL_ID"] },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "live_send_supported": { "type": "boolean" }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/cross-repo/external_pr_receipt.schema.json",
+  "title": "External PR Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "target_repo", "planned_pr_id", "actual_pr_url", "status", "checks", "evidence", "deviation_from_plan"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.external_pr_receipt.v1" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "actual_pr_url": { "type": "string", "format": "uri" },
+    "status": { "type": "string", "enum": ["opened", "merged", "blocked", "rejected"] },
+    "checks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["passed", "failed", "not_run", "skipped", "unknown"]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_ref" }
+    },
+    "deviation_from_plan": { "type": "array", "items": { "type": "string" } },
+    "rollback_plan": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "id", "verdict", "summary"],
+      "properties": {
+        "surface": { "type": "string", "minLength": 1 },
+        "id": { "type": "string", "minLength": 1 },
+        "verdict": { "type": "string", "enum": ["pass", "fail", "warning", "not_run", "informational"] },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

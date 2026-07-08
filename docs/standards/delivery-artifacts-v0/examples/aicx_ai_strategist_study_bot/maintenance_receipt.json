@@ -1,0 +1,54 @@
+{
+  "schema_version": "aicx.maintenance_receipt.v0",
+  "maintenance_receipt_id": "MAINT-AICX-2026-06-21-DRY-RUN",
+  "date": "2026-06-21",
+  "mode": "dry-run",
+  "status": "reply_found_graded_and_sent",
+  "action": "thread_poll",
+  "actions": [
+    {
+      "action": "thread_poll",
+      "status": "reply_found_graded_and_sent",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_thread_poll_receipt.json"
+    }
+  ],
+  "out_dir": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot",
+  "run_state_path": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/run_state.json",
+  "allow_late": true,
+  "late_window_hours": 12,
+  "started_at_unix_seconds": 1782096366,
+  "completed_at_unix_seconds": 1782096366,
+  "env_readiness": {
+    "bot_token_present": false,
+    "channel_id_present": false,
+    "slack_sdk_available": false,
+    "required_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ],
+    "missing_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ]
+  },
+  "run_state_status": "graded",
+  "run_state_last_event_status": "received_graded_and_sent",
+  "artifacts": {
+    "quiz_set": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_set.json",
+    "quiz_prompt_json": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_prompt.json",
+    "quiz_prompt_md": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/quiz_prompt.md",
+    "slack_outbound_message": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_outbound_message.json",
+    "slack_delivery_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_delivery_receipt.json",
+    "slack_reply_event": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_reply_event.json",
+    "answer_submission": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/answer_submission.json",
+    "grading_report": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/grading_report.json",
+    "study_recommendation": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/study_recommendation.json",
+    "slack_grading_response": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_grading_response.json",
+    "slack_grading_delivery_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_grading_delivery_receipt.json",
+    "slack_reply_intake_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_reply_intake_receipt.json",
+    "slack_thread_poll_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/slack_thread_poll_receipt.json",
+    "maintenance_receipt": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/maintenance_receipt.json",
+    "run_state": "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/run_state.json"
+  },
+  "errors": []
+}

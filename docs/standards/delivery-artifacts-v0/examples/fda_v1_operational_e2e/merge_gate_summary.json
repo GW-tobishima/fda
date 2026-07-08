@@ -1,0 +1,10 @@
+{
+  "status": "merged",
+  "policy_disposition": "already_merged",
+  "ci_status": "hosted_ci_passed",
+  "risk_classification": "low_risk",
+  "actual_pr_url": "https://github.com/msamunetogetoge/forge-delivery-agent/pull/87",
+  "merge_commit_sha": "5c3a06956c917e567c1e91480215109265035d8c",
+  "github_merge_receipt": "github_merge_receipt.json",
+  "summary": "PR-V1-014 merge adapter and PR-V1-017 forge gate adapter are merged. Target PR #87は2026-06-29T23:06:45Zにsquash merge済みで、github_merge_receipt.jsonにGitHub merge result commitとrollback planを残している。PR #88もmerge済み。Slack P0再ベースラインPR #89は、このmerged Operational V1 proofを最新化する別PRとしてReview Agent Gate、CI、Codex review後にHuman merge approvalへ戻す。"
+}

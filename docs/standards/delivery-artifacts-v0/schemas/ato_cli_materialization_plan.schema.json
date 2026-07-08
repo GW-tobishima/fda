@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/ato_cli_materialization_plan.schema.json",
+  "title": "ATO CLI Materialization Plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "program_id",
+    "epic_id",
+    "mode",
+    "transport",
+    "source_artifacts",
+    "write_policy",
+    "lanes",
+    "commands",
+    "traceability",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "ato_cli_materialization_plan.v0" },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "mode": { "type": "string", "const": "dry-run" },
+    "transport": { "type": "string", "const": "ato_cli" },
+    "source_artifacts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "write_policy": {
+      "type": "object",
+      "required": [
+        "execute_by_default",
+        "requires_human_confirmation",
+        "actual_cli_execution",
+        "ato_db_change",
+        "mcp_usage",
+        "forbidden_actions"
+      ],
+      "properties": {
+        "execute_by_default": { "type": "boolean", "const": false },
+        "requires_human_confirmation": { "type": "boolean", "const": true },
+        "actual_cli_execution": { "type": "boolean", "const": false },
+        "ato_db_change": { "type": "boolean", "const": false },
+        "mcp_usage": { "type": "boolean", "const": false },
+        "forbidden_actions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "lanes": {
+      "type": "object",
+      "required": ["program", "epic", "cases", "tasks", "human_decisions", "ai_repair"],
+      "properties": {
+        "program": { "$ref": "#/$defs/program_lane" },
+        "epic": { "$ref": "#/$defs/epic_lane" },
+        "cases": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/case_lane" },
+          "minItems": 1
+        },
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/task_lane" },
+          "minItems": 1
+        },
+        "human_decisions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/human_decision_lane" }
+        },
+        "ai_repair": {
+          "type": "object",
+          "required": ["items", "empty_reason", "payload_contract"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/ai_repair_lane" }
+            },
+            "empty_reason": { "type": "string", "minLength": 1 },
+            "payload_contract": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "commands": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/planned_command" },
+      "minItems": 1
+    },
+    "traceability": {
+      "type": "object",
+      "required": [
+        "planned_pr_ids",
+        "case_ids",
+        "task_ids",
+        "human_decision_ids",
+        "claim_ids",
+        "proof_obligations",
+        "artifact_refs"
+      ],
+      "properties": {
+        "planned_pr_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "case_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "task_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "human_decision_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": ["expected_commands", "expected_report", "verdict"],
+      "properties": {
+        "expected_commands": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "expected_report": { "type": "string", "minLength": 1 },
+        "verdict": { "type": "string", "enum": ["not_run", "pass", "fail"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "program_lane": {
+      "type": "object",
+      "required": ["program_id", "cli_task_key", "title", "purpose", "current_status", "artifact_refs"],
+      "properties": {
+        "program_id": { "type": "string", "minLength": 1 },
+        "cli_task_key": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "current_status": { "type": "string", "minLength": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "epic_lane": {
+      "type": "object",
+      "required": ["epic_id", "cli_task_key", "program_id", "purpose", "current_status", "claim_ids", "proof_obligations", "artifact_refs"],
+      "properties": {
+        "epic_id": { "type": "string", "minLength": 1 },
+        "cli_task_key": { "type": "string", "minLength": 1 },
+        "program_id": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "current_status": { "type": "string", "minLength": 1 },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "case_lane": {
+      "type": "object",
+      "required": ["case_id", "cli_task_key", "epic_id", "planned_pr_id", "purpose", "current_status", "claim_ids", "proof_obligations", "artifact_refs"],
+      "properties": {
+        "case_id": { "type": "string", "minLength": 1 },
+        "cli_task_key": { "type": "string", "minLength": 1 },
+        "epic_id": { "type": "string", "minLength": 1 },
+        "planned_pr_id": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "current_status": { "type": "string", "minLength": 1 },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "task_lane": {
+      "type": "object",
+      "required": [
+        "task_id",
+        "cli_task_key",
+        "case_id",
+        "planned_pr_id",
+        "purpose",
+        "current_status",
+        "decisions",
+        "open_issues",
+        "next_actions",
+        "claim_ids",
+        "proof_obligations",
+        "artifact_refs"
+      ],
+      "properties": {
+        "task_id": { "type": "string", "minLength": 1 },
+        "cli_task_key": { "type": "string", "minLength": 1 },
+        "case_id": { "type": "string", "minLength": 1 },
+        "planned_pr_id": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "current_status": { "type": "string", "minLength": 1 },
+        "decisions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "open_issues": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "next_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "claim_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "proof_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "human_decision_lane": {
+      "type": "object",
+      "required": ["human_turn_id", "source_decision_id", "target_task_key", "reason_type", "requested_decision", "recommended_option", "artifact_refs"],
+      "properties": {
+        "human_turn_id": { "type": "string", "minLength": 1 },
+        "source_decision_id": { "type": "string", "minLength": 1 },
+        "target_task_key": { "type": "string", "minLength": 1 },
+        "reason_type": { "type": "string", "enum": ["spec_decision", "risk_approval", "merge_approval", "exception_handle", "knowledge_review", "blocker_confirmation"] },
+        "requested_decision": { "type": "string", "minLength": 1 },
+        "recommended_option": { "type": "string", "minLength": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "ai_repair_lane": {
+      "type": "object",
+      "required": ["repair_id", "source_task_id", "reason", "next_actions", "artifact_refs"],
+      "properties": {
+        "repair_id": { "type": "string", "minLength": 1 },
+        "source_task_id": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "next_actions": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "planned_command": {
+      "type": "object",
+      "required": ["command_id", "lane", "purpose", "command", "idempotency_key", "planned_only", "expected_effect", "source_refs"],
+      "properties": {
+        "command_id": { "type": "string", "minLength": 1 },
+        "lane": { "type": "string", "enum": ["program", "epic", "case", "task", "human_decision", "ai_repair", "evidence", "readiness"] },
+        "purpose": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 },
+        "idempotency_key": { "type": "string", "minLength": 1 },
+        "planned_only": { "type": "boolean", "const": true },
+        "requires_run_id_from": { "type": ["string", "null"] },
+        "expected_effect": { "type": "object" },
+        "source_refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

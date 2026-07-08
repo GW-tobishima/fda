@@ -1,0 +1,454 @@
+{
+  "program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+  "epic_id": "EPIC-OSHI-VTUBER-PR-6A",
+  "status": "draft",
+  "outcome": "oshi-note VTuber紹介リンク / PRページ機能を、本人確認、推し色、初期推し登録、匿名集計、公開コメント、PR表示、素材許諾、API Data方針まで追跡可能なHigh-risk Epicとして分解する。",
+  "success_metrics": [
+    "必須Human Decisions 8件がHDPとして分離されている",
+    "VTuber選択の推し色が紹介URL経由登録時の初期推し表示へ反映される要求がClaim/Case/Task/PRに追跡できる",
+    "通常メモ非公開、少数母数非表示、公開用コメントopt-in、PR表示、素材許諾、API Data利用有無がGate化されている",
+    "Planning-only制約により実装、GitHub PR、ATO CLI実行、Forge実評価を行わない"
+  ],
+  "scope_in": [
+    "VTuber紹介リンク / PRページのEpic分解",
+    "本人確認済みVTuber限定の判断点",
+    "宣伝用登録時の推し色選択と紹介URL経由初期推し色反映",
+    "通常メモ非公開と公開用コメントopt-in",
+    "匿名集計dashboardと少数母数非表示",
+    "投稿カード / SNSテンプレのPR表示、素材許諾、API Data方針",
+    "Planned PR、ATO CLI materialization draft、validation plan"
+  ],
+  "scope_out": [
+    "oshi-note implementation code changes",
+    "GitHub PR creation",
+    "ATO CLI execution",
+    "Forge real evaluation",
+    "YouTube / Twitch / Stripe / GA4 / Ads API calls",
+    "Legal final approval"
+  ],
+  "assumptions": [
+    "MVPはファン側Premium転換を優先し、Creator Pro / 紹介報酬は後段に分離する",
+    "申請 / URL発行は初期PoCでは手動運用でもよい",
+    "VTuberに見せる情報は匿名集計に限定する",
+    "推し色はcreatorまたはcampaign設定として保存され、紹介URL経由登録の初期推し状態へ反映される"
+  ],
+  "open_questions": [
+    {
+      "id": "Q-ON-VPR-001",
+      "question": "少数母数非表示閾値をunique users 10未満、records 10未満、または両方で判定するか",
+      "blocking": true,
+      "owner": "human product owner / privacy reviewer"
+    },
+    {
+      "id": "Q-ON-VPR-002",
+      "question": "公開用コメントのmoderationを自動フィルタのみ、人間レビュー必須、またはMVPではコメント非表示のどれにするか",
+      "blocking": true,
+      "owner": "operations owner"
+    },
+    {
+      "id": "Q-ON-VPR-003",
+      "question": "MVPでYouTube / Twitch API Dataを使うか、VTuber提供素材とユーザー入力に限定するか",
+      "blocking": true,
+      "owner": "product owner / compliance reviewer"
+    },
+    {
+      "id": "Q-ON-VPR-004",
+      "question": "PR表示を案件投稿だけに必須化するか、全紹介投稿に標準表示するか",
+      "blocking": true,
+      "owner": "legal / compliance owner"
+    }
+  ],
+  "claim_tree": [
+    {
+      "claim_id": "CLM-ON-VPR-001",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "紹介ページ発行は本人確認済みVTuber / 事務所アカウントに限定される。",
+      "blocking": true,
+      "proof_required": [
+        "human_decision_packet",
+        "partner_verification_policy",
+        "operations_runbook"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-002",
+      "parent_claim_id": null,
+      "type": "functional",
+      "statement": "VTuberが宣伝用登録時に選択した推し色は、紹介URLページと紹介URL経由登録の初期推し状態へ反映される。",
+      "blocking": true,
+      "proof_required": [
+        "campaign_color_contract",
+        "initial_favorite_acceptance_test",
+        "ux_review"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-003",
+      "parent_claim_id": null,
+      "type": "security",
+      "statement": "通常メモ本文、個人ID、メールアドレス、自由入力URL、raw logはVTuber向けsurfaceに出ない。",
+      "blocking": true,
+      "proof_required": [
+        "privacy_data_flow_review",
+        "api_contract_test",
+        "security_review"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-004",
+      "parent_claim_id": "CLM-ON-VPR-003",
+      "type": "non_functional",
+      "statement": "少数母数の集計bucketは非表示になり、個人推測を避ける。",
+      "blocking": true,
+      "proof_required": [
+        "aggregation_threshold_test",
+        "privacy_review"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-005",
+      "parent_claim_id": "CLM-ON-VPR-003",
+      "type": "ux",
+      "statement": "公開用コメントは通常メモと分離され、明示opt-inとmoderation方針の対象になる。",
+      "blocking": true,
+      "proof_required": [
+        "comment_opt_in_copy_review",
+        "moderation_policy",
+        "comment_display_test"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-006",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "投稿カードとSNSテンプレは独自集計注記、公式統計ではない注記、必要なPR表示を含む。",
+      "blocking": true,
+      "proof_required": [
+        "compliance_review",
+        "card_template_snapshot",
+        "sns_template_review"
+      ]
+    },
+    {
+      "claim_id": "CLM-ON-VPR-007",
+      "parent_claim_id": "CLM-ON-VPR-006",
+      "type": "operational",
+      "statement": "公式素材、ロゴ、サムネイル、YouTube / Twitch API Dataは許諾と規約方針が解決されるまで使用しない。",
+      "blocking": true,
+      "proof_required": [
+        "material_permission_record",
+        "api_data_usage_decision",
+        "retention_review"
+      ]
+    }
+  ],
+  "case_graph": [
+    {
+      "case_id": "CASE-ON-VPR-001",
+      "purpose": "本人確認、素材許諾、Human Decision、creator/campaign申請の運用境界を決める。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-ON-VPR-001",
+        "CLM-ON-VPR-007"
+      ],
+      "planned_pr": "PR-ON-VPR-001",
+      "risk": "critical"
+    },
+    {
+      "case_id": "CASE-ON-VPR-002",
+      "purpose": "紹介URL、campaign slug、VTuber選択推し色、紹介URL経由初期推し登録の機能境界を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-001"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-002"
+      ],
+      "planned_pr": "PR-ON-VPR-002",
+      "risk": "high"
+    },
+    {
+      "case_id": "CASE-ON-VPR-003",
+      "purpose": "通常メモ非公開、公開用コメントopt-in、削除導線、moderation方針を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-001",
+        "CASE-ON-VPR-002"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-005"
+      ],
+      "planned_pr": "PR-ON-VPR-003",
+      "risk": "critical"
+    },
+    {
+      "case_id": "CASE-ON-VPR-004",
+      "purpose": "匿名集計dashboard、少数母数非表示、creator成果確認の仕様を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-003"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-003",
+        "CLM-ON-VPR-004"
+      ],
+      "planned_pr": "PR-ON-VPR-004",
+      "risk": "critical"
+    },
+    {
+      "case_id": "CASE-ON-VPR-005",
+      "purpose": "投稿カード、SNSテンプレ、PR表示、素材許諾、YouTube / Twitch API Data利用有無を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-003",
+        "CASE-ON-VPR-004"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-005",
+        "CLM-ON-VPR-006",
+        "CLM-ON-VPR-007"
+      ],
+      "planned_pr": "PR-ON-VPR-005",
+      "risk": "critical"
+    },
+    {
+      "case_id": "CASE-ON-VPR-006",
+      "purpose": "first log後のPremium CTA、低カーディナリティKPI、Stripe/analytics metadata境界を決める。",
+      "depends_on": [
+        "CASE-ON-VPR-002",
+        "CASE-ON-VPR-004"
+      ],
+      "claim_ids": [
+        "CLM-ON-VPR-002",
+        "CLM-ON-VPR-003"
+      ],
+      "planned_pr": "PR-ON-VPR-006",
+      "risk": "high"
+    }
+  ],
+  "pr_plan": [
+    {
+      "planned_pr_id": "PR-ON-VPR-001",
+      "case_id": "CASE-ON-VPR-001",
+      "purpose": "VTuber partner intake, verification status, material permission record, and human decision policy scaffolding.",
+      "risk": "critical",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/spec/**",
+        "templates/terms.html",
+        "templates/privacy.html",
+        "admin or ops runbook files"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-002",
+      "case_id": "CASE-ON-VPR-002",
+      "purpose": "Referral campaign, campaign slug, selected creator color, referral page, and initial favorite registration contract.",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "creator/referral campaign model or config",
+        "referral page route",
+        "initial favorite registration flow",
+        "color propagation tests"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-003",
+      "case_id": "CASE-ON-VPR-003",
+      "purpose": "Public comment opt-in separated from normal memo, deletion path, moderation state, and privacy copy.",
+      "risk": "critical",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "comment opt-in UI / API",
+        "moderation state",
+        "privacy copy",
+        "normal memo exclusion tests"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-004",
+      "case_id": "CASE-ON-VPR-004",
+      "purpose": "Anonymous aggregation dashboard with low-count suppression and creator-scoped authorization.",
+      "risk": "critical",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "aggregation job or query",
+        "creator dashboard read model",
+        "threshold tests",
+        "authorization tests"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-005",
+      "case_id": "CASE-ON-VPR-005",
+      "purpose": "PR card and SNS template disclosure, material permission enforcement, and API Data decision handling.",
+      "risk": "critical",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "card template",
+        "SNS template",
+        "material permission enforcement",
+        "API data retention docs if API Data is used"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ON-VPR-006",
+      "case_id": "CASE-ON-VPR-006",
+      "purpose": "Premium CTA after first log and low-cardinality funnel measurement.",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "paywall CTA flow",
+        "analytics event contract",
+        "Stripe metadata constraints",
+        "funnel tests"
+      ]
+    }
+  ],
+  "proof_strategy": [
+    {
+      "claim_id": "CLM-ON-VPR-001",
+      "proof_type": "human_decision_and_ops_review",
+      "owner_agent": "human_liaison",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-002",
+      "proof_type": "functional_acceptance_and_ux_review",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-003",
+      "proof_type": "privacy_data_flow_and_security_review",
+      "owner_agent": "security_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-004",
+      "proof_type": "aggregation_threshold_test",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-005",
+      "proof_type": "comment_opt_in_and_moderation_review",
+      "owner_agent": "human_liaison",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-006",
+      "proof_type": "compliance_template_review",
+      "owner_agent": "security_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ON-VPR-007",
+      "proof_type": "material_permission_and_api_data_review",
+      "owner_agent": "human_liaison",
+      "blocking": true
+    }
+  ],
+  "human_decision_points": [
+    {
+      "id": "HDP-ON-VPR-001",
+      "trigger": "紹介ページ発行に入る前",
+      "decision_needed": "本人確認済みVTuber限定にするか。",
+      "options": [
+        "本人確認済みVTuber / 事務所アカウントに限定する",
+        "申請後審査中の限定公開を許す"
+      ],
+      "required_before": "PR-ON-VPR-001"
+    },
+    {
+      "id": "HDP-ON-VPR-002",
+      "trigger": "集計dashboard設計前",
+      "decision_needed": "少数母数非表示閾値を決める。",
+      "options": [
+        "unique users 10未満またはrecords 10未満は非表示",
+        "unique users 5未満を非表示",
+        "項目ごとに別閾値"
+      ],
+      "required_before": "PR-ON-VPR-004"
+    },
+    {
+      "id": "HDP-ON-VPR-003",
+      "trigger": "VTuber dashboard API設計前",
+      "decision_needed": "通常メモ非公開を固定するか。",
+      "options": [
+        "通常メモは常に非公開",
+        "個別明示同意がある場合だけ一部公開"
+      ],
+      "required_before": "PR-ON-VPR-003"
+    },
+    {
+      "id": "HDP-ON-VPR-004",
+      "trigger": "first log UI設計前",
+      "decision_needed": "公開用コメントのopt-in方式を決める。",
+      "options": [
+        "通常メモとは別入力 + 明示チェック",
+        "通常メモから公開用コメントへ転記確認"
+      ],
+      "required_before": "PR-ON-VPR-003"
+    },
+    {
+      "id": "HDP-ON-VPR-005",
+      "trigger": "公開コメント表示前",
+      "decision_needed": "moderation要否を決める。",
+      "options": [
+        "自動フィルタ + 人間レビュー",
+        "自動フィルタのみ",
+        "MVPではコメント表示しない"
+      ],
+      "required_before": "PR-ON-VPR-003"
+    },
+    {
+      "id": "HDP-ON-VPR-006",
+      "trigger": "投稿カード生成前",
+      "decision_needed": "PR表示の範囲と削除可否を決める。",
+      "options": [
+        "案件性がある場合は削除不可のPR表示",
+        "SNSテンプレで警告するが削除可能",
+        "全紹介投稿にPR表示"
+      ],
+      "required_before": "PR-ON-VPR-005"
+    },
+    {
+      "id": "HDP-ON-VPR-007",
+      "trigger": "PRページ / 投稿カードで素材を使う前",
+      "decision_needed": "素材許諾の扱いを決める。",
+      "options": [
+        "VTuber提供または許諾済み素材のみ",
+        "公式ガイドライン許可範囲の素材も許す",
+        "MVPは素材なし"
+      ],
+      "required_before": "PR-ON-VPR-005"
+    },
+    {
+      "id": "HDP-ON-VPR-008",
+      "trigger": "動画名 / サムネイル / ranking表示前",
+      "decision_needed": "YouTube / Twitch API Data利用有無を決める。",
+      "options": [
+        "MVPではAPI Dataを使わない",
+        "refresh / delete方針込みで使う",
+        "VTuber提供素材だけ使う"
+      ],
+      "required_before": "PR-ON-VPR-005"
+    }
+  ],
+  "merge_policy": {
+    "auto_merge_level": "none",
+    "conditions": [
+      "Human Decision Packet is resolved before implementation",
+      "Privacy, compliance, material permission, and API Data gates pass",
+      "Referral color propagation and initial favorite registration have acceptance tests",
+      "No normal memo body or direct identifiers are exposed"
+    ],
+    "forbidden": [
+      "Auto-merge for high-risk privacy or compliance changes",
+      "Implementation before human decisions are resolved",
+      "Using YouTube / Twitch API Data without retention and display policy",
+      "Showing low-count aggregates or normal memo text to VTubers"
+    ]
+  }
+}

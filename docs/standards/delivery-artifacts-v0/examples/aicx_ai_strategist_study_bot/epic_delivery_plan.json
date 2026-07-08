@@ -1,0 +1,364 @@
+{
+  "program_id": "PROGRAM-AICX-STUDY-BOT-001",
+  "epic_id": "EPIC-AICX-STUDY-BOT-POC-001",
+  "status": "ready",
+  "outcome": "AI ストラテジスト資格学習を毎朝の実践問題、回答採点、弱点ページ推薦で日次運用できる Bot の PoC 計画を作る。",
+  "success_metrics": [
+    "2026-06-17 から 2026-07-10 までの学習範囲を日付、ページ、topic、問題数へ正規化できる",
+    "毎朝 4:30 Asia/Tokyo に約 30 問を生成・送信する実装タスクが分解されている",
+    "回答後に正答率と推奨 PDF ページを返す flow が task graph に含まれている",
+    "Slack-first、A-D 選択式、毎日 4:30 Asia/Tokyo、local-only PDF source が実装前提として反映されている"
+  ],
+  "scope_in": [
+    "Human Input Spec の正規化",
+    "Requirements Definition の作成",
+    "Epic Delivery Plan の作成",
+    "Environment Readiness Plan の作成",
+    "ATO Task Graph の作成",
+    "Slack-first / A-D 選択式 / 毎日 4:30 / local-only PDF source の decision 反映"
+  ],
+  "scope_out": [
+    "本番 Bot 実装",
+    "Slack App または LINE channel の作成",
+    "PDF OCR / text extraction の実行",
+    "教材 PDF 本文の repo 保存",
+    "GitHub PR 自動作成、merge、release、deploy"
+  ],
+  "assumptions": [
+    "Codex CLI はローカルで定期実行できる",
+    "対象 PDF は local-only path data/study_bot/source/pdf/aicx_ai_agent_strategist_official_text.pdf にコピー済み",
+    "初期通知チャネルは Slack-first とする",
+    "回答形式は A-D 選択式とする",
+    "通知頻度は毎日 4:30 Asia/Tokyo とする",
+    "Slack-first ならローカル polling で返信取り込み PoC が可能",
+    "LINE-first は public HTTPS webhook または tunnel/relay が必要なため後続 adapter 拡張に回す",
+    "PDF 本文の長文抜粋は通知・ログ・外部 API に送らない"
+  ],
+  "open_questions": [
+    {
+      "id": "Q-ASB-001",
+      "question": "決定済み: 初期通知チャネルは Slack-first",
+      "blocking": false,
+      "owner": "human"
+    },
+    {
+      "id": "Q-ASB-002",
+      "question": "決定済み: PDF は local-only path data/study_bot/source/pdf/aicx_ai_agent_strategist_official_text.pdf を参照する。抽出方式は実装 task で検証する",
+      "blocking": false,
+      "owner": "human"
+    },
+    {
+      "id": "Q-ASB-003",
+      "question": "決定済み: 回答形式は A-D 選択式",
+      "blocking": false,
+      "owner": "human"
+    },
+    {
+      "id": "Q-ASB-004",
+      "question": "決定済み: 日次通知は毎日 4:30 Asia/Tokyo",
+      "blocking": false,
+      "owner": "human"
+    }
+  ],
+  "claim_tree": [
+    {
+      "claim_id": "CLM-ASB-001",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "Human Input Spec から Requirements、Epic Delivery Plan、Environment Readiness、Task Graph まで追跡できる。",
+      "blocking": true,
+      "proof_required": [
+        "human_input_spec",
+        "requirements_definition",
+        "epic_delivery_plan",
+        "environment_readiness_plan",
+        "task_graph"
+      ]
+    },
+    {
+      "claim_id": "CLM-ASB-002",
+      "parent_claim_id": "CLM-ASB-001",
+      "type": "functional",
+      "statement": "日付、ページ範囲、topic から当日の 30 問程度の実践問題を生成する計画がある。",
+      "blocking": true,
+      "proof_required": [
+        "study_schedule",
+        "question_set_fixture",
+        "generation_prompt_contract"
+      ]
+    },
+    {
+      "claim_id": "CLM-ASB-003",
+      "parent_claim_id": "CLM-ASB-001",
+      "type": "operational",
+      "statement": "毎朝 4:30 Asia/Tokyo の scheduler と重複防止が設計されている。",
+      "blocking": true,
+      "proof_required": [
+        "scheduler_dry_run",
+        "idempotency_key_policy"
+      ]
+    },
+    {
+      "claim_id": "CLM-ASB-004",
+      "parent_claim_id": "CLM-ASB-001",
+      "type": "functional",
+      "statement": "回答後に正答率、領域別弱点、推奨 PDF ページを返す計画がある。",
+      "blocking": true,
+      "proof_required": [
+        "grading_fixture",
+        "page_recommendation_report"
+      ]
+    },
+    {
+      "claim_id": "CLM-ASB-005",
+      "parent_claim_id": "CLM-ASB-001",
+      "type": "security",
+      "statement": "PDF 本文、回答履歴、Slack/LINE token を安全に扱う環境 readiness が定義されている。",
+      "blocking": true,
+      "proof_required": [
+        "environment_readiness_plan",
+        "secret_scan",
+        "content_safety_review"
+      ]
+    }
+  ],
+  "case_graph": [
+    {
+      "case_id": "CASE-ASB-001",
+      "purpose": "PoC-0 の Human Input Spec、Requirements、Epic Delivery Plan、Environment Readiness、Task Graph を作る。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-ASB-001"
+      ],
+      "planned_pr": "PR-ASB-001",
+      "risk": "low"
+    },
+    {
+      "case_id": "CASE-ASB-002",
+      "purpose": "PDF source、page extraction、topic map の ingest 境界を作る。",
+      "depends_on": [
+        "CASE-ASB-001"
+      ],
+      "claim_ids": [
+        "CLM-ASB-002",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-002",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-ASB-003",
+      "purpose": "4:30 scheduler と当日範囲の問題生成 dry-run を作る。",
+      "depends_on": [
+        "CASE-ASB-002"
+      ],
+      "claim_ids": [
+        "CLM-ASB-002",
+        "CLM-ASB-003"
+      ],
+      "planned_pr": "PR-ASB-003",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-ASB-004",
+      "purpose": "Slack-first adapter 境界と回答取り込みを実装する。",
+      "depends_on": [
+        "CASE-ASB-003"
+      ],
+      "claim_ids": [
+        "CLM-ASB-003",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-004",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-ASB-005",
+      "purpose": "回答取り込み、採点、弱点 topic、推奨ページ返却を実装する。",
+      "depends_on": [
+        "CASE-ASB-004"
+      ],
+      "claim_ids": [
+        "CLM-ASB-004"
+      ],
+      "planned_pr": "PR-ASB-005",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-ASB-006",
+      "purpose": "日次 run log、dry-run evidence、secret/PDF safety gate を整える。",
+      "depends_on": [
+        "CASE-ASB-005"
+      ],
+      "claim_ids": [
+        "CLM-ASB-003",
+        "CLM-ASB-004",
+        "CLM-ASB-005"
+      ],
+      "planned_pr": "PR-ASB-006",
+      "risk": "medium"
+    }
+  ],
+  "pr_plan": [
+    {
+      "planned_pr_id": "PR-ASB-001",
+      "case_id": "CASE-ASB-001",
+      "purpose": "PoC-0 planning artifacts を追加する。",
+      "risk": "low",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/**"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ASB-002",
+      "case_id": "CASE-ASB-002",
+      "purpose": "PDF ingest、page index、topic map fixture を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "adapters/source_ingest/**",
+        "docs/standards/delivery-artifacts-v0/examples/aicx_ai_strategist_study_bot/source_ingest_fixture.json"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ASB-003",
+      "case_id": "CASE-ASB-003",
+      "purpose": "scheduler dry-run と quiz generation contract を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/**",
+        "model_contracts/planner.contract.yaml",
+        "docs/runtime/ai_delivery_runtime.md"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ASB-004",
+      "case_id": "CASE-ASB-004",
+      "purpose": "messaging adapter 境界と Slack-first 実装を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "adapters/messaging/**",
+        "docs/runtime/ai_delivery_runtime.md"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ASB-005",
+      "case_id": "CASE-ASB-005",
+      "purpose": "answer intake、grading、page recommendation を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/**",
+        "evals/**"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-ASB-006",
+      "case_id": "CASE-ASB-006",
+      "purpose": "run log、evidence、secret/PDF safety gate を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/**",
+        "docs/runtime/ai_delivery_runtime.md",
+        "evals/**"
+      ]
+    }
+  ],
+  "proof_strategy": [
+    {
+      "claim_id": "CLM-ASB-001",
+      "proof_type": "artifact_presence_and_schema_validation",
+      "owner_agent": "contract_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ASB-002",
+      "proof_type": "question_set_fixture_review",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ASB-003",
+      "proof_type": "scheduler_dry_run_and_idempotency_check",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ASB-004",
+      "proof_type": "grading_fixture_and_page_recommendation_check",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-ASB-005",
+      "proof_type": "secret_and_content_safety_review",
+      "owner_agent": "security_qa",
+      "blocking": true
+    }
+  ],
+  "human_decision_points": [
+    {
+      "id": "HDP-ASB-001",
+      "trigger": "通知・返信 adapter の実装前",
+      "decision_needed": "決定済み: 初期チャネルは Slack-first。",
+      "options": [
+        "Slack-first",
+        "LINE-first",
+        "adapter 抽象のみ"
+      ],
+      "required_before": "CASE-ASB-004"
+    },
+    {
+      "id": "HDP-ASB-002",
+      "trigger": "PDF ingest の実装前",
+      "decision_needed": "決定済み: PDF source は local-only copy を使う。",
+      "options": [
+        "ローカル PDF を使う",
+        "OCR 済みテキストを使う",
+        "手動 page map を使う"
+      ],
+      "required_before": "CASE-ASB-002"
+    },
+    {
+      "id": "HDP-ASB-003",
+      "trigger": "採点器の実装前",
+      "decision_needed": "決定済み: 回答形式は A-D 選択式。",
+      "options": [
+        "A-D 選択式",
+        "短答式",
+        "混合式"
+      ],
+      "required_before": "CASE-ASB-005"
+    },
+    {
+      "id": "HDP-ASB-004",
+      "trigger": "scheduler 有効化前",
+      "decision_needed": "決定済み: 日次通知頻度は毎日 4:30 Asia/Tokyo。",
+      "options": [
+        "毎日 4:30",
+        "平日 4:30",
+        "失敗時のみ再送"
+      ],
+      "required_before": "CASE-ASB-003"
+    }
+  ],
+  "merge_policy": {
+    "auto_merge_level": "none",
+    "conditions": [
+      "JSON schema syntax is valid",
+      "PoC-0 artifacts are traceable from input to task graph",
+      "Human decisions are separated from AI repair work",
+      "No secret or PDF body is committed"
+    ],
+    "forbidden": [
+      "Commit Slack/LINE tokens",
+      "Commit source PDF or long PDF excerpts",
+      "Switch to LINE-first without a new human decision",
+      "Enable scheduled delivery before dry-run evidence exists"
+    ]
+  }
+}

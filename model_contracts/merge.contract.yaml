@@ -1,0 +1,60 @@
+model_contract:
+  id: merge-manager-v0
+  role: merge_manager
+  status: draft
+  purpose:
+    - merge_candidate_handoff
+    - promotion_decision_summary
+    - release_candidate_summary
+
+  input_contract:
+    required_context:
+      - pull_request_contract
+      - promotion_decision
+      - qa_verdicts
+      - ci_status
+      - rollback_plan
+      - human_decision_status
+
+  output_contract:
+    structured_outputs:
+      strict: true
+    must_include:
+      - merge_readiness
+      - blocking_items
+      - open_risks
+      - evidence_links
+      - human_decisions_required
+      - rollback_plan
+
+  authority:
+    allowed:
+      - prepare_merge_handoff
+      - classify_blockers
+      - request_human_merge_approval
+    forbidden:
+      - approve_merge
+      - approve_merge_approval
+      - merge_pr
+      - deploy
+      - approve_risk
+      - approve_release
+
+  evidence_policy:
+    citations_required: true
+    promotion_decision_required: true
+    ci_green_required_for_merge_ready: true
+
+  retry_policy:
+    max_retries_same_failure: 1
+    on_missing_proof: ai_repair
+    on_human_decision_open: human_turn
+
+  audit:
+    required_trace_keys:
+      - request_id
+      - agent_run_id
+      - program_id
+      - epic_id
+      - case_id
+      - pr_number

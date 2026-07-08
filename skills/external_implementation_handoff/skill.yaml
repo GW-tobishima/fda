@@ -1,0 +1,32 @@
+skill:
+  name: external_implementation_handoff
+  version: v0.1.0
+  purpose: Planned PR を対象 repo の実装 agent へ渡す handoff packet に変換する。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json
+    - docs/standards/fda-v1/schemas/repository-profile/repo_yaml.schema.json
+    - docs/standards/fda-v1/schemas/repository-profile/delivery_policy_yaml.schema.json
+  output_schema:
+    - docs/standards/fda-v1/schemas/cross-repo/implementation_handoff.schema.json
+    - artifact_contract:planned_pr_execution_packet.v1
+  allowed_actions:
+    - handoff_packet_create
+    - expected_evidence_define
+    - rollback_requirement_mark
+    - human_decision_reference
+  forbidden_actions:
+    - target_repo_source_mutation
+    - github_pr_merge
+    - release_approval
+    - human_decision_approval
+  required_artifacts:
+    - implementation_handoff.md
+    - planned_pr_execution_packet.json
+    - target_repo_profile.json
+  validation_commands:
+    - git diff --check
+  escalation_conditions:
+    - forbidden_without_human_matched
+    - handoff_requires_secret
+    - target_repo_policy_missing

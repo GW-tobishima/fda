@@ -1,0 +1,29 @@
+{
+  "schema_version": "aicx.slack_delivery_receipt.v0",
+  "delivery_receipt_id": "SLACKRECEIPT-QUIZ-ASB-2026-06-22-LIVE",
+  "message_id": "SLACKMSG-QUIZ-ASB-2026-06-22",
+  "quiz_set_id": "QUIZ-ASB-2026-06-22",
+  "generated_for_date": "2026-06-22",
+  "delivery_channel": "slack",
+  "mode": "live",
+  "status": "sent",
+  "slack_used": true,
+  "target_channel_env": "SLACK_CHANNEL_ID",
+  "posted_at_unix_seconds": 1782087536,
+  "env_readiness": {
+    "bot_token_present": true,
+    "channel_id_present": true,
+    "slack_sdk_available": true,
+    "required_env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_CHANNEL_ID"
+    ],
+    "missing_env": []
+  },
+  "slack_response": {
+    "ok": true,
+    "channel": "C0BC09N7XMK",
+    "ts": "1782087536.889139"
+  },
+  "errors": []
+}

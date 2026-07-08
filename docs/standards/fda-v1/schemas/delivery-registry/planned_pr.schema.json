@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/planned_pr.schema.json",
+  "title": "Planned PR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "planned_pr_id", "target_repo", "title", "status", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.planned_pr.v1" },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "program_id": { "type": "string", "minLength": 1 },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "case_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["planned", "handoff_ready", "opened", "merged", "blocked", "rejected", "canceled"] },
+    "scope_in": { "type": "array", "items": { "type": "string" } },
+    "scope_out": { "type": "array", "items": { "type": "string" } },
+    "claim_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "proof_obligation_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "level": { "type": "string", "enum": ["low", "medium", "high", "critical", "unknown"] },
+        "summary": { "type": "string" },
+        "mitigation": { "type": "string" },
+        "decision_required": { "type": "boolean" },
+        "human_decision_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "expected_artifact_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "human_decision_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

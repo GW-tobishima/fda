@@ -1,0 +1,37 @@
+{
+  "runner_explanation": {
+    "current_phase": "external_implementation_handoff",
+    "previous_run_id": "poc-6a-high-risk-epic-planning",
+    "diff_from_previous_run": "User decisions are recorded, the aggregate and individual HDPs are updated, and PR-ON-VPR-001 is packaged for external oshi-note implementation handoff.",
+    "execution_actor": "codex-cli",
+    "input_summary": "User requested PoC-6A High-risk Epic Planning for oshi-note VTuber referral / PR page using the 2026-06-20 feasibility report, 2026-06-24 Excalidraw flow, and an added requirement that the creator-selected color is applied to referral sign-up initial favorite state.",
+    "changed_input_summary": "User resolved MVP decisions: verified VTuber only, low-count threshold, normal memo privacy, no public comments in MVP, moderation deferred, PR display, permitted materials only, and no YouTube/Twitch API Data in MVP.",
+    "stop_condition": "Do not touch oshi-note implementation code from this repo. Handoff packet is ready for external implementation, and target PR evidence must be returned using the receipt schemas.",
+    "next_action": "oshi-note implementation agent starts PR-ON-VPR-001 using implementation_handoff.md and planned_pr_execution_packet.json, then returns external_pr_receipt.json and evidence_return_packet.json.",
+    "automation_boundary": "External implementation handoff only. This repo records planning, decisions, packet, expected evidence, and schemas; the target repo performs implementation separately.",
+    "completion_evidence": [
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_input_spec.md",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/epic_delivery_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-001-verified-vtuber-only.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-002-low-count-threshold.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-003-normal-memo-private.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-004-public-comment-opt-in.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-005-moderation-policy.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-006-pr-disclosure.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-007-material-permission.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decisions/hdp-on-vpr-008-youtube-twitch-api-data.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_materialization_plan.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/ato_cli_commands.md",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/target_repo_profile.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/implementation_handoff.md",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json",
+      "docs/standards/delivery-artifacts-v0/schemas/external_pr_receipt.schema.json",
+      "docs/standards/delivery-artifacts-v0/schemas/evidence_return_packet.schema.json",
+      "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/validation_report.json"
+    ],
+    "failure_evidence": [],
+    "related_program_id": "PROGRAM-OSHI-VTUBER-PR-001",
+    "related_epic_id": "EPIC-OSHI-VTUBER-PR-6A"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "target_repo_profile.v0",
+  "profile_id": "TARGET-REPO-OSHI-NOTE-001",
+  "target_repo": {
+    "name": "oshi-note",
+    "local_path": "/root/code/oshi-note",
+    "role": "external_implementation_repo",
+    "implementation_owner": "oshi-note implementation agent or human maintainer"
+  },
+  "source_repo": {
+    "name": "forge-delivery-agent",
+    "artifact_root": "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page",
+    "role": "planning_and_handoff_repo"
+  },
+  "handoff_policy": {
+    "forge_delivery_agent_may_modify_target_repo": false,
+    "target_repo_pr_creation_by_this_packet": false,
+    "target_repo_expected_to_copy_or_reference_artifacts": true,
+    "implementation_must_return_evidence_packet": true
+  },
+  "reference_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/implementation_handoff.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_pr_execution_packet.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/requirements_definition.md",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/planned_prs.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/human_decision_packet.json",
+    "docs/standards/delivery-artifacts-v0/examples/oshi_note_vtuber_pr_page/risk_register.md"
+  ],
+  "target_repo_change_boundary": {
+    "scope_in": [
+      "PR-ON-VPR-001 docs/spec/policy foundation",
+      "VTuber partner intake policy",
+      "verified VTuber only policy",
+      "material permission policy",
+      "PR disclosure policy",
+      "ops runbook for stop, delete, and display-name change requests"
+    ],
+    "scope_out": [
+      "referral page implementation",
+      "creator dashboard implementation",
+      "public comment feature implementation",
+      "YouTube or Twitch API integration",
+      "automatic identity verification integration",
+      "payment or reward implementation"
+    ]
+  }
+}

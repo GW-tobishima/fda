@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/ato_state_receipt.schema.json",
+  "title": "FDA ATO State Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "stage",
+    "status",
+    "adapter",
+    "task_key",
+    "run_id",
+    "artifact_dir",
+    "receipt_path",
+    "checkpoint_id",
+    "decision_mappings",
+    "decision_sync",
+    "evidence_edges",
+    "commands",
+    "failure_reason",
+    "resume_command",
+    "raw_output_stored"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.ato_state_receipt.v0" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "stage": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["succeeded", "failed", "adapter_unavailable"]
+    },
+    "adapter": { "type": "string", "const": "ato_cli" },
+    "task_key": { "type": "string", "minLength": 1 },
+    "run_id": { "type": ["string", "null"] },
+    "artifact_dir": { "type": "string", "minLength": 1 },
+    "receipt_path": { "type": "string", "minLength": 1 },
+    "checkpoint_id": { "type": ["string", "null"] },
+    "decision_mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fda_decision_id", "ato_decision_id", "status"],
+        "properties": {
+          "fda_decision_id": { "type": "string", "minLength": 1 },
+          "ato_decision_id": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision_sync": {
+      "type": ["object", "null"],
+      "required": ["fda_decision_id", "ato_decision_id", "answer_recorded", "applied"],
+      "properties": {
+        "fda_decision_id": { "type": "string", "minLength": 1 },
+        "ato_decision_id": { "type": "string", "minLength": 1 },
+        "answer_recorded": { "type": "boolean" },
+        "applied": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "evidence_edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_surface", "evidence_id", "verdict"],
+        "properties": {
+          "evidence_surface": { "type": "string", "minLength": 1 },
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "verdict": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "command_kind",
+          "command",
+          "status",
+          "exit_code",
+          "stdout_json_detected",
+          "stdout_top_level_keys",
+          "stderr_summary"
+        ],
+        "properties": {
+          "command_kind": { "type": "string", "minLength": 1 },
+          "command": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "minItems": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": ["succeeded", "failed", "adapter_unavailable"]
+          },
+          "exit_code": { "type": ["integer", "null"] },
+          "stdout_json_detected": { "type": "boolean" },
+          "stdout_top_level_keys": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "stderr_summary": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "failure_reason": { "type": ["string", "null"] },
+    "resume_command": { "type": ["string", "null"] },
+    "raw_output_stored": { "type": "boolean", "const": false }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "succeeded" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "failure_reason": { "type": "null" },
+          "resume_command": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "enum": ["failed", "adapter_unavailable"] } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "failure_reason": { "type": "string", "minLength": 1 },
+          "resume_command": { "type": "string", "minLength": 1 }
+        },
+        "required": ["failure_reason", "resume_command"]
+      }
+    }
+  ]
+}

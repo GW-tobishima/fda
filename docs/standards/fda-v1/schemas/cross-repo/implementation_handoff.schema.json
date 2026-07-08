@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/cross-repo/implementation_handoff.schema.json",
+  "title": "Implementation Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "handoff_id", "target_repo", "planned_pr_id", "scope_in", "scope_out", "acceptance_criteria", "evidence_expected"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.implementation_handoff.v1" },
+    "handoff_id": { "type": "string", "minLength": 1 },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string" },
+    "scope_in": { "type": "array", "items": { "type": "string" } },
+    "scope_out": { "type": "array", "items": { "type": "string" } },
+    "files_to_change_candidates": { "type": "array", "items": { "type": "string" } },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "security_checks": { "type": "array", "items": { "type": "string" } },
+    "human_decisions_required": { "type": "array", "items": { "type": "string" } },
+    "rollback_plan_required": { "type": "boolean" },
+    "evidence_expected": { "type": "array", "items": { "type": "string" } },
+    "claim_ids": { "type": "array", "items": { "type": "string" } },
+    "proof_obligation_ids": { "type": "array", "items": { "type": "string" } }
+  }
+}

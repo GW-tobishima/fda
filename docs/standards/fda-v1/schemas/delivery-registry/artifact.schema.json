@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/delivery-registry/artifact.schema.json",
+  "title": "Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_id", "artifact_type", "title", "path_or_url", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.artifact.v1" },
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "artifact_type": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "producer_adapter": { "type": "string" },
+    "producer_agent": { "type": "string" },
+    "related_program_id": { "type": "string" },
+    "related_epic_id": { "type": "string" },
+    "related_case_id": { "type": "string" },
+    "related_task_id": { "type": "string" },
+    "latest_version": { "type": "string" },
+    "preview_summary": { "type": "string" },
+    "path_or_url": { "type": "string", "minLength": 1 },
+    "open_in_editor_link": { "type": "string" },
+    "open_in_browser_link": { "type": "string" },
+    "diff_link": { "type": "string" },
+    "evidence_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "evidence_links": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

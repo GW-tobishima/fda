@@ -1,0 +1,128 @@
+{
+  "epic_id": "EPIC-FDA-V1-MCP",
+  "expected_global_receipts": [
+    "mcp_tool_call_receipt.json",
+    "implementation_receipt.json",
+    "external_pr_receipt.json",
+    "coding_agent_thread_state.json"
+  ],
+  "human_decision_guard": {
+    "gate_verdict": "clear",
+    "non_approval_decision_ids": [],
+    "unresolved_decision_ids": []
+  },
+  "invocations": [
+    {
+      "agent_provider": "codex",
+      "allowed_tools": [
+        "codex",
+        "codex-reply"
+      ],
+      "cwd": "transient-worktree:fda-v1-017-forge-gate-adapter",
+      "expected_receipts": [
+        "mcp_tool_call_receipt.json",
+        "implementation_receipt.json",
+        "external_pr_receipt.json"
+      ],
+      "forbidden_actions": [
+        "merge",
+        "release",
+        "scope_change_without_human_decision"
+      ],
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "implementation_handoff.md",
+        "dry_run_receipt.json"
+      ],
+      "invocation_id": "INV-FDA-V1-IMPLEMENTER-LIVE-001",
+      "mcp_server": {
+        "command": [
+          "codex",
+          "mcp-server"
+        ],
+        "tools_list_required": true,
+        "transport": "stdio"
+      },
+      "prompt_artifact": "codex_live_prompt.md",
+      "role": "implementer",
+      "source_mutation_allowed": true,
+      "thread_policy": "new_thread",
+      "tool_name": "codex",
+      "workspace_policy": "write"
+    },
+    {
+      "agent_provider": "codex",
+      "allowed_tools": [
+        "codex"
+      ],
+      "cwd": "transient-worktree:fda-v1-017-forge-gate-adapter",
+      "expected_receipts": [
+        "functional_qa_receipt.json"
+      ],
+      "forbidden_actions": [
+        "source_mutation",
+        "security_exception_approval",
+        "merge"
+      ],
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "external_pr_receipt.json"
+      ],
+      "invocation_id": "INV-FDA-V1-FQA-LIVE-PLACEHOLDER-001",
+      "mcp_server": {
+        "command": [
+          "codex",
+          "mcp-server"
+        ],
+        "tools_list_required": true,
+        "transport": "stdio"
+      },
+      "prompt_artifact": "PR-V1-007-functional-qa-prompt",
+      "role": "functional_qa",
+      "source_mutation_allowed": false,
+      "thread_policy": "new_thread",
+      "tool_name": "codex",
+      "workspace_policy": "read_only"
+    },
+    {
+      "agent_provider": "codex",
+      "allowed_tools": [
+        "codex"
+      ],
+      "cwd": "transient-worktree:fda-v1-017-forge-gate-adapter",
+      "expected_receipts": [
+        "security_qa_receipt.json"
+      ],
+      "forbidden_actions": [
+        "source_mutation",
+        "functional_qa_copy_paste",
+        "risk_self_approval"
+      ],
+      "input_artifacts": [
+        "planned_pr_execution_packet.json",
+        "external_pr_receipt.json"
+      ],
+      "invocation_id": "INV-FDA-V1-SQA-LIVE-PLACEHOLDER-001",
+      "mcp_server": {
+        "command": [
+          "codex",
+          "mcp-server"
+        ],
+        "tools_list_required": true,
+        "transport": "stdio"
+      },
+      "prompt_artifact": "PR-V1-007-security-qa-prompt",
+      "role": "security_qa",
+      "source_mutation_allowed": false,
+      "thread_policy": "new_thread",
+      "tool_name": "codex",
+      "workspace_policy": "read_only"
+    }
+  ],
+  "plan_id": "MCP-FDA-V1-LIVE-001",
+  "planned_pr_id": "PR-V1-006",
+  "program_id": "FDA-V1",
+  "role_policy_ref": "agent_role_policy.json",
+  "schema_version": "fda.mcp_agent_invocation_plan.v0",
+  "status": "ready"
+}

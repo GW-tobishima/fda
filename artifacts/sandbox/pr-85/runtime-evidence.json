@@ -1,0 +1,50 @@
+{
+  "schema_version": "fda.runtime_evidence.v0",
+  "pr_number": 85,
+  "planned_pr_id": "PR-FDA-ARCH-FU-007",
+  "runtime": "local-shell",
+  "worktree": "/tmp/issue68-fu007-docs-final",
+  "checks": [
+    {
+      "command": "cargo run --quiet --bin fda -- implement --dry-run --artifacts docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor --out /tmp/fda-fu007-implement-dry-run --target-repo /tmp/issue68-fu007-docs-final --repo-root /tmp/issue68-fu007-docs-final --json",
+      "verdict": "pass",
+      "evidence": "artifacts/sandbox/pr-85/mcp_tool_call_receipt.json"
+    },
+    {
+      "command": "python3 scripts/check_architecture_boundaries.py",
+      "verdict": "pass"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "verdict": "pass",
+      "summary": "63 tests pass"
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "verdict": "pass"
+    },
+    {
+      "command": "cargo check",
+      "verdict": "pass"
+    },
+    {
+      "command": "cargo clippy --all-targets --all-features -- -D warnings",
+      "verdict": "pass"
+    },
+    {
+      "command": "cargo test -- --test-threads=1",
+      "verdict": "pass",
+      "summary": "134 tests pass"
+    },
+    {
+      "command": "cargo build --bin fda",
+      "verdict": "pass"
+    },
+    {
+      "command": "fda validate-artifacts for fda_arch_lib_rs_refactor",
+      "verdict": "pass",
+      "summary": "59 passed, 0 failed, 35 skipped",
+      "evidence": "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/validation_report.json"
+    }
+  ]
+}

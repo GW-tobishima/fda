@@ -1,0 +1,39 @@
+{
+  "schema_version": "aicx.study_recommendation.v0",
+  "recommendation_id": "RECO-QUIZ-ASB-2026-06-21",
+  "quiz_set_id": "QUIZ-ASB-2026-06-21",
+  "grading_report_id": "GRADING-QUIZ-ASB-2026-06-21",
+  "generated_for_date": "2026-06-21",
+  "overall_accuracy": 0.6,
+  "recommended_pages": [
+    {
+      "topic_id": "TOPIC-5D",
+      "label": "5D前半 / Discovery・Definition",
+      "page_ranges": [
+        {
+          "from": 351,
+          "to": 368
+        }
+      ],
+      "reason": "topic accuracy 0% is below the 80% fixture threshold"
+    },
+    {
+      "topic_id": "TOPIC-ORG-KPI",
+      "label": "組織設計 / KPI",
+      "page_ranges": [
+        {
+          "from": 312,
+          "to": 327
+        }
+      ],
+      "reason": "topic accuracy 0% is below the 80% fixture threshold"
+    }
+  ],
+  "next_actions": [
+    "弱点 topic の page_ranges を優先して読む",
+    "PDF ingest 前でも topic_map の手動 fixture を使って再出題する",
+    "80% 未満の topic は翌日の fixture quiz で再確認する"
+  ],
+  "pdf_ingest_required": false,
+  "slack_required": false
+}

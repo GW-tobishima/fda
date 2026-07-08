@@ -1,0 +1,385 @@
+{
+  "schema_version": "forge_delivery.epic_delivery_plan.v0",
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "status": "ready",
+  "source_requirements": [
+    "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/requirements_definition.md",
+    "https://github.com/msamunetogetoge/forge-delivery-agent/issues/68"
+  ],
+  "planning_mode": "execution_planning",
+  "objective": {
+    "summary": "src/lib.rs に残る legacy command 実装を責務別 module へ移し、#44 の Clean Architecture 意図を完了状態へ収束させる。",
+    "success_outcomes": [
+      "lib.rs が crate facade と module export に限定される",
+      "全 CLI command が application use case へ dispatch される",
+      "process IO と filesystem IO が ports/infra 境界へ寄る",
+      "rendering と domain の純粋性が architecture gate で守られる",
+      "PR 粒度が planned_prs.json から追跡できる"
+    ],
+    "non_goals": [
+      "CLI 挙動変更",
+      "crate 分割",
+      "workspace 化",
+      "artifact schema の破壊的変更",
+      "merge / release 承認"
+    ]
+  },
+  "outcome": "GitHub Issue #68 を FDA artifact として正式な Epic / Case / Task / Planned PR / Proof に変換し、後続 PR の粒度を固定する。",
+  "success_metrics": [
+    "epic_delivery_plan.json が schema validation を通る",
+    "planned_prs.json が 7 件の Planned PR を持つ",
+    "各 Planned PR に claim、proof、acceptance criteria、expected files がある",
+    "case_graph と task_graph で PR 順序と依存が追跡できる",
+    "architecture gate が lib.rs の再肥大化を検出できるようになる",
+    "cargo test と cargo clippy が全 PR で pass する"
+  ],
+  "scope": {
+    "in": [
+      "lib.rs facade 化",
+      "application use case 分割",
+      "rendering module 分割",
+      "process / filesystem port 化",
+      "architecture gate 拡張",
+      "docs 更新"
+    ],
+    "out": [
+      "runtime behavior redesign",
+      "public CLI contract change",
+      "schema breaking change",
+      "automatic merge approval",
+      "release approval"
+    ]
+  },
+  "scope_in": [
+    "FDA artifact 化",
+    "result 型と support helper の移動",
+    "implement / review / repair / merge / output / notify の use case 分割",
+    "MCP / Codex process invocation の port / infra adapter 化",
+    "lib.rs facade gate",
+    "architecture docs の完了状態更新"
+  ],
+  "scope_out": [
+    "機能追加",
+    "コマンド仕様変更",
+    "crate 分割",
+    "workspace 化",
+    "GitHub issue #68 の自動 close",
+    "merge / release 承認"
+  ],
+  "assumptions": [
+    "現状の CLI 挙動は維持する",
+    "既存 tests は移動後も同じ意味で通す",
+    "抽出済み domain/rendering/application の gate は維持する",
+    "大きな function move は挙動変更なし PR として小さく分割する",
+    "lib.rs の肥大化は architecture debt であり、実装失敗ではない"
+  ],
+  "open_questions": [
+    {
+      "id": "Q-FDA-ARCH-FU-001",
+      "question": "top-level ports/ module をこの Epic 内で作るか、application::ports を維持したまま完了とするか",
+      "blocking": false,
+      "owner": "maintainer"
+    }
+  ],
+  "claim_tree": [
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-001",
+      "parent_claim_id": null,
+      "type": "contract",
+      "statement": "lib.rs は crate public surface、module export、最小 facade に限定される。",
+      "blocking": true,
+      "proof_required": [
+        "lib.rs facade gate",
+        "code review",
+        "cargo test"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-002",
+      "parent_claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "functional",
+      "statement": "cli::runner は全 command を application use case へ dispatch する。",
+      "blocking": true,
+      "proof_required": [
+        "runner dispatch review",
+        "command smoke",
+        "cargo test"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-003",
+      "parent_claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "non_functional",
+      "statement": "domain、rendering、application の責務境界は移動後も architecture gate で守られる。",
+      "blocking": true,
+      "proof_required": [
+        "python3 scripts/check_architecture_boundaries.py",
+        "cargo clippy -- -D warnings"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-004",
+      "parent_claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "operational",
+      "statement": "process IO と filesystem IO は ports/infra 境界へ集約される。",
+      "blocking": true,
+      "proof_required": [
+        "process port tests",
+        "infra adapter review",
+        "architecture gate"
+      ]
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-005",
+      "parent_claim_id": "CLM-FDA-ARCH-FU-001",
+      "type": "contract",
+      "statement": "source architecture docs と architecture gate は完了状態で一致する。",
+      "blocking": true,
+      "proof_required": [
+        "docs review",
+        "architecture gate review",
+        "validation report"
+      ]
+    }
+  ],
+  "case_graph": [
+    {
+      "case_id": "CASE-FDA-ARCH-FU-001",
+      "purpose": "result 型と pure support helper を移し、抽出済み use case の crate root 依存を薄くする。",
+      "depends_on": [],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-001",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-002",
+      "purpose": "implement dry-run/live use case と rendering を分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-001"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-002",
+      "risk": "high"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-003",
+      "purpose": "MCP / Codex process invocation を ports と infra adapter に切り出す。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-002"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-004"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-003",
+      "risk": "high"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-004",
+      "purpose": "review / continue / merge use case と receipt rendering を分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-003"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-004",
+      "risk": "high"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-005",
+      "purpose": "open / notify を application と rendering へ分離する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-004"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-002",
+        "CLM-FDA-ARCH-FU-003"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-005",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-006",
+      "purpose": "architecture gate を拡張し、lib.rs facade 化を fail-close に検査する。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-005"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-001",
+        "CLM-FDA-ARCH-FU-003",
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-006",
+      "risk": "medium"
+    },
+    {
+      "case_id": "CASE-FDA-ARCH-FU-007",
+      "purpose": "docs の移行段階注記を完了状態へ更新し、source responsibility と gate を一致させる。",
+      "depends_on": [
+        "CASE-FDA-ARCH-FU-006"
+      ],
+      "claim_ids": [
+        "CLM-FDA-ARCH-FU-005"
+      ],
+      "planned_pr": "PR-FDA-ARCH-FU-007",
+      "risk": "low"
+    }
+  ],
+  "pr_plan": [
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-001",
+      "case_id": "CASE-FDA-ARCH-FU-001",
+      "purpose": "result 型と pure support helper を application/support へ移す。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/application/**/*.rs",
+        "src/support/**/*.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-002",
+      "case_id": "CASE-FDA-ARCH-FU-002",
+      "purpose": "implement dry-run/live use case と prompt/receipt rendering を分離する。",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/application/implement.rs",
+        "src/rendering/implement.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-003",
+      "case_id": "CASE-FDA-ARCH-FU-003",
+      "purpose": "MCP / Codex process invocation を ports と infra adapter へ切り出す。",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/application/ports.rs",
+        "src/infra/process.rs",
+        "src/application/implement.rs",
+        "src/lib.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-004",
+      "case_id": "CASE-FDA-ARCH-FU-004",
+      "purpose": "review / continue / merge use case と receipt rendering を分離する。",
+      "risk": "high",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/application/review.rs",
+        "src/application/repair.rs",
+        "src/application/merge.rs",
+        "src/rendering/review.rs",
+        "src/rendering/repair.rs",
+        "src/rendering/merge.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-005",
+      "case_id": "CASE-FDA-ARCH-FU-005",
+      "purpose": "open / notify use case と output rendering を分離する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "src/application/output_hub.rs",
+        "src/application/notify.rs",
+        "src/rendering/output_hub.rs",
+        "src/rendering/notify.rs",
+        "src/lib.rs",
+        "src/cli/runner.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-006",
+      "case_id": "CASE-FDA-ARCH-FU-006",
+      "purpose": "architecture gate に lib.rs facade 検査を追加する。",
+      "risk": "medium",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "scripts/check_architecture_boundaries.py",
+        "tests/**",
+        "src/lib.rs"
+      ]
+    },
+    {
+      "planned_pr_id": "PR-FDA-ARCH-FU-007",
+      "case_id": "CASE-FDA-ARCH-FU-007",
+      "purpose": "architecture docs を完了状態へ更新する。",
+      "risk": "low",
+      "auto_merge_allowed": false,
+      "expected_files": [
+        "docs/standards/fda-v1/architecture.md",
+        "docs/standards/fda-v1/source_architecture.md",
+        "docs/standards/delivery-artifacts-v0/examples/fda_arch_lib_rs_refactor/**"
+      ]
+    }
+  ],
+  "proof_strategy": [
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-001",
+      "proof_type": "lib_facade_gate_and_code_review",
+      "owner_agent": "architecture_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-002",
+      "proof_type": "runner_dispatch_and_command_smoke",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-003",
+      "proof_type": "architecture_boundary_check",
+      "owner_agent": "architecture_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-004",
+      "proof_type": "port_adapter_review_and_process_tests",
+      "owner_agent": "functional_qa",
+      "blocking": true
+    },
+    {
+      "claim_id": "CLM-FDA-ARCH-FU-005",
+      "proof_type": "docs_gate_consistency_review",
+      "owner_agent": "contract_qa",
+      "blocking": true
+    }
+  ],
+  "human_decision_points": [],
+  "merge_policy": {
+    "auto_merge_level": "none",
+    "conditions": [
+      "python3 scripts/check_architecture_boundaries.py が pass する",
+      "cargo test が pass する",
+      "cargo clippy -- -D warnings が pass する",
+      "各 PR は挙動変更なしの責務移動として review される"
+    ],
+    "forbidden": [
+      "未検証のまま #68 を close する",
+      "architecture gate を弱める",
+      "domain に外部 IO を入れる",
+      "rendering に filesystem 書き込みを入れる",
+      "human merge approval なしに merge approval と扱う"
+    ]
+  }
+}

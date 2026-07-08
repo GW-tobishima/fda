@@ -1,0 +1,833 @@
+{
+  "schema_version": "fda.artifact_inventory.v0",
+  "generated_at_unix_seconds": 1783122598,
+  "artifacts": [
+    {
+      "artifact_id": "ART-FDA-V1-018-001",
+      "artifact_type": "end_to_end_receipt",
+      "title": "Operational V1 E2E Receipt",
+      "producer_agent": "codex-cli",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Operational V1の代表E2E証跡。PR #87のCodex CLI primary証跡とPR #88のSlack P0通知証跡によりstatus=succeeded。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/end_to_end_receipt.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "status_summary.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-002",
+      "artifact_type": "status_summary",
+      "title": "Operational V1 Status Summary",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "fda status相当のcurrent_phaseとnext_actions。operational_v1_completeを返す。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/status_summary.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "end_to_end_receipt.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-003",
+      "artifact_type": "output_hub",
+      "title": "Operational V1 Output Hub",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "proof packの成果物一覧を表示するOutput Hub HTML。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/output_hub.html",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "artifact_inventory.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-004",
+      "artifact_type": "decision_inbox",
+      "title": "Operational V1 Decision Inbox",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "未解決Human Decisionがないことを表示するDecision Inbox HTML。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/decision_inbox.html",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "status_summary.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-005",
+      "artifact_type": "execution_status",
+      "title": "Operational V1 Execution Status",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "runner_explanationとvalidation_reportから生成する実行状態HTML。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/execution_status.html",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "runner_explanation.json",
+        "validation_report.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-006",
+      "artifact_type": "output_hub_receipt",
+      "title": "Operational V1 Output Hub Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Output Hub生成結果のreceipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/output_hub_receipt.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "output_hub.html"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783117903
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-007",
+      "artifact_type": "runner_explanation",
+      "title": "Operational V1 Runner Explanation",
+      "producer_agent": "codex-cli",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "proof packの停止条件、次action、境界を説明するrunner artifact。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/runner_explanation.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "end_to_end_receipt.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783119143
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-008",
+      "artifact_type": "validation_report",
+      "title": "Operational V1 Proof Validation Report",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "delivery-artifacts-v0 schemaに対するproof pack validation report。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "end_to_end_receipt.json",
+        "status_summary.json",
+        "artifact_inventory.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-009",
+      "artifact_type": "live_execution_evidence",
+      "title": "Fixture-free Codex CLI Primary Evidence",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "fixture-free current Codex CLI primary実装がPR #87、test status、scope evidenceを回収した durable evidence。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/live_execution_evidence.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "mcp_tool_call_receipt.json",
+        "mcp_agent_invocation_plan.json",
+        "dry_run_receipt.json",
+        "implementation_receipt.json",
+        "external_pr_receipt.json",
+        "coding_agent_thread_state.json",
+        "end_to_end_receipt.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-010",
+      "artifact_type": "ato_state_receipt",
+      "title": "Operational V1 ATO State Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-016",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR #87 Operational V1 finalize checkpointを示すATO state receipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/ato_state_receipt.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "live_execution_evidence.json"
+      ],
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1782683039
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-011",
+      "artifact_type": "dry_run_receipt",
+      "title": "Codex MCP Dry-run Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "V1.5 optional automationのために残すCodex MCP dry-run receipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/dry_run_receipt.json",
+      "evidence_links": [
+        "mcp_tool_call_receipt.json",
+        "mcp_agent_invocation_plan.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-012",
+      "artifact_type": "mcp_agent_invocation_plan",
+      "title": "Codex MCP Agent Invocation Plan",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "V1.5 optional automationのために残すCodex MCP invocation plan。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/mcp_agent_invocation_plan.json",
+      "evidence_links": [
+        "planned_pr_execution_packet.json",
+        "codex_live_prompt.md"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-013",
+      "artifact_type": "mcp_tool_call_receipt",
+      "title": "Codex MCP Tool Call Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "V1.5 optional automationへ送ったCodex MCP live試行の履歴receipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/mcp_tool_call_receipt.json",
+      "evidence_links": [
+        "implementation_receipt.json",
+        "external_pr_receipt.json",
+        "coding_agent_thread_state.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-014",
+      "artifact_type": "implementation_receipt",
+      "title": "Implementation Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "current Codex CLI primary実装がPR #87と検証結果を残したreceipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/implementation_receipt.json",
+      "evidence_links": [
+        "mcp_tool_call_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-015",
+      "artifact_type": "external_pr_receipt",
+      "title": "External PR Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "Actual PR URL、test evidence、scope evidenceをPR #87として記録したreceipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/external_pr_receipt.json",
+      "evidence_links": [
+        "implementation_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-016",
+      "artifact_type": "coding_agent_thread_state",
+      "title": "Coding Agent Thread State",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "current Codex CLI sessionの実装threadがPR #87で完了した状態。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/coding_agent_thread_state.json",
+      "evidence_links": [
+        "mcp_tool_call_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-017",
+      "artifact_type": "planned_pr_execution_packet",
+      "title": "Planned PR Execution Packet",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "current Codex CLI primary実装へ渡すplanned PR execution packet。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/planned_pr_execution_packet.json",
+      "evidence_links": [
+        "implementation_handoff.md",
+        "codex_live_prompt.md",
+        "dry_run_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-018",
+      "artifact_type": "development_handoff",
+      "title": "Implementation Handoff",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "current Codex CLI primary実装のhandoff context。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/implementation_handoff.md",
+      "evidence_links": [
+        "planned_pr_execution_packet.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-019",
+      "artifact_type": "agent_prompt",
+      "title": "Codex Live Prompt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "V1.5 optional automationとして残すCodex MCP live prompt履歴。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/codex_live_prompt.md",
+      "evidence_links": [
+        "planned_pr_execution_packet.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-020",
+      "artifact_type": "agent_role_policy",
+      "title": "Agent Role Policy",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-MCP",
+      "related_case_ids": [
+        "CASE-FDA-V1-MCP-DRY-RUN-001",
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-006",
+        "PR-V1-015",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782627314,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "Codex CLI primaryとoptional MCP automationのrole/boundary policy。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/agent_role_policy.json",
+      "evidence_links": [
+        "planned_pr_execution_packet.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-021",
+      "artifact_type": "notification_request",
+      "title": "Notification Request",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-012",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "Operational V1完了proof packでは未解決Human Decisionがないためnot_sendableにしたSlack notification request。実送信成功はPR #88のlive receiptで参照する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/notification_request.json",
+      "evidence_links": [
+        "notification_receipt.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_context_path_notification_request.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-022",
+      "artifact_type": "notification_receipt",
+      "title": "Notification Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-012",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "Operational V1完了proof packでは未解決Human Decisionがないためskipしたnotification receipt。Slack live送信成功とfail-closed proofはPR #88証跡で参照する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/notification_receipt.json",
+      "evidence_links": [
+        "notification_request.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_live_notification_receipt.json",
+        "artifacts/runs/v1-pivot-012-slack-incoming-webhook-notification-epic-20260702/slack_missing_env_notification_receipt.json",
+        "https://github.com/msamunetogetoge/forge-delivery-agent/pull/88"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-023",
+      "artifact_type": "merge_gate_summary",
+      "title": "Merge Gate Summary",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-014",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "Merge gate summary referenced by the E2E proof pack.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/merge_gate_summary.json",
+      "evidence_links": [
+        "end_to_end_receipt.json",
+        "github_merge_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-024",
+      "artifact_type": "qa_receipt",
+      "title": "Aggregate QA Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-007",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "Aggregate QA receipt for the Operational V1 proof pack.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/qa_receipt.json",
+      "evidence_links": [
+        "functional_qa_receipt.json",
+        "security_qa_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-025",
+      "artifact_type": "functional_qa_receipt",
+      "title": "Functional QA Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-007",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "Functional QA receipt referenced by the E2E proof pack.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/functional_qa_receipt.json",
+      "evidence_links": [
+        "qa_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-026",
+      "artifact_type": "security_qa_receipt",
+      "title": "Security QA Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-007",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "Security QA receipt referenced by the E2E proof pack.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/security_qa_receipt.json",
+      "evidence_links": [
+        "qa_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-027",
+      "artifact_type": "repair_receipt",
+      "title": "Repair Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-008",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1782683039,
+      "updated_at_unix_seconds": 1782683039,
+      "preview_summary": "Repair receipt showing that this representative run did not need repair execution.",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/repair_receipt.json",
+      "evidence_links": [
+        "end_to_end_receipt.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-028",
+      "artifact_type": "human_decision_packet",
+      "title": "Operational V1 Human Decision Packet",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-012",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1783117641,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "Operational V1完了proof packの現在artifact_dirに対応するHuman Decision文書。未解決Human Decisionがないことを示す。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/human_decision_packet.md",
+      "evidence_links": [
+        "notification_request.json",
+        "status_summary.json"
+      ]
+    },
+    {
+      "artifact_id": "ART-FDA-V1-018-029",
+      "artifact_type": "generic_receipt",
+      "title": "GitHub Merge Receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_program_id": "FDA-V1",
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_case_ids": [
+        "CASE-FDA-V1-018"
+      ],
+      "related_task_ids": [
+        "PR-V1-014",
+        "PR-V1-018"
+      ],
+      "latest_version": "v0",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "created_at_unix_seconds": 1783121509,
+      "updated_at_unix_seconds": 1783122598,
+      "preview_summary": "PR #87のGitHub squash merge結果、GitHub merge result commit、merged状態用rollback planを記録するreceipt。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/github_merge_receipt.json",
+      "evidence_links": [
+        "merge_gate_summary.json",
+        "external_pr_receipt.json"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "operational_v1_e2e",
+      "title": "Operational V1 E2E Proof",
+      "artifact_ids": [
+        "ART-FDA-V1-018-001",
+        "ART-FDA-V1-018-002",
+        "ART-FDA-V1-018-003",
+        "ART-FDA-V1-018-004",
+        "ART-FDA-V1-018-005",
+        "ART-FDA-V1-018-006",
+        "ART-FDA-V1-018-007",
+        "ART-FDA-V1-018-008",
+        "ART-FDA-V1-018-009",
+        "ART-FDA-V1-018-010",
+        "ART-FDA-V1-018-011",
+        "ART-FDA-V1-018-012",
+        "ART-FDA-V1-018-013",
+        "ART-FDA-V1-018-014",
+        "ART-FDA-V1-018-015",
+        "ART-FDA-V1-018-016",
+        "ART-FDA-V1-018-017",
+        "ART-FDA-V1-018-018",
+        "ART-FDA-V1-018-019",
+        "ART-FDA-V1-018-020",
+        "ART-FDA-V1-018-021",
+        "ART-FDA-V1-018-022",
+        "ART-FDA-V1-018-023",
+        "ART-FDA-V1-018-024",
+        "ART-FDA-V1-018-025",
+        "ART-FDA-V1-018-026",
+        "ART-FDA-V1-018-027",
+        "ART-FDA-V1-018-028",
+        "ART-FDA-V1-018-029"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+model_contract:
+  id: qa-v0
+  role:
+    - functional_qa
+    - security_qa
+    - contract_qa
+  status: draft
+  purpose:
+    - acceptance_criteria_verification
+    - security_and_contract_gap_detection
+    - ai_repair_classification
+
+  input_contract:
+    required_context:
+      - pull_request_contract
+      - claim_ids
+      - proof_obligations
+      - validation_evidence
+      - autonomy_contract
+
+  output_contract:
+    structured_outputs:
+      strict: true
+    must_include:
+      - verdict
+      - coverage
+      - evidence_links
+      - findings
+      - repair_items
+      - human_decision_candidates
+
+  authority:
+    allowed:
+      - classify_ai_repair
+      - request_missing_evidence
+      - flag_human_exception
+    forbidden:
+      - edit_source
+      - approve_security_exception
+      - merge_pr
+      - change_scope
+
+  evidence_policy:
+    citations_required: true
+    proof_claim_link_required: true
+    high_critical_findings_blocking: true
+
+  retry_policy:
+    max_retries_same_failure: 1
+    on_missing_proof: ai_repair
+    on_high_critical_security: human_decision_packet
+
+  audit:
+    required_trace_keys:
+      - request_id
+      - agent_run_id
+      - program_id
+      - epic_id
+      - case_id
+      - pr_number

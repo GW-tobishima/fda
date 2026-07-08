@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/cross-repo/actual_pr_handle.schema.json",
+  "title": "Actual PR Handle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "target_repo", "planned_pr_id", "actual_pr_url", "actual_pr_number", "head_sha", "observed_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.actual_pr_handle.v1" },
+    "target_repo": { "type": "string", "minLength": 1 },
+    "planned_pr_id": { "type": "string", "minLength": 1 },
+    "actual_pr_url": { "type": "string", "format": "uri" },
+    "actual_pr_number": { "type": "integer", "minimum": 1 },
+    "head_sha": { "type": "string", "minLength": 7 },
+    "base_branch": { "type": "string" },
+    "head_branch": { "type": "string" },
+    "status_url": { "type": "string", "format": "uri" },
+    "review_url": { "type": "string", "format": "uri" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "notes": { "type": "string" }
+  }
+}

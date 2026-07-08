@@ -1,0 +1,79 @@
+{
+  "acceptance_criteria": [
+    "Given current Codex CLI implements within approved V1 scope, When a PR is opened, Then FDA records implementation_receipt.json.",
+    "Given current Codex CLI creates PR #87, When FDA parses the result, Then planned_pr_id and actual_pr_url are recorded in external_pr_receipt.json.",
+    "Given local validations were run by the implementer, When FDA writes receipts, Then test status and command evidence are recorded."
+  ],
+  "agent_invocation_plan_id": null,
+  "created_at": "unix:1782627313",
+  "epic_id": "EPIC-FDA-V1-OPERATIONAL",
+  "expected_evidence_from_target_pr": [
+    "implementation_receipt.json",
+    "external_pr_receipt.json",
+    "live_execution_evidence.json",
+    "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+  ],
+  "files_to_change_candidates": [],
+  "forge_mapping": {
+    "claim_ids": [
+      "CLM-FDA-V1-CODEX-CLI-PRIMARY-001"
+    ],
+    "gate_requirements": [
+      "Development Gate",
+      "Current Codex CLI Primary Gate",
+      "Human Decision guard",
+      "External PR receipt"
+    ],
+    "proof_obligations": [
+      "PROOF-FDA-V1-CODEX-CLI-PRIMARY-001"
+    ]
+  },
+  "handoff_kind": "external_implementation",
+  "human_decision_dependencies": [],
+  "implementation_start_gate": {
+    "human_decisions_resolved": true,
+    "notes": "HDP-001からHDP-008までの人間判断がAで確定しており、current Codex CLIがV1 scope内でrepo変更とPR作成を行う。",
+    "target_repo_changes_allowed_by_this_repo": true,
+    "target_repo_pr_creation_allowed_by_this_packet": true
+  },
+  "packet_id": "PPEXEC-FDA-V1-018-001",
+  "planned_pr_id": "PR-V1-018",
+  "planned_pr_title": "Codex CLI primary operational V1 proof",
+  "program_id": "FDA-V1",
+  "resolved_human_decisions": [],
+  "rollback_noop_plan": [
+    "Close the target PR or revert its branch if implementation output must be discarded.",
+    "Delete FDA output artifacts if they were generated for a failed live attempt."
+  ],
+  "schema_version": "planned_pr_execution_packet.v0",
+  "scope_in": [
+    "current Codex CLI primary implementation",
+    "target repo implementation by the current session",
+    "test evidence collection",
+    "actual PR URL collection",
+    "implementation and external PR receipts"
+  ],
+  "scope_out": [
+    "Functional QA and Security QA execution",
+    "repair loop",
+    "merge, release, deployment",
+    "human-only approval self-approval"
+  ],
+  "security_privacy_legal_checks": [
+    "Do not invoke live Codex tool with unresolved or non-approval Human Decision",
+    "Do not merge or release from implementer phase",
+    "Record scope drift instead of silently closing planned PR"
+  ],
+  "source_artifacts": [
+    "docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e",
+    "implementation_handoff.md",
+    "live_execution_evidence.json",
+    "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json"
+  ],
+  "source_repo": ".",
+  "status": "ready_for_external_implementation",
+  "target_repo": {
+    "local_path": "/root/code/forge-delivery-agent",
+    "name": "forge-delivery-agent"
+  }
+}

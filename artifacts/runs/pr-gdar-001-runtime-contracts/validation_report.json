@@ -1,0 +1,695 @@
+{
+  "schema_version": "fda.validation_report.v0",
+  "verdict": "pass",
+  "generated_at_unix_seconds": 1782287932,
+  "repo_root": ".",
+  "schema_dir": "docs/standards/delivery-artifacts-v0/schemas",
+  "artifact_dir": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime",
+  "summary": {
+    "passed": 50,
+    "failed": 0,
+    "skipped": 20
+  },
+  "checks": [
+    {
+      "check_id": "schema:adaptive_plan",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/adaptive_plan.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:adaptive_plan",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/adaptive_plan.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/adaptive_plan.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `adaptive_plan`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:answer_submission",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/answer_submission.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:answer_submission",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/answer_submission.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/answer_submission.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `answer_submission`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:artifact_inventory",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:artifact_inventory",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/artifact_inventory.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:ato_cli_materialization_plan",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/ato_cli_materialization_plan.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:ato_cli_materialization_plan",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/ato_cli_materialization_plan.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:autonomy_contract",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/autonomy_contract.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:autonomy_contract",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/autonomy_contract.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/autonomy_contract.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:case_graph",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:case_graph",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:epic_delivery_plan",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:epic_delivery_plan",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:forge_projection",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:forge_projection",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/forge_projection.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:generic_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/generic_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:generic_receipt",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/generic_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:generic_run_state",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/generic_run_state.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:generic_run_state",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/generic_run_state.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:grading_report",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/grading_report.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:grading_report",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/grading_report.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/grading_report.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `grading_report`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:human_decision_packet",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:human_decision_packet",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/human_decision_packet.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:issue",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/issue.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:issue",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/issue.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/issue.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `issue`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:maintenance_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/maintenance_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:maintenance_receipt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/maintenance_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/maintenance_receipt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `maintenance_receipt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:planned_prs",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:planned_prs",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/planned_prs.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:pull_request",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/pull_request.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:pull_request",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/pull_request.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/pull_request.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `pull_request`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:question_bank.fixture",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/question_bank.fixture.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:question_bank.fixture",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/question_bank.fixture.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/question_bank.fixture.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `question_bank.fixture`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:quiz_prompt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_prompt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:quiz_prompt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_prompt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/quiz_prompt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `quiz_prompt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:quiz_set",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_set.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:quiz_set",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/quiz_set.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/quiz_set.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `quiz_set`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:requirements_definition",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/requirements_definition.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:requirements_definition",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/requirements_definition.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `requirements_definition`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:run_state",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/run_state.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:run_state",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/run_state.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/run_state.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `run_state`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:runner_explanation",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/runner_explanation.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:runner_explanation",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/runner_explanation.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json",
+      "errors": []
+    },
+    {
+      "check_id": "schema:slack_delivery_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_delivery_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_delivery_receipt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_delivery_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_delivery_receipt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_delivery_receipt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_grading_delivery_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_delivery_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_grading_delivery_receipt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_delivery_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_grading_delivery_receipt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_grading_delivery_receipt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_grading_response",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_response.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_grading_response",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_grading_response.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_grading_response.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_grading_response`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_outbound_message",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_outbound_message.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_outbound_message",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_outbound_message.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_outbound_message.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_outbound_message`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_reply_event",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_event.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_reply_event",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_event.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_reply_event.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_reply_event`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_reply_intake_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_intake_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_reply_intake_receipt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_reply_intake_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_reply_intake_receipt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_reply_intake_receipt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_socket_mode_payload",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_socket_mode_payload.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_socket_mode_payload",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_socket_mode_payload.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_socket_mode_payload.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_socket_mode_payload`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:slack_thread_poll_receipt",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_thread_poll_receipt.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:slack_thread_poll_receipt",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/slack_thread_poll_receipt.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/slack_thread_poll_receipt.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `slack_thread_poll_receipt`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:study_recommendation",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/study_recommendation.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:study_recommendation",
+      "kind": "json_schema_validation",
+      "status": "skipped",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/study_recommendation.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/study_recommendation.json",
+      "errors": [
+        {
+          "message": "no matching example JSON for schema `study_recommendation`",
+          "instance_path": null,
+          "schema_path": null
+        }
+      ]
+    },
+    {
+      "check_id": "schema:task_graph",
+      "kind": "schema_compile",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json",
+      "artifact_path": null,
+      "errors": []
+    },
+    {
+      "check_id": "artifact:task_graph",
+      "kind": "json_schema_validation",
+      "status": "pass",
+      "schema_path": "docs/standards/delivery-artifacts-v0/schemas/task_graph.schema.json",
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+      "errors": []
+    },
+    {
+      "check_id": "artifact:epic_delivery_plan:trace_links",
+      "kind": "epic_delivery_plan_trace_links",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/implementer.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/implementer.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/merge.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/merge.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/planner.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/planner.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:model_contracts/qa.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "model_contracts/qa.contract.yaml",
+      "errors": []
+    },
+    {
+      "check_id": "yaml:docs/standards/delivery-artifacts-v0/model_contracts/planner.contract.yaml",
+      "kind": "yaml_syntax",
+      "status": "pass",
+      "schema_path": null,
+      "artifact_path": "docs/standards/delivery-artifacts-v0/model_contracts/planner.contract.yaml",
+      "errors": []
+    }
+  ]
+}

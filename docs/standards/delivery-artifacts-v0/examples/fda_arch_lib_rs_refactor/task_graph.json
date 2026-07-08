@@ -1,0 +1,204 @@
+{
+  "program_id": "PROGRAM-FDA-ARCH-001",
+  "epic_id": "EPIC-FDA-ARCH-FU-001",
+  "tasks": [
+    {
+      "task_id": "TASK-FDA-ARCH-FU-001",
+      "title": "result 型と support helper を移動する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-001",
+      "status": "ready_to_work",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-001",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-001",
+          "CLM-FDA-ARCH-FU-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-002",
+      "title": "implement use case と rendering を分離する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-002",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-002",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-001",
+          "CLM-FDA-ARCH-FU-002",
+          "CLM-FDA-ARCH-FU-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-003",
+      "title": "process invocation を port / infra adapter へ分離する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-003",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-003",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-004"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-004",
+      "title": "review / repair / merge use case を分離する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-004",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-004",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-001",
+          "CLM-FDA-ARCH-FU-002",
+          "CLM-FDA-ARCH-FU-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-005",
+      "title": "open / notify use case を分離する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-005",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-005",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-001",
+          "CLM-FDA-ARCH-FU-002",
+          "CLM-FDA-ARCH-FU-003"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "implementer",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-006",
+      "title": "architecture gate に lib.rs facade 検査を追加する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-006",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-006",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-001",
+          "CLM-FDA-ARCH-FU-003",
+          "CLM-FDA-ARCH-FU-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "architecture_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    },
+    {
+      "task_id": "TASK-FDA-ARCH-FU-007",
+      "title": "architecture docs を完了状態へ更新する",
+      "parent_type": "case",
+      "parent_id": "CASE-FDA-ARCH-FU-007",
+      "status": "planned",
+      "forge": {
+        "program_id": "PROGRAM-FDA-ARCH-001",
+        "epic_id": "EPIC-FDA-ARCH-FU-001",
+        "case_id": "CASE-FDA-ARCH-FU-007",
+        "claim_ids": [
+          "CLM-FDA-ARCH-FU-005"
+        ],
+        "promotion_state": "draft",
+        "proof_state": "partial"
+      },
+      "execution": {
+        "owner_agent": "contract_qa",
+        "branch": null,
+        "pr_number": null,
+        "run_id": null
+      },
+      "human": {
+        "decision_required": false,
+        "decision_packet_id": null
+      }
+    }
+  ]
+}

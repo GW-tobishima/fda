@@ -1,0 +1,32 @@
+skill:
+  name: requirement_to_epic_plan
+  version: v0.3.0
+  purpose: Requirements Definition から Epic Delivery Plan を生成する。
+  input_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/requirements_definition.schema.json
+    - docs/standards/fda-v1/schemas/repository-profile/repo_yaml.schema.json
+    - docs/standards/fda-v1/schemas/repository-profile/delivery_policy_yaml.schema.json
+  output_schema:
+    - docs/standards/delivery-artifacts-v0/schemas/epic_delivery_plan.schema.json
+    - docs/standards/delivery-artifacts-v0/schemas/case_graph.schema.json
+  allowed_actions:
+    - requirements_parse
+    - epic_scope_draft
+    - case_graph_draft
+    - artifact_inventory_update
+  forbidden_actions:
+    - source_mutation
+    - human_decision_approval
+    - forge_promotion_write
+    - github_pr_create
+  required_artifacts:
+    - requirements_definition.md
+    - epic_delivery_plan.json
+    - case_graph.json
+    - runner_explanation.json
+  validation_commands:
+    - cargo run -- validate-artifacts --artifacts artifacts/runs/<run_id> --out artifacts/runs/<run_id>/validation_report.json
+  escalation_conditions:
+    - scope_change
+    - missing_requirements_goal
+    - privacy_or_terms_impact

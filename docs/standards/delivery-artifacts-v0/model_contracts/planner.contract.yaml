@@ -1,0 +1,70 @@
+model_contract:
+  id: planner-v0
+  role: work_breakdown_planner
+  status: draft
+  purpose:
+    - requirements_doc_to_epic_delivery_plan
+    - case_graph_generation
+    - human_decision_point_detection
+
+  input_contract:
+    schema_ref: ../schemas/requirements_definition.schema.json
+    required_context:
+      - autonomy_policy
+      - repository_profile
+      - forge_policy
+      - ato_task_graph_policy
+
+  output_contract:
+    schema_ref: ../schemas/epic_delivery_plan.schema.json
+    standalone_schema_refs:
+      case_graph_document: ../schemas/case_graph.schema.json
+      task_graph: ../schemas/task_graph.schema.json
+    strict_schema_required: true
+    must_include:
+      - scope_in
+      - scope_out
+      - assumptions
+      - open_questions
+      - claim_tree
+      - case_graph
+      - pr_plan
+      - proof_strategy
+      - human_decision_points
+    must_emit_artifacts:
+      - epic_delivery_plan
+      - case_graph_document
+      - task_graph
+
+  authority:
+    allowed:
+      - create_planned_tasks
+      - propose_claims
+      - propose_human_decision_points
+      - propose_pr_plan
+    forbidden:
+      - change_scope_without_human
+      - approve_security_exception
+      - merge_pr
+      - deploy
+      - expand_autonomy_contract
+
+  evidence_policy:
+    citations_required: true
+    source_trace_required: true
+    confidence_required: true
+
+  retry_policy:
+    max_retries_same_failure: 2
+    on_schema_error: repair_output
+    on_scope_change_needed: human_decision_packet
+    on_security_high: escalate_human
+
+  audit:
+    required_trace_keys:
+      - request_id
+      - agent_run_id
+      - program_id
+      - epic_id
+    conditional_trace_keys:
+      case_id: case_scoped_planning

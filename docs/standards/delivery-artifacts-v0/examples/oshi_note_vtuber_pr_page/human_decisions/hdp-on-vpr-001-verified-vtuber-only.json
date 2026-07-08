@@ -1,0 +1,47 @@
+{
+  "human_decision_id": "HDP-ON-VPR-001",
+  "title": "本人確認済みVTuber限定",
+  "status": "resolved",
+  "selected_option_id": "verified_only",
+  "answered_by": "user",
+  "answered_at": "2026-06-25",
+  "implementation_directive": "本人確認済みVTuberのみ。未確認、申請中、代理権限未確認のアカウントには紹介URLを発行しない。",
+  "reason_type": "spec_decision",
+  "target_task_key": "TASK-ON-VPR-001",
+  "required_before": "PR-ON-VPR-001",
+  "requested_decision": "紹介ページ / 宣伝URLを本人確認済みVTuberまたは事務所アカウントだけに発行するか。",
+  "recommended_option": "本人確認済みVTuber / 事務所アカウントに限定する",
+  "options": [
+    {
+      "id": "verified_only",
+      "description": "本人確認済みVTuber / 事務所アカウントに限定する",
+      "pros": [
+        "なりすましと代理人権限のリスクを下げられる",
+        "素材許諾や停止受付の運用と接続しやすい"
+      ],
+      "cons": [
+        "申請から公開までのリードタイムが伸びる"
+      ],
+      "recommended": true
+    },
+    {
+      "id": "limited_preview_before_verification",
+      "description": "申請後審査中の限定公開を許す",
+      "pros": [
+        "初期導入の摩擦が下がる"
+      ],
+      "cons": [
+        "審査漏れ時のなりすまし露出リスクが残る"
+      ],
+      "recommended": false
+    }
+  ],
+  "default_if_no_decision": "実装開始しない。紹介URL発行は未解決のままにする。",
+  "planned_ato_cli_command": "ato work block --task TASK-ON-VPR-001 --run-id \"<RUN_ID:TASK-ON-VPR-001>\" --reason spec_decision --title \"HDP-ON-VPR-001 本人確認済みVTuber限定\" --question \"紹介ページ / 宣伝URLを本人確認済みVTuberまたは事務所アカウントだけに発行するか。\" --recommended-option \"本人確認済みVTuber / 事務所アカウントに限定する\" --option \"本人確認済みVTuber / 事務所アカウントに限定する\" --option \"申請後審査中の限定公開を許す\" --json",
+  "source_refs": [
+    "human_input_spec.md",
+    "requirements_definition.md",
+    "risk_register.md",
+    "human_decision_packet.json"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/quiz_prompt.schema.json",
+  "title": "AICX User-Facing Quiz Prompt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "quiz_prompt_id",
+    "quiz_set_id",
+    "generated_for_date",
+    "timezone",
+    "delivery_time",
+    "source_quiz_set_path",
+    "answer_key_included",
+    "rationale_included",
+    "answer_format",
+    "study_window",
+    "study_range_label",
+    "question_count",
+    "questions"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "aicx.quiz_prompt.v0" },
+    "quiz_prompt_id": { "type": "string", "minLength": 1 },
+    "quiz_set_id": { "type": "string", "minLength": 1 },
+    "generated_for_date": { "type": "string", "format": "date" },
+    "timezone": { "type": "string", "minLength": 1 },
+    "delivery_time": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$" },
+    "source_quiz_set_path": { "type": ["string", "null"] },
+    "answer_key_included": { "type": "boolean", "const": false },
+    "rationale_included": { "type": "boolean", "const": false },
+    "answer_format": { "type": "string", "const": "multiple_choice_a_d" },
+    "study_window": {
+      "type": "object",
+      "required": ["week_id", "date_from", "date_to", "study_pages", "focus_topics"],
+      "properties": {
+        "week_id": { "type": "string", "minLength": 1 },
+        "date_from": { "type": "string", "format": "date" },
+        "date_to": { "type": "string", "format": "date" },
+        "study_pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/page_range" }
+        },
+        "focus_topics": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "study_range_label": { "type": "string", "minLength": 1 },
+    "question_count": { "type": "integer", "minimum": 1, "maximum": 60 },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "required": [
+          "question_number",
+          "question_id",
+          "topic_id",
+          "topic_label",
+          "page_ranges",
+          "prompt",
+          "choices"
+        ],
+        "properties": {
+          "question_number": { "type": "integer", "minimum": 1 },
+          "question_id": { "type": "string", "minLength": 1 },
+          "topic_id": { "type": "string", "minLength": 1 },
+          "topic_label": { "type": "string", "minLength": 1 },
+          "page_ranges": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/page_range" }
+          },
+          "prompt": { "type": "string", "minLength": 1 },
+          "choices": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": ["choice", "text"],
+              "properties": {
+                "choice": { "type": "string", "enum": ["A", "B", "C", "D"] },
+                "text": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "page_range": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 1 },
+        "to": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

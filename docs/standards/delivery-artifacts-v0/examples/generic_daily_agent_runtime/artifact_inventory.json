@@ -1,0 +1,651 @@
+{
+  "schema_version": "fda.artifact_inventory.v0",
+  "generated_at_unix_seconds": 1782257896,
+  "artifacts": [
+    {
+      "artifact_id": "ART-GDAR-001",
+      "artifact_type": "epic_delivery_plan",
+      "title": "Generic Daily Agent Runtime Epic Delivery Plan",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Requirements DefinitionからCase、Task、Planned PR、Human Decision、Forge Claim/Proofへ落とすplanning-only plan。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-002",
+      "artifact_type": "case_graph",
+      "title": "Generic Daily Agent Runtime Case Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [],
+      "latest_version": "v0",
+      "preview_summary": "Artifact contract、command boundary、AICX migrationの3 Caseへ分割したplanning graph。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-003",
+      "artifact_type": "task_graph",
+      "title": "Generic Daily Agent Runtime Task Graph",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ATO materialization dry-run前のTask候補。実ATO書き込みは行わない。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/case_graph.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-004",
+      "artifact_type": "planned_prs",
+      "title": "Generic Daily Agent Runtime Planned PRs",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-003",
+        "TASK-GDAR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-GDAR-001から003までの目的、scope、risk、claims、proof strategyを固定する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-005",
+      "artifact_type": "autonomy_contract",
+      "title": "Generic Daily Agent Runtime Autonomy Contract",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-003",
+        "TASK-GDAR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "planning_onlyで許可される生成・検証と禁止される実装・ATO materialization・Forge実評価を明示する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/autonomy_contract.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-006",
+      "artifact_type": "human_decision_packet",
+      "title": "Generic Daily Agent Runtime Human Decision Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-003",
+        "TASK-GDAR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "切り出し粒度、AICX互換性、自動マージ許可範囲の3判断だけに絞ったpacket。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/requirements_definition.md"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-007",
+      "artifact_type": "forge_projection",
+      "title": "Generic Daily Agent Runtime Forge Projection",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-003",
+        "TASK-GDAR-005"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Forgeが後続で読むClaimContract、Proof Obligation、promotion readinessの投影。PoC-5Aでは実評価しない。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-008",
+      "artifact_type": "runner_explanation",
+      "title": "Generic Daily Agent Runtime Runner Explanation",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PoC-5Aがplanning-onlyであり、次actionがATO CLI materialization dry-runまたはPR-GDAR-001 executionであることを説明する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runner_explanation.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/artifact_inventory.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-009",
+      "artifact_type": "validation_report",
+      "title": "PoC-5A Generic Daily Agent Runtime Validation Report",
+      "producer_agent": "cargo run -- validate-artifacts",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "generic_daily_agent_runtime example artifactに対するschema compile、schema validation、epic trace link validation結果。",
+      "path_or_url": "artifacts/runs/poc-5a-generic-daily-agent-runtime/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json"
+      ],
+      "created_at_unix_seconds": 1782249649,
+      "updated_at_unix_seconds": 1782249649
+    },
+    {
+      "artifact_id": "ART-GDAR-010",
+      "artifact_type": "ato_cli_materialization_plan",
+      "title": "PoC-5B ATO CLI Materialization Dry-run Plan",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "Program、Epic、Case、Task、Human Decision、AI RepairのATO CLI予定コマンドをdry-runで投影する。対象Program/Epic/Case/TaskへのCLI実行、ATO MCP write、ATO DB変更は行わない。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/epic_delivery_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/task_graph.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/human_decision_packet.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+      ],
+      "created_at_unix_seconds": 1782257896,
+      "updated_at_unix_seconds": 1782257896
+    },
+    {
+      "artifact_id": "ART-GDAR-011",
+      "artifact_type": "ato_summary_preview",
+      "title": "PoC-5B ATO CLI Summary Preview",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ATO CLI materialization dry-runの人間向け要約。投影順序、Human Decision、Task lane、CLI dry-run境界を確認できる。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_commands.md"
+      ],
+      "created_at_unix_seconds": 1782257896,
+      "updated_at_unix_seconds": 1782257896
+    },
+    {
+      "artifact_id": "ART-GDAR-012",
+      "artifact_type": "ato_cli_commands",
+      "title": "PoC-5B ATO CLI Planned Commands",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "ATO CLIで実行するとした場合のwork begin、checkpoint、block、evidence attach、readinessの予定コマンド列。今回のPRでは実行しない。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_commands.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json"
+      ],
+      "created_at_unix_seconds": 1782257896,
+      "updated_at_unix_seconds": 1782257896
+    },
+    {
+      "artifact_id": "ART-GDAR-013",
+      "artifact_type": "validation_report",
+      "title": "PoC-5B Generic Daily Agent Runtime Validation Report",
+      "producer_agent": "cargo run -- validate-artifacts",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001",
+        "CASE-GDAR-002",
+        "CASE-GDAR-003"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002",
+        "TASK-GDAR-003",
+        "TASK-GDAR-004",
+        "TASK-GDAR-005",
+        "TASK-GDAR-006"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PoC-5BのATO CLI materialization dry-run artifactに対するschema compile、schema validation、epic trace link validation結果。",
+      "path_or_url": "artifacts/runs/poc-5b-generic-daily-agent-runtime/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_materialization_plan.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_cli_commands.md",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/ato_summary_preview.md"
+      ],
+      "created_at_unix_seconds": 1782257896,
+      "updated_at_unix_seconds": 1782257896
+    },
+    {
+      "artifact_id": "ART-GDAR-014",
+      "artifact_type": "generic_run_state",
+      "title": "PR-GDAR-001 Generic Run State Fixture",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "dispatch、event intake、action、maintain、statusの現在状態、idempotency、artifact refsをAICX非依存に表現するfixture。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/schemas/generic_run_state.schema.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runtime_artifact_contracts.md"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-015",
+      "artifact_type": "generic_receipt",
+      "title": "PR-GDAR-001 Generic Receipt Fixture",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "dispatch、event_intake、action、maintenance、statusのreceipt例を同一schemaで検証するfixture。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/schemas/generic_receipt.schema.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runtime_artifact_contracts.md"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-016",
+      "artifact_type": "runtime_artifact_contracts",
+      "title": "PR-GDAR-001 Runtime Artifact Contracts",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "generic_run_stateとgeneric_receiptの対象、既存AICX artifactとの関係、Claim/Proof対応を明示する。",
+      "path_or_url": "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/runtime_artifact_contracts.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/planned_prs.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/forge_projection.json"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-017",
+      "artifact_type": "validation_report",
+      "title": "PR-GDAR-001 Runtime Contracts Validation Report",
+      "producer_agent": "cargo run -- validate-artifacts",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-GDAR-001で追加したgeneric_run_state/generic_receipt fixtureを含むschema validation結果。",
+      "path_or_url": "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_run_state.json",
+        "docs/standards/delivery-artifacts-v0/examples/generic_daily_agent_runtime/generic_receipt.json"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-018",
+      "artifact_type": "development_handoff",
+      "title": "PR-GDAR-001 Development Handoff",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR境界、non-goals、AC対応、runtime state hygiene、検証結果をまとめるhandoff。",
+      "path_or_url": "artifacts/runs/pr-gdar-001-runtime-contracts/development_handoff.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-019",
+      "artifact_type": "unit_test_report",
+      "title": "PR-GDAR-001 Unit Test Report",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "schema validation、cargo test、cargo check、git diff --checkの結果をClaim/Proof単位で整理する。",
+      "path_or_url": "artifacts/runs/pr-gdar-001-runtime-contracts/unit_test_report.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-020",
+      "artifact_type": "self_review_report",
+      "title": "PR-GDAR-001 Self Review Report",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-GDAR-001の受入条件、差分、検証、残リスクを人間レビュー前に点検する。",
+      "path_or_url": "artifacts/runs/pr-gdar-001-runtime-contracts/self_review_report.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "artifacts/runs/pr-gdar-001-runtime-contracts/development_handoff.md",
+        "artifacts/runs/pr-gdar-001-runtime-contracts/unit_test_report.md"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    },
+    {
+      "artifact_id": "ART-GDAR-021",
+      "artifact_type": "review_packet",
+      "title": "PR-GDAR-001 Review Packet",
+      "producer_agent": "codex-cli",
+      "related_program_id": "PROGRAM-GENERIC-DAILY-AGENT-RUNTIME-001",
+      "related_epic_id": "EPIC-GDAR-001",
+      "related_case_ids": [
+        "CASE-GDAR-001"
+      ],
+      "related_task_ids": [
+        "TASK-GDAR-001",
+        "TASK-GDAR-002"
+      ],
+      "latest_version": "v0",
+      "preview_summary": "PR-GDAR-001のscope、validation、Claim/Proof、review pointsをまとめるレビュー用packet。",
+      "path_or_url": "artifacts/review_packets/pr-gdar-001-runtime-contracts.md",
+      "open_in_editor_link": null,
+      "open_in_browser_link": null,
+      "diff_link": null,
+      "evidence_links": [
+        "artifacts/runs/pr-gdar-001-runtime-contracts/validation_report.json",
+        "artifacts/runs/pr-gdar-001-runtime-contracts/self_review_report.md"
+      ],
+      "created_at_unix_seconds": 1782287603,
+      "updated_at_unix_seconds": 1782287603
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "GRP-GDAR-PLANNING",
+      "title": "PoC-5A Planning Artifacts",
+      "artifact_ids": [
+        "ART-GDAR-001",
+        "ART-GDAR-002",
+        "ART-GDAR-003",
+        "ART-GDAR-004",
+        "ART-GDAR-005",
+        "ART-GDAR-006",
+        "ART-GDAR-007",
+        "ART-GDAR-008"
+      ]
+    },
+    {
+      "group_id": "GRP-GDAR-VALIDATION",
+      "title": "PoC-5A Validation Evidence",
+      "artifact_ids": [
+        "ART-GDAR-009"
+      ]
+    },
+    {
+      "group_id": "GRP-GDAR-MATERIALIZATION",
+      "title": "PoC-5B ATO CLI Materialization Dry-run",
+      "artifact_ids": [
+        "ART-GDAR-010",
+        "ART-GDAR-011",
+        "ART-GDAR-012",
+        "ART-GDAR-013"
+      ]
+    },
+    {
+      "group_id": "GRP-GDAR-PR-001-EXECUTION",
+      "title": "PR-GDAR-001 Runtime Artifact Contracts",
+      "artifact_ids": [
+        "ART-GDAR-014",
+        "ART-GDAR-015",
+        "ART-GDAR-016",
+        "ART-GDAR-017",
+        "ART-GDAR-018",
+        "ART-GDAR-019",
+        "ART-GDAR-020",
+        "ART-GDAR-021"
+      ]
+    }
+  ]
+}
