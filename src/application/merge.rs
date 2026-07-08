@@ -1131,8 +1131,11 @@ fn validate_reviewer_evidence_path(
 }
 
 fn review_agent_gate_section(content: &str) -> Option<String> {
-    let start = content.find("## REVIEW_AGENT_GATE")?;
-    let tail = &content[start..];
+    // Windows の checkout (core.autocrlf=true) では反映済み packet が CRLF になる。
+    // 生成側 packet (LF) との比較が改行差で stale 誤判定にならないよう正規化する。
+    let normalized = content.replace("\r\n", "\n");
+    let start = normalized.find("## REVIEW_AGENT_GATE")?;
+    let tail = &normalized[start..];
     let end = tail
         .find("\n## ")
         .filter(|index| *index > 0)
