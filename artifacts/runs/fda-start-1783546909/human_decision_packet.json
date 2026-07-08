@@ -1,0 +1,137 @@
+{
+  "case_id": null,
+  "context": {
+    "current_state": "Input source cli_goal was classified as implementation_candidate",
+    "relevant_evidence": [
+      "requirements_definition.md",
+      "non_functional_requirements.md",
+      "risk_register.md",
+      "runner_explanation.json"
+    ],
+    "relevant_requirement": "PR-V1-002: fda start は要件定義、Human Decision、runner explanation を生成し、判断事項を stdout と requirements_definition.md の両方へ出す。"
+  },
+  "decision_needed": "Intake artifact を Design Gate または非実装 mode へ進める前に、人間が scope、分類、未記載制約の扱いを確認する必要がある。",
+  "decision_packet_id": "HDP-FDA-V1-INTAKE-001",
+  "decisions": [
+    {
+      "decision_id": "HD-FDA-001",
+      "options": [
+        {
+          "description": "推奨案として採用する",
+          "id": "approve_scope"
+        },
+        {
+          "description": "修正して再生成する",
+          "id": "revise"
+        }
+      ],
+      "recommended_option_id": "approve_scope",
+      "required_before": "Design Gate",
+      "summary": "入力から抽出した Scope In / Scope Out を Intake 正本として固定してよいか",
+      "type": "spec_decision"
+    },
+    {
+      "decision_id": "HD-FDA-002",
+      "options": [
+        {
+          "description": "推奨案として採用する",
+          "id": "accept_classification"
+        },
+        {
+          "description": "修正して再生成する",
+          "id": "revise"
+        }
+      ],
+      "recommended_option_id": "accept_classification",
+      "required_before": "Design Gate",
+      "summary": "実装可否分類 `implementation_candidate` と次 gate `Design Gate` を採用してよいか",
+      "type": "spec_decision"
+    },
+    {
+      "decision_id": "HD-FDA-003",
+      "options": [
+        {
+          "description": "推奨案として採用する",
+          "id": "confirm_before_design"
+        },
+        {
+          "description": "修正して再生成する",
+          "id": "revise"
+        }
+      ],
+      "recommended_option_id": "confirm_before_design",
+      "required_before": "Design Gate",
+      "summary": "外部API、個人情報、法務制約の未記載項目を Design Gate で明示確認する前提で進めてよいか",
+      "type": "spec_decision"
+    }
+  ],
+  "default_if_no_decision": "waiting_human のまま停止し、実装系 command には進まない。",
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "forge_mapping": {
+    "ato_task_graph": [
+      "pr-v1-002-intake-command-contract"
+    ],
+    "claim_ids": [
+      "FDA-V1-INTAKE-HUMAN-DECISION"
+    ],
+    "gate_requirements": [
+      "Intake Gate",
+      "Design Gate"
+    ],
+    "human_decision_points": [
+      "HD-FDA-001",
+      "HD-FDA-002",
+      "HD-FDA-003"
+    ],
+    "planned_prs": [
+      "PR-V1-002"
+    ],
+    "proof_obligations": [
+      "CLI stdout includes Human Decision",
+      "requirements_definition.md includes same Human Decision",
+      "JSON artifacts validate"
+    ]
+  },
+  "impact": {
+    "operations": "runner_explanation と artifact_inventory で再開位置を追跡できる。",
+    "schedule": "判断待ちでは Design Gate へ進めず、手戻りを Intake で閉じる。",
+    "scope": "Scope In / Out が未確定のまま Design Gate へ進むことを防ぐ。",
+    "security": "外部API、個人情報、法務制約の未記載項目を後続 gate の確認対象にできる。",
+    "ux": "CLI stdout と Markdown の両方で判断事項を確認できる。"
+  },
+  "options": [
+    {
+      "cons": [
+        "入力解釈に誤りがある場合は後続 gate で手戻りする"
+      ],
+      "description": "生成された Intake artifact を正本として採用し、判断回答後に次 gate へ進める。",
+      "id": "approve_intake",
+      "pros": [
+        "PR-V1-002 の dry-run から Design Gate へ進める",
+        "Human Decision の stop 条件が明確になる"
+      ],
+      "recommended": true
+    },
+    {
+      "cons": [
+        "Design Gate への着手が遅れる"
+      ],
+      "description": "Scope、分類、制約を修正してから再度 fda start を実行する。",
+      "id": "revise_intake",
+      "pros": [
+        "早い段階で入力解釈を修正できる"
+      ],
+      "recommended": false
+    }
+  ],
+  "program_id": "FDA-V1",
+  "recorded_decision": {
+    "decided_at": "1783546961",
+    "decided_by": "human",
+    "decision": "HD-FDA-001=yes; HD-FDA-002=yes; HD-FDA-003=yes",
+    "rationale": "Recorded by fda decide"
+  },
+  "required_before": "Design Gate",
+  "status": "resolved",
+  "trigger": "fda start dry-run generated intake artifacts"
+}

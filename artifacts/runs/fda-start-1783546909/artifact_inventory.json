@@ -1,0 +1,211 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "ART-INTAKE-001",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/requirements_definition.md",
+      "preview_summary": "Intake 要件定義と Human Decision の正本 Markdown",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Requirements Definition",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-002",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/non_functional_requirements.md",
+      "preview_summary": "Intake dry-run の非機能要件",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Non-Functional Requirements",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-003",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/risk_register.md",
+      "preview_summary": "Intake Gate の初期リスクと Human Decision 対応",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Risk Register",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-004",
+      "artifact_type": "human_decision_packet",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/human_decision_packet.md",
+      "preview_summary": "人間向けの判断事項一覧",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Human Decision Packet Markdown",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-005",
+      "artifact_type": "human_decision_packet",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/human_decision_packet.json",
+      "preview_summary": "Schema 検証可能な Human Decision Packet",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Human Decision Packet JSON",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-006",
+      "artifact_type": "runner_explanation",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/runner_explanation.json",
+      "preview_summary": "Intake dry-run の停止条件、境界、次 action",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Runner Explanation",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-INTAKE-007",
+      "artifact_type": "validation_report",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/validation_report.json",
+      "preview_summary": "生成 JSON artifact の schema validation 結果",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-INTAKE"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-002"
+      ],
+      "title": "Validation Report",
+      "updated_at_unix_seconds": 1783546909
+    },
+    {
+      "artifact_id": "ART-ATO-STATE-001",
+      "artifact_type": "ato_state_receipt",
+      "created_at_unix_seconds": 1783546909,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783546909/ato_state_receipt.json",
+      "preview_summary": "ATO task/run/checkpoint/decision/evidence sync receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-ATO"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-016"
+      ],
+      "title": "ATO State Receipt",
+      "updated_at_unix_seconds": 1783546909
+    }
+  ],
+  "generated_at_unix_seconds": 1783546909,
+  "groups": [
+    {
+      "artifact_ids": [
+        "ART-INTAKE-001",
+        "ART-INTAKE-002",
+        "ART-INTAKE-003",
+        "ART-INTAKE-004",
+        "ART-INTAKE-005"
+      ],
+      "group_id": "intake_artifacts",
+      "title": "Intake Artifacts"
+    },
+    {
+      "artifact_ids": [
+        "ART-INTAKE-006",
+        "ART-INTAKE-007"
+      ],
+      "group_id": "run_evidence",
+      "title": "Run Evidence"
+    }
+  ],
+  "schema_version": "fda.artifact_inventory.v0"
+}

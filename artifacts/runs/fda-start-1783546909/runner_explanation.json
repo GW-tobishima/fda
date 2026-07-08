@@ -1,0 +1,21 @@
+{
+  "runner_explanation": {
+    "automation_boundary": "PR-V1-002 dry-run only; no target repo implementation, model provider call, MCP agent invocation, GitHub PR execution, merge, release, deploy, notification, or Output Hub generation",
+    "changed_input_summary": null,
+    "completion_evidence": [
+      "artifacts/runs/fda-start-1783546909/requirements_definition.md",
+      "artifacts/runs/fda-start-1783546909/human_decision_packet.json",
+      "artifacts/runs/fda-start-1783546909/artifact_inventory.json"
+    ],
+    "current_phase": "planning",
+    "diff_from_previous_run": null,
+    "execution_actor": "forge-delivery-agent",
+    "failure_evidence": [],
+    "input_summary": "fda start dry-run input from cli_goal: FDAの普段使い検証: READMEにClaude Code運用の注意書きを1行追加したい",
+    "next_action": "Resolve Human Decision with fda decide, then continue to Design Gate",
+    "previous_run_id": null,
+    "related_epic_id": "EPIC-FDA-V1-INTAKE",
+    "related_program_id": "FDA-V1",
+    "stop_condition": "intake_artifacts_generated_with_waiting_human_decisions"
+  }
+}

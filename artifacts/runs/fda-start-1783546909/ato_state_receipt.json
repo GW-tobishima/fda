@@ -1,0 +1,127 @@
+{
+  "adapter": "ato_cli",
+  "artifact_dir": "artifacts/runs/fda-start-1783546909",
+  "checkpoint_id": "cp_01KX1TXQBA0FKW8RNVZ00Z8NGX",
+  "commands": [
+    {
+      "command": [
+        "ato",
+        "work",
+        "checkpoint",
+        "--task",
+        "fda-ato-sync-e2e-smoke-gw-tobishima-fda-20260708",
+        "--run-id",
+        "run_01KX1TVQ41C2RYGF86AJJVKPVD",
+        "--kind",
+        "decide",
+        "--summary",
+        "<redacted>",
+        "--evidence-surface",
+        "fda_artifact",
+        "--evidence-id",
+        "<redacted>",
+        "--evidence-verdict",
+        "pass",
+        "--validation-status",
+        "passed",
+        "--freshness",
+        "current",
+        "--durability-class",
+        "artifact",
+        "--trust-level",
+        "self_reported",
+        "--json"
+      ],
+      "command_kind": "work_checkpoint",
+      "exit_code": 0,
+      "status": "succeeded",
+      "stderr_summary": null,
+      "stdout_json_detected": true,
+      "stdout_top_level_keys": [
+        "checkpoint",
+        "evidence",
+        "next_recommended_command"
+      ]
+    },
+    {
+      "command": [
+        "ato",
+        "decisions",
+        "answer",
+        "dec_01KX1TW52TD9ZADAS2DAKK21AH",
+        "--answer",
+        "<redacted>",
+        "--answered-by",
+        "<redacted>",
+        "--json"
+      ],
+      "command_kind": "decision_answer",
+      "exit_code": 0,
+      "status": "succeeded",
+      "stderr_summary": null,
+      "stdout_json_detected": true,
+      "stdout_top_level_keys": [
+        "decision",
+        "next_recommended_command"
+      ]
+    },
+    {
+      "command": [
+        "ato",
+        "decisions",
+        "apply",
+        "dec_01KX1TW52TD9ZADAS2DAKK21AH",
+        "--json"
+      ],
+      "command_kind": "decision_apply",
+      "exit_code": 0,
+      "status": "succeeded",
+      "stderr_summary": null,
+      "stdout_json_detected": true,
+      "stdout_top_level_keys": [
+        "decision",
+        "next_recommended_command"
+      ]
+    }
+  ],
+  "decision_mappings": [
+    {
+      "ato_decision_id": "dec_01KX1TW4ZDS7Z4VAXDGYEGWSRM",
+      "fda_decision_id": "HD-FDA-001",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KX1TW513G2EE0YAJY423MQTZ",
+      "fda_decision_id": "HD-FDA-002",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KX1TW52TD9ZADAS2DAKK21AH",
+      "fda_decision_id": "HD-FDA-003",
+      "status": "applied"
+    }
+  ],
+  "decision_sync": {
+    "answer_recorded": true,
+    "applied": true,
+    "ato_decision_id": "dec_01KX1TW52TD9ZADAS2DAKK21AH",
+    "fda_decision_id": "HD-FDA-003"
+  },
+  "evidence_edges": [
+    {
+      "evidence_id": "artifacts/runs/fda-start-1783546909/decision_receipts.json",
+      "evidence_surface": "fda_artifact",
+      "verdict": "pass"
+    }
+  ],
+  "failure_reason": null,
+  "raw_output_stored": false,
+  "receipt_id": "ATO-FDA-DECIDE-001",
+  "receipt_path": "artifacts/runs/fda-start-1783546909/ato_state_receipt.json",
+  "resume_command": null,
+  "run_id": "run_01KX1TVQ41C2RYGF86AJJVKPVD",
+  "schema_version": "fda.ato_state_receipt.v0",
+  "stage": "decide",
+  "status": "succeeded",
+  "task_key": "fda-ato-sync-e2e-smoke-gw-tobishima-fda-20260708"
+}
