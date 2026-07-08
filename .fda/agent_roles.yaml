@@ -1,33 +1,33 @@
 agent_roles:
   default_orchestrator:
-    executor: current_codex_cli
+    executor: current_claude_code
     workspace_policy: workspace_write
     can_edit: true
     required_checkpoint: true
   implementer:
-    executor: current_codex_cli
+    executor: current_claude_code
     workspace_policy: workspace_write
     can_edit: true
     role_switch_allowed: true
     required_handoff: implementation_handoff.md
     required_checkpoint: true
   pr_reviewer:
-    executor: codex_subagent
+    executor: claude_subagent
     workspace_policy: read_only
     can_edit: false
     required_for_pr: true
   functional_qa:
-    executor: codex_subagent
+    executor: claude_subagent
     workspace_policy: read_only
     can_edit: false
     required_for_pr: true
   security_qa:
-    executor: codex_subagent
+    executor: claude_subagent
     workspace_policy: read_only
     can_edit: false
     required_for_pr: true
   forge_reviewer:
-    executor: codex_subagent
+    executor: claude_subagent
     workspace_policy: read_only
     can_edit: false
     required_when:
@@ -37,7 +37,7 @@ agent_roles:
       - human_decision_boundary_changed
     fallback_role: qax2
   design_qa:
-    executor: codex_subagent
+    executor: claude_subagent
     workspace_policy: read_only
     can_edit: false
     required_when:
@@ -46,7 +46,7 @@ agent_roles:
       - browser_surface_changed
     not_applicable_requires_reason: true
   merge_manager:
-    executor: current_codex_cli
+    executor: current_claude_code
     workspace_policy: controlled_write
     can_edit: false
     requires_human_approval: true

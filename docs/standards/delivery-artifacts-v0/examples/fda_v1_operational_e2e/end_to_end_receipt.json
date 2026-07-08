@@ -244,5 +244,5 @@
     "artifacts/runs/v1-pivot-011-operational-v1-codex-cli-primary-finalize-20260629/validation_report.json",
     "live_execution_evidence.json"
   ],
-  "next_action": "Slack P0再ベースラインPRのReview Agent Gate、CI、Codex reviewを通す"
+  "next_action": "Operational V1 は close 済み。docs/v1/fda_v1_next_phase_v1_5.md の V1.5 planning へ進む"
 }

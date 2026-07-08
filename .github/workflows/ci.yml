@@ -22,3 +22,12 @@ jobs:
             --requirements docs/standards/delivery-artifacts-v0/examples/forge_dashboard_epic/requirements_definition.md \
             --out /tmp/fda-fixture-plan \
             --mode fixture
+
+  rust-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test
+      - run: cargo run -- validate-artifacts --out ${{ runner.temp }}/fda-validation-report.json
+      - run: python scripts/check_architecture_boundaries.py

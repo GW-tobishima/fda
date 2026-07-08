@@ -37,7 +37,15 @@
       "properties": {
         "executor": {
           "type": "string",
-          "enum": ["current_codex_cli", "codex_subagent", "external_adapter"]
+          "enum": [
+            "current_codex_cli",
+            "current_claude_code",
+            "current_ai_cli",
+            "codex_subagent",
+            "claude_subagent",
+            "ai_subagent",
+            "external_adapter"
+          ]
         },
         "workspace_policy": {
           "type": "string",

@@ -237,3 +237,19 @@ AI側で実装してよい事項:
 - Output HubでV1 E2E成果物をローカル確認できる。
 - `end_to_end_receipt.json` が `status=succeeded` で、fixtureなしcurrent Codex CLI primary実装のactual PR URL、test status、scope evidenceを参照している。
 - `docs/v1/fda_v1_product_contract.md` と実装状態の差分が解消されている。
+
+## 8. Operational V1 Close（2026-07-09 追記）
+
+Operational V1 は proof complete として close した。
+
+- close 証跡: `docs/standards/delivery-artifacts-v0/examples/fda_v1_operational_e2e/`
+  （`end_to_end_receipt.json` status=succeeded、PR #87 / #88 / #89 merge 済み）
+- `status_summary.json` / `end_to_end_receipt.json` の next_action は V1.5 planning へ
+  進む内容に更新済み（旧記載の「PR #89 の review を通す」は merge 済みのため陳腐化していた）
+- release note: `docs/v1/fda_v1_release_note.md`
+- 残リスク: `docs/v1/fda_v1_residual_risks.md`
+- 次フェーズ: `docs/v1/fda_v1_next_phase_v1_5.md`
+
+GW-tobishima フォークでは、close と同時に Windows / Claude Code での普段使い対応
+（クロスプラットフォーム修正、`current_claude_code` executor、
+`docs/v1/claude_code_primary_runbook.md`）を追補した。上流契約・語彙は変更していない。
