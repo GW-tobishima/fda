@@ -9,22 +9,31 @@ use crate::application::validate::ValidationReport;
 use crate::{ContinueResult, ImplementResult, MergeResult, NotifyResult, OpenResult, ReviewResult};
 
 pub(crate) fn print_help() {
+    println!("fda — AI Delivery Runtime (work protocol: docs/v1/work_protocol.md)");
+    println!();
+    println!("[作業 Work]");
     println!("fda start <goal> [--out <dir>] [--mode auto|implement|research|uiux|design-only] [--repo-root <path>] [--json]");
     println!("fda start --input <path> [--out <dir>] [--mode auto|implement|research|uiux|design-only] [--repo-root <path>] [--json]");
-    println!("fda decide <decision-id> --answer <answer> [--artifacts <dir>] [--decided-by <actor>] [--repo-root <path>] [--json]");
     println!("fda design [--artifacts <dir>] [--out <dir>] [--repo-root <path>] [--json]");
     println!("fda plan --requirements <path> --out <dir> --mode fixture [--repo-root <path>] [--fixture-dir <dir>] [--json]");
     println!("fda implement --dry-run [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--json]");
     println!("fda implement --live [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--live-timeout-seconds <n>] [--repo-root <path>] [--json]");
-    println!("fda review [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--json]");
     println!("fda continue [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--max-retries <n>] [--repo-root <path>] [--json]");
     println!("fda merge [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--execute] [--merge-method merge|squash|rebase] [--json]");
-    println!("fda open [--artifacts <dir>] [--out <dir>] [--repo-root <path>] [--json]");
-    println!("fda status [--artifacts <dir>] [--repo-root <path>] [--json]");
+    println!();
+    println!("[判断 Decision]");
+    println!("fda decide <decision-id> --answer <answer> [--artifacts <dir>] [--decided-by <actor>] [--repo-root <path>] [--json]");
     println!("fda notify test [--artifacts <dir>] [--out <dir>] [--channel slack|email|codex-app] [--to <recipient>] [--live] [--repo-root <path>] [--json]");
+    println!();
+    println!("[証跡 Evidence]");
+    println!("fda review [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--json]");
+    println!("fda status [--artifacts <dir>] [--repo-root <path>] [--json]");
+    println!("fda open [--artifacts <dir>] [--out <dir>] [--repo-root <path>] [--json]");
     println!("fda ui [--artifacts-root <dir>] [--port <n>] [--open] [--repo-root <path>]  # read-only Mission Control (127.0.0.1)");
     println!("fda validate-artifacts [--repo-root <path>] [--schemas <dir>] [--artifacts <dir>] [--model-contracts <dir>] [--out <path>] [--json]");
+    println!();
     println!("共通ATO連携: [--ato-sync] [--ato-task <key>] [--ato-run-id <run>] [--ato-backend <backend>] [--ato-db <path>] [--ato-cli <path>]");
+    println!("[知識 Knowledge] は ato knowledge / ato search を使う (正本: ATO)");
 }
 
 pub(crate) fn print_start_summary(result: &StartResult) {
