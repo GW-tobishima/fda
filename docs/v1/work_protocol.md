@@ -76,6 +76,9 @@ ATO task/run を先に開き、各 fda コマンドに
 
 - Human Decision（scope / privacy / legal / security High・Critical / risk / merge / release）の
   自己承認。委任契約（delegation contract）の**制定**も常に人間（AI は提案まで）。
+- **AI が `.fda/delegation_contract.yaml` を作成・編集すること**（AI に許されるのは
+  `docs/standards/fda-v1/examples/delegation_contract.example.yaml` の提示と
+  `fda policy propose` の提案出力まで。人間の YAML 編集のみが制定）。
 - 未解決 Human Decision を実装で埋めること。
 - reviewer / QA subagent による source mutation。
 - auto merge（単発・例外を含め禁止。V1.5 でも不変。merge approval は常に人間へ）。

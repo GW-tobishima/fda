@@ -184,6 +184,18 @@ fn top_level_decision_summary(packet: &Value) -> Option<HumanDecisionSummary> {
     })
 }
 
+/// packet の `decisions[]` から `decision_id` に一致する要素の `type` を返す。
+/// delegation contract の decision_type 照合（decide --by-contract / status hint）に使う。
+pub(crate) fn decision_type_from_packet(packet: &Value, decision_id: &str) -> Option<String> {
+    packet
+        .get("decisions")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .find(|decision| value_string(decision, "decision_id").as_deref() == Some(decision_id))
+        .and_then(|decision| value_string(decision, "type"))
+}
+
 fn decision_option_ids(value: &Value) -> Vec<String> {
     value
         .get("options")

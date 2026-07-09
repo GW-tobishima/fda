@@ -7,6 +7,7 @@ pub(crate) mod merge;
 pub(crate) mod notify;
 pub(crate) mod output_hub;
 pub(crate) mod plan;
+pub(crate) mod policy;
 pub(crate) mod ports;
 pub(crate) mod profile;
 pub(crate) mod repair;

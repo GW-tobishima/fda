@@ -978,6 +978,81 @@ mod tests {
         }
     }
 
+    /// forge_reviewer MEDIUM 対応の回帰テスト: `fda status --json` の出力
+    /// （contract_hints / merge.risk_tier を含む）が status_summary.schema.json
+    /// （additionalProperties: false）に適合し続けることを保証する。
+    #[test]
+    fn status_result_json_conforms_to_status_summary_schema() {
+        let base = env::temp_dir().join(format!(
+            "fda-status-schema-conform-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::write(
+            artifacts.join("human_decision_packet.json"),
+            serde_json::to_string(&json!({
+                "schema_version": "fda.human_decision_packet.v0",
+                "status": "waiting_human",
+                "decisions": [{
+                    "decision_id": "HD-FDA-001",
+                    "type": "spec_decision",
+                    "summary": "スキーマ整合確認用の未解決判断",
+                    "required_before": "Design Gate",
+                    "options": [{"id": "yes"}, {"id": "no"}],
+                    "recommended_option_id": "yes"
+                }]
+            }))
+            .unwrap(),
+        )
+        .unwrap();
+        fs::write(
+            artifacts.join("merge_gate_summary.json"),
+            serde_json::to_string(&json!({
+                "status": "merge_ready",
+                "risk_tier": "low"
+            }))
+            .unwrap(),
+        )
+        .unwrap();
+
+        let result = crate::application::status::status(&crate::cli::args::StatusConfig {
+            repo_root: base.clone(),
+            artifact_dir: PathBuf::from("artifacts"),
+            ato: AtoConfig::default(),
+            print_json: true,
+        })
+        .unwrap();
+        let result_json = serde_json::to_value(&result).unwrap();
+        assert!(result_json.get("contract_hints").is_some());
+        assert!(result_json
+            .get("merge")
+            .and_then(|merge| merge.get("risk_tier"))
+            .is_some());
+
+        let schema = read_json_value(Path::new(
+            "docs/standards/delivery-artifacts-v0/schemas/status_summary.schema.json",
+        ))
+        .unwrap();
+        let validator = JsonSchemaArtifactValidator;
+        assert!(validator.compile_schema(&schema).is_ok());
+        let errors = validator
+            .validate_json_schema(&schema, &result_json)
+            .map_err(|error| error.message)
+            .unwrap();
+        assert!(
+            errors.is_empty(),
+            "fda status --json は status_summary schema に適合すること: {:?}",
+            errors
+                .iter()
+                .map(|error| error.message.clone())
+                .collect::<Vec<_>>()
+        );
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
     #[test]
     fn parses_notify_test_args() {
         let command = parse_args(vec![
@@ -7036,6 +7111,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -7120,6 +7196,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -7179,6 +7256,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -7198,6 +7276,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
             decision_id: "HD-FDA-001".to_string(),
             answer: "revise".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })
@@ -7301,6 +7380,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
             decision_id: "HDP-FDA-TOP-001".to_string(),
             answer: "approve_top_level".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })
@@ -7407,6 +7487,7 @@ RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**
             decision_id: "HDP-001".to_string(),
             answer: "B".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })

@@ -28,6 +28,13 @@ const REPOSITORY_PROFILE_FILES: [(&str, &str); 7] = [
     ("notification.yaml", "notification_yaml.schema.json"),
 ];
 
+/// 任意（optional）の .fda profile ファイル。存在する場合のみ schema 検証し、
+/// 不存在なら検証をスキップする（profile gate の必須 7 ファイルには含めない）。
+const OPTIONAL_REPOSITORY_PROFILE_FILES: [(&str, &str); 1] = [(
+    "delegation_contract.yaml",
+    "delegation_contract_yaml.schema.json",
+)];
+
 #[derive(Serialize)]
 pub(crate) struct ValidationReport {
     pub(crate) schema_version: &'static str,
@@ -207,6 +214,14 @@ pub(crate) fn validate_artifacts_with_ports(
         &repo_root.join(".fda"),
         &repo_root.join(REPOSITORY_PROFILE_SCHEMA_DIR),
     ));
+    checks.extend(validate_optional_repository_profile(
+        store,
+        validator,
+        yaml_validator,
+        &repo_root,
+        &repo_root.join(".fda"),
+        &repo_root.join(REPOSITORY_PROFILE_SCHEMA_DIR),
+    ));
 
     let summary = summarize(&checks);
     let verdict = if summary.failed == 0 { "pass" } else { "fail" };
@@ -242,6 +257,35 @@ pub(crate) fn validate_repository_profile(
                 &profile_dir.join(profile_file),
                 &profile_schema_dir.join(schema_file),
             )
+        })
+        .collect()
+}
+
+/// 任意 profile ファイル（`delegation_contract.yaml` 等）を検証する。
+/// **存在する場合のみ**検証し、不存在ならチェック自体を出さない（必須 7 ファイルには加えない）。
+pub(crate) fn validate_optional_repository_profile(
+    store: &impl ArtifactStore,
+    validator: &impl ArtifactValidator,
+    yaml_validator: &impl YamlValidator,
+    repo_root: &Path,
+    profile_dir: &Path,
+    profile_schema_dir: &Path,
+) -> Vec<ValidationCheck> {
+    OPTIONAL_REPOSITORY_PROFILE_FILES
+        .into_iter()
+        .filter_map(|(profile_file, schema_file)| {
+            let profile_path = profile_dir.join(profile_file);
+            if !store.exists(&profile_path) {
+                return None;
+            }
+            Some(validate_repository_profile_file(
+                store,
+                validator,
+                yaml_validator,
+                repo_root,
+                &profile_path,
+                &profile_schema_dir.join(schema_file),
+            ))
         })
         .collect()
 }
@@ -587,5 +631,50 @@ mod tests {
         assert!(checks
             .iter()
             .all(|check| check.kind == "repository_profile_validation"));
+    }
+
+    #[test]
+    fn optional_delegation_contract_is_skipped_when_absent() {
+        let repo_root = env::current_dir().unwrap();
+        // このテスト専用のディレクトリで、delegation_contract.yaml は決して書かない
+        // （不存在＝検証スキップを確認するため）。
+        let profile_dir = env::temp_dir().join("fda-optional-contract-absent");
+        FsArtifactStore.create_dir_all(&profile_dir).unwrap();
+
+        let checks = validate_optional_repository_profile(
+            &FsArtifactStore,
+            &JsonSchemaArtifactValidator,
+            &SerdeYamlValidator,
+            &repo_root,
+            &profile_dir,
+            &repo_root.join(REPOSITORY_PROFILE_SCHEMA_DIR),
+        );
+        // 不存在なら検証スキップ = チェック自体が出ない（従来動作）。
+        assert!(checks.is_empty());
+    }
+
+    #[test]
+    fn optional_delegation_contract_fails_on_schema_violation() {
+        let repo_root = env::current_dir().unwrap();
+        let profile_dir = env::temp_dir().join("fda-optional-contract-bad");
+        FsArtifactStore.create_dir_all(&profile_dir).unwrap();
+        // rule_id が `DC-` で始まらない → schema の pattern 違反。
+        FsArtifactStore
+            .write_text(
+                &profile_dir.join("delegation_contract.yaml"),
+                "delegation_contract:\n  - rule_id: X-001\n    decision_type: spec_decision\n    match_summary_keywords:\n      - foo\n    answer: yes\n    authority: k\n    enacted_from:\n      - run\n    expires: \"2026-10-01\"\n",
+            )
+            .unwrap();
+
+        let checks = validate_optional_repository_profile(
+            &FsArtifactStore,
+            &JsonSchemaArtifactValidator,
+            &SerdeYamlValidator,
+            &repo_root,
+            &profile_dir,
+            &repo_root.join(REPOSITORY_PROFILE_SCHEMA_DIR),
+        );
+        assert_eq!(checks.len(), 1);
+        assert_eq!(checks[0].status, "fail");
     }
 }

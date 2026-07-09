@@ -4,6 +4,7 @@ use crate::application::decide::DecideResult;
 use crate::application::design::DesignResult;
 use crate::application::gc::GcResult;
 use crate::application::plan::PlanResult;
+use crate::application::policy::PolicyProposalResult;
 use crate::application::start::StartResult;
 use crate::application::status::StatusResult;
 use crate::application::validate::ValidationReport;
@@ -33,6 +34,10 @@ pub(crate) fn print_help() {
     println!("fda ui [--artifacts-root <dir>] [--port <n>] [--open] [--repo-root <path>]  # read-only Mission Control (127.0.0.1)");
     println!("fda gc [--artifacts-root <dir>] [--max-age-days <n>] [--repo-root <path>] [--json]  # stale run 棚卸し docket (read-only, 削除しない)");
     println!("fda validate-artifacts [--repo-root <path>] [--schemas <dir>] [--artifacts <dir>] [--model-contracts <dir>] [--out <path>] [--json]");
+    println!();
+    println!("[判断 Decision / 立法]");
+    println!("fda decide <decision-id> --by-contract <rule-id> [--artifacts <dir>] [--repo-root <path>] [--json]  # 委任契約で明示適用 (--answer と排他, fail-closed)");
+    println!("fda policy propose [--artifacts-root <dir>] [--min-occurrences <n>] [--out <dir>] [--repo-root <path>] [--json]  # 委任契約候補を逆提案 (.fda へは書かない, 制定は人間)");
     println!();
     println!("共通ATO連携: [--ato-sync] [--ato-task <key>] [--ato-run-id <run>] [--ato-backend <backend>] [--ato-db <path>] [--ato-cli <path>]");
     println!("[知識 Knowledge] は ato knowledge / ato search を使う (正本: ATO)");
@@ -282,6 +287,13 @@ pub(crate) fn print_status_summary(result: &StatusResult) {
             );
         }
     }
+    if !result.contract_hints.is_empty() {
+        println!();
+        println!("委任契約の適用候補 (自動適用はしません。人間が明示指定):");
+        for hint in &result.contract_hints {
+            println!("- {hint}");
+        }
+    }
     println!();
     println!("Notification:");
     println!("- request: {}", result.notification.request_status);
@@ -354,6 +366,35 @@ pub(crate) fn print_gc_summary(result: &GcResult) {
             for reason in &candidate.reasons {
                 println!("    - {reason}");
             }
+        }
+    }
+    println!();
+    println!("次:");
+    for action in &result.next_actions {
+        println!("{action}");
+    }
+}
+
+pub(crate) fn print_policy_summary(result: &PolicyProposalResult) {
+    println!("Policy proposal: {}", result.proposal_path);
+    println!("Markdown: {}", result.proposal_markdown_path);
+    println!("Artifacts root: {}", result.artifacts_root);
+    println!("Scanned runs: {}", result.scanned_runs);
+    println!("Min occurrences: {}", result.min_occurrences);
+    println!("Candidates: {}", result.candidate_count);
+    println!();
+    if result.candidates.is_empty() {
+        println!("委任契約の候補はありません。");
+    } else {
+        println!("委任契約候補 (.fda へは書きません。制定は人間の YAML 編集のみ):");
+        for candidate in &result.candidates {
+            println!(
+                "- {} [{} 回 / type: {} / answer: {}]",
+                candidate.proposed_rule_id,
+                candidate.occurrences,
+                candidate.decision_type,
+                candidate.answer
+            );
         }
     }
     println!();

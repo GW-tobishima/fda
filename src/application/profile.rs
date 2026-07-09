@@ -2,7 +2,10 @@ use std::env;
 use std::path::{Path, PathBuf};
 
 use crate::application::ports::ArtifactStore;
-use crate::application::validate::{validate_repository_profile, REPOSITORY_PROFILE_SCHEMA_DIR};
+use crate::application::validate::{
+    validate_optional_repository_profile, validate_repository_profile,
+    REPOSITORY_PROFILE_SCHEMA_DIR,
+};
 use crate::infra::json_schema::JsonSchemaArtifactValidator;
 use crate::infra::yaml::SerdeYamlValidator;
 use crate::support::paths::display_path;
@@ -79,7 +82,7 @@ fn validate_profile(
 ) -> Result<(), String> {
     let profile_dir = repo_root.join(".fda");
     let schema_dir = schema_repo_root.join(REPOSITORY_PROFILE_SCHEMA_DIR);
-    let checks = validate_repository_profile(
+    let mut checks = validate_repository_profile(
         store,
         &JsonSchemaArtifactValidator,
         &SerdeYamlValidator,
@@ -87,6 +90,15 @@ fn validate_profile(
         &profile_dir,
         &schema_dir,
     );
+    // 任意ファイル（.fda/delegation_contract.yaml 等）は存在すれば検証する。
+    checks.extend(validate_optional_repository_profile(
+        store,
+        &JsonSchemaArtifactValidator,
+        &SerdeYamlValidator,
+        repo_root,
+        &profile_dir,
+        &schema_dir,
+    ));
     let failures = checks
         .iter()
         .filter(|check| check.status == "fail")

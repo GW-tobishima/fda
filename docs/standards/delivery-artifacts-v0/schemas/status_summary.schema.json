@@ -23,6 +23,11 @@
     "current_phase": { "type": "string", "minLength": 1 },
     "phase_reason": { "type": "string", "minLength": 1 },
     "unresolved_decisions": { "type": "array" },
+    "contract_hints": {
+      "type": "array",
+      "description": "V1.5 F1 (optional・非破壊追加): 未解決判断に適用可能な delegation contract のヒント。自動適用はしない。",
+      "items": { "type": "string" }
+    },
     "notification": {
       "type": "object",
       "required": ["request_status", "receipt_status", "channel", "recipient", "sent"],
@@ -76,6 +81,10 @@
         "policy_disposition": { "type": ["string", "null"] },
         "ci_status": { "type": ["string", "null"] },
         "risk_classification": { "type": ["string", "null"] },
+        "risk_tier": {
+          "type": ["string", "null"],
+          "description": "V1.5 F4 (optional・非破壊追加): risk_tier.json 由来の low / standard / high。"
+        },
         "actual_pr_url": { "type": ["string", "null"] }
       },
       "additionalProperties": false
