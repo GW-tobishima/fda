@@ -1,9 +1,12 @@
 //! F4 比例ゲート: 変更の risk tier を判定する純ロジックと成果物出力。
 //!
 //! `assess_risk_tier` は scope パス群と delivery_policy（parsed）だけを見る純関数で、
-//! low / standard / high を返す。merge gate はこの tier を読み、low の run では
-//! forge_reviewer / design_qa の conditional 要求を「auto not_applicable（理由記録）」に
-//! 軽量化する（ゲートの種類は減らさない = fail-closed 維持）。
+//! low / standard / high を返す。緩和（forge_reviewer / design_qa の auto
+//! not_applicable）は `fda review` が review_agent_gate.json の既存契約
+//! （status=not_applicable + not_applicable_reason）として記録し、`fda merge` は
+//! `proportional_relaxation` による merge 時再検証（live 再計算 + ガバナンス・
+//! ハードガード）でその正当性を検証するだけにする（merge が独自にスキップ判定しない）。
+//! ゲートの種類は減らさない = fail-closed 維持。
 
 use serde::Serialize;
 use serde_json::Value;
@@ -97,6 +100,125 @@ pub(crate) fn assess_risk_tier(scope_paths: &[String], policy: &Value) -> RiskTi
         "一部の scope パスが low_risk_paths に一致しないため standard と判定しました".to_string()
     };
     RiskTier::new("standard", vec![reason], Vec::new())
+}
+
+/// 比例緩和の判定結果。review は生成に、merge は検証に使う（判定ロジックは単一）。
+#[derive(Debug, Clone)]
+pub(crate) struct ProportionalRelaxation {
+    /// forge_reviewer を not_applicable にしてよいか。
+    pub(crate) forge_reviewer: bool,
+    /// design_qa を not_applicable にしてよいか。
+    pub(crate) design_qa: bool,
+    /// 緩和適用時に記録する理由（"risk_tier=low: ..."）。
+    pub(crate) reason: Option<String>,
+    /// 緩和を却下した理由（mismatch / hard guard 等。補助情報）。
+    pub(crate) notes: Vec<String>,
+}
+
+impl ProportionalRelaxation {
+    fn denied(notes: Vec<String>) -> Self {
+        ProportionalRelaxation {
+            forge_reviewer: false,
+            design_qa: false,
+            reason: None,
+            notes,
+        }
+    }
+}
+
+/// governance-critical パス（比例ゲートのハードガード対象）。
+///
+/// これらの変更を含む PR では、low_risk_paths / risk tier の値に**関係なく**
+/// forge_reviewer の緩和を適用しない。この規則はコードにハードコードされており、
+/// delivery_policy.yaml では上書きできない（段階的統治弱体化の経路を遮断する）。
+pub(crate) fn is_governance_critical_path(path: &str) -> bool {
+    let normalized = path.replace('\\', "/").to_ascii_lowercase();
+    let normalized = normalized.trim_start_matches("./");
+    normalized.starts_with(".fda/")
+        || normalized.contains("/.fda/")
+        || normalized == "scripts/check_review_agent_gate.py"
+        || normalized == "scripts/check_architecture_boundaries.py"
+        || normalized.starts_with("src/application/merge")
+        || normalized.starts_with("src/application/review")
+        || normalized.starts_with("src/application/risk_tier")
+        || normalized.starts_with("src/application/policy")
+}
+
+/// merge 時再検証つきの比例緩和判定（TOCTOU / scope-drift 対策）。
+///
+/// 保存済み tier（risk_tier.json）を無検証で信頼せず、changed_files を
+/// `.fda/delivery_policy.yaml` の low_risk_paths で live 再計算し、
+/// **stored=low かつ live=low の両方が成立する場合のみ**緩和を許す。
+/// さらに governance-critical パスを含む場合は forge_reviewer の緩和を
+/// 却下する（ハードガード。design_qa は UI 無関係のため緩和可のまま）。
+pub(crate) fn proportional_relaxation(
+    store: &impl ArtifactStore,
+    repo_root: &Path,
+    stored_tier: Option<&str>,
+    changed_files: &[String],
+) -> ProportionalRelaxation {
+    if stored_tier != Some("low") {
+        return ProportionalRelaxation::denied(Vec::new());
+    }
+    let live = match load_delivery_policy(store, repo_root) {
+        Ok((policy, _)) => assess_risk_tier(changed_files, &policy),
+        Err(error) => {
+            return ProportionalRelaxation::denied(vec![format!(
+                "delivery_policy の読み込みに失敗したため緩和不適用: {error}"
+            )]);
+        }
+    };
+    let mut notes = Vec::new();
+    let governance: Vec<&str> = changed_files
+        .iter()
+        .filter(|path| is_governance_critical_path(path))
+        .map(String::as_str)
+        .collect();
+    if !governance.is_empty() {
+        notes.push(format!(
+            "governance-critical path を検出したため forge_reviewer は緩和不適用 (hard guard, YAML で上書き不可): {}",
+            governance.join(", ")
+        ));
+    }
+    if live.tier != "low" {
+        notes.push(format!(
+            "stored/live tier mismatch (stored=low, live={}): 緩和不適用 (standard 扱い)",
+            live.tier
+        ));
+        return ProportionalRelaxation::denied(notes);
+    }
+    let reason = format!(
+        "risk_tier=low: 全 changed files が delivery_policy.low_risk_paths に一致 (matched: {})",
+        live.matched_low_risk_paths.join(", ")
+    );
+    if !governance.is_empty() {
+        return ProportionalRelaxation {
+            forge_reviewer: false,
+            design_qa: true,
+            reason: Some(reason),
+            notes,
+        };
+    }
+    ProportionalRelaxation {
+        forge_reviewer: true,
+        design_qa: true,
+        reason: Some(reason),
+        notes,
+    }
+}
+
+/// artifact_dir の risk_tier.json から tier を読む（無ければ None）。
+pub(crate) fn stored_risk_tier(store: &impl ArtifactStore, artifact_dir: &Path) -> Option<String> {
+    let path = artifact_dir.join("risk_tier.json");
+    if !store.exists(&path) {
+        return None;
+    }
+    let body = store.read_text(&path).ok()?;
+    let value: Value = serde_json::from_str(&body).ok()?;
+    value
+        .get("tier")
+        .and_then(Value::as_str)
+        .map(str::to_string)
 }
 
 /// `fda implement --dry-run` で risk_tier.json を out_dir に生成する。
@@ -310,6 +432,8 @@ fn glob_match_inner(pattern: &[char], pi: usize, text: &[char], ti: usize) -> bo
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::infra::clock::system_unix_seconds;
+    use crate::infra::fs_store::FsArtifactStore;
     use serde_json::json;
 
     fn fda_policy() -> Value {
@@ -377,5 +501,86 @@ mod tests {
         ));
         assert!(!glob_match("docs/**", "src/lib.rs"));
         assert!(!glob_match("tests/**", "test.rs"));
+    }
+
+    #[test]
+    fn governance_critical_paths_are_hardcoded() {
+        assert!(is_governance_critical_path(".fda/delivery_policy.yaml"));
+        assert!(is_governance_critical_path(".fda/gates.yaml"));
+        assert!(is_governance_critical_path(
+            "scripts/check_review_agent_gate.py"
+        ));
+        assert!(is_governance_critical_path(
+            "scripts/check_architecture_boundaries.py"
+        ));
+        assert!(is_governance_critical_path("src/application/merge.rs"));
+        assert!(is_governance_critical_path("src/application/review.rs"));
+        assert!(is_governance_critical_path("src/application/risk_tier.rs"));
+        assert!(is_governance_critical_path("src/application/policy.rs"));
+        assert!(!is_governance_critical_path("docs/v1/work_protocol.md"));
+        assert!(!is_governance_critical_path("src/application/gc.rs"));
+    }
+
+    fn temp_repo_with_policy(name: &str, policy_body: &str) -> std::path::PathBuf {
+        let store = FsArtifactStore;
+        let unique = system_unix_seconds();
+        let repo = std::env::temp_dir().join(format!("{name}-{unique}"));
+        store.create_dir_all(&repo.join(".fda")).unwrap();
+        store
+            .write_text(&repo.join(".fda").join("delivery_policy.yaml"), policy_body)
+            .unwrap();
+        repo
+    }
+
+    #[test]
+    fn hard_guard_denies_forge_relaxation_even_when_policy_marks_fda_low_risk() {
+        // upstream 既定のように .fda/** を low_risk_paths に含む policy でも、
+        // governance-critical パスの forge_reviewer 緩和はコード側で却下される
+        // （YAML では上書き不可）。
+        let repo = temp_repo_with_policy(
+            "fda-risk-tier-hard-guard",
+            "delivery_policy:\n  low_risk_paths:\n    - docs/**\n    - .fda/**\n  human_required_for:\n    - merge_approval\n",
+        );
+        let changed = vec![".fda/gates.yaml".to_string()];
+        let relaxation = proportional_relaxation(&FsArtifactStore, &repo, Some("low"), &changed);
+        assert!(!relaxation.forge_reviewer);
+        assert!(relaxation.design_qa);
+        assert!(relaxation
+            .notes
+            .iter()
+            .any(|note| note.contains("governance-critical") && note.contains("hard guard")));
+    }
+
+    #[test]
+    fn stored_live_mismatch_denies_relaxation() {
+        let repo = temp_repo_with_policy(
+            "fda-risk-tier-mismatch",
+            "delivery_policy:\n  low_risk_paths:\n    - docs/**\n  human_required_for:\n    - merge_approval\n",
+        );
+        // 保存 tier は low だが、live の changed_files に範囲外 (src/) が混入。
+        let changed = vec!["docs/a.md".to_string(), "src/lib.rs".to_string()];
+        let relaxation = proportional_relaxation(&FsArtifactStore, &repo, Some("low"), &changed);
+        assert!(!relaxation.forge_reviewer);
+        assert!(!relaxation.design_qa);
+        assert!(relaxation
+            .notes
+            .iter()
+            .any(|note| note.contains("stored/live tier mismatch")));
+    }
+
+    #[test]
+    fn relaxation_applies_only_when_stored_and_live_are_both_low() {
+        let repo = temp_repo_with_policy(
+            "fda-risk-tier-relax-ok",
+            "delivery_policy:\n  low_risk_paths:\n    - docs/**\n  human_required_for:\n    - merge_approval\n",
+        );
+        let changed = vec!["docs/a.md".to_string()];
+        // stored 無し → 緩和不適用（fail-closed）。
+        let no_stored = proportional_relaxation(&FsArtifactStore, &repo, None, &changed);
+        assert!(!no_stored.forge_reviewer && !no_stored.design_qa);
+        // stored=low + live=low → 緩和適用、理由に risk_tier=low を含む。
+        let relaxed = proportional_relaxation(&FsArtifactStore, &repo, Some("low"), &changed);
+        assert!(relaxed.forge_reviewer && relaxed.design_qa);
+        assert!(relaxed.reason.as_deref().unwrap().contains("risk_tier=low"));
     }
 }

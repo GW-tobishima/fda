@@ -50,6 +50,9 @@ struct RunScanInput {
     has_validation_report: bool,
     ato_state_status: Option<String>,
     unresolved_decision_count: usize,
+    /// 壊れた JSON 等の読取エラー。scan 全体を abort せず、この run を
+    /// parse_error 候補として docket に報告する。
+    parse_errors: Vec<String>,
 }
 
 pub(crate) fn gc(config: &GcConfig) -> Result<GcResult, String> {
@@ -132,8 +135,25 @@ fn scan_run(
     let has_completion_receipt = store.exists(&run_dir.join("merge_receipt.json"))
         || store.exists(&run_dir.join("end_to_end_receipt.json"));
     let has_validation_report = store.exists(&run_dir.join("validation_report.json"));
-    let ato_state_status = read_ato_state_status(store, run_dir)?;
-    let unresolved_decision_count = unresolved_decision_count(store, run_dir)?;
+    // 壊れた JSON で scan 全体を abort しない: parse error はこの run の候補理由として
+    // 記録し、残りの run のスキャンを継続する（fail-soft、docket で人間へ報告）。
+    let mut parse_errors = Vec::new();
+    let ato_state_status = match read_ato_state_status(store, run_dir) {
+        Ok(status) => status,
+        Err(error) => {
+            parse_errors.push(format!("parse_error: ato_state_receipt.json ({error})"));
+            None
+        }
+    };
+    let unresolved_decision_count = match unresolved_decision_count(store, run_dir) {
+        Ok(count) => count,
+        Err(error) => {
+            parse_errors.push(format!(
+                "parse_error: human_decision_packet.json / decision_receipts.json ({error})"
+            ));
+            0
+        }
+    };
     Ok(RunScanInput {
         run: name.to_string(),
         mtime_unix,
@@ -141,15 +161,17 @@ fn scan_run(
         has_validation_report,
         ato_state_status,
         unresolved_decision_count,
+        parse_errors,
     })
 }
 
-/// 検出 4 種を純ロジックで評価する。候補でなければ None。
+/// 検出 4 種 + parse error を純ロジックで評価する。候補でなければ None。
 ///
 /// (a) stale かつ未完了 → archive（要人間）
 /// (b) validation_report.json 欠落 → resume
 /// (c) ato_state_receipt.json status が succeeded 以外 → resume
 /// (d) 未解決 decision かつ stale → answer_decision（要人間）
+/// (e) 壊れた JSON（parse_error）→ resume（要人間）
 fn evaluate_run(input: &RunScanInput, now_unix: u64, max_age_days: u64) -> Option<GcCandidate> {
     let threshold_seconds = max_age_days.saturating_mul(SECONDS_PER_DAY);
     let age_seconds = now_unix.saturating_sub(input.mtime_unix);
@@ -158,6 +180,12 @@ fn evaluate_run(input: &RunScanInput, now_unix: u64, max_age_days: u64) -> Optio
     let mut reasons = Vec::new();
     let mut recommendation = "resume";
     let mut needs_human = false;
+
+    // (e) parse error は内容判定に使えないため人間へ報告する。
+    if !input.parse_errors.is_empty() {
+        reasons.extend(input.parse_errors.iter().cloned());
+        needs_human = true;
+    }
 
     // (a)
     if is_stale && !input.has_completion_receipt {
@@ -330,6 +358,7 @@ mod tests {
             has_validation_report: true,
             ato_state_status: Some("succeeded".to_string()),
             unresolved_decision_count: 0,
+            parse_errors: Vec::new(),
         }
     }
 
@@ -383,6 +412,94 @@ mod tests {
     fn clean_run_is_not_a_candidate() {
         let input = base_input("run-clean");
         assert!(evaluate_run(&input, 100 * SECONDS_PER_DAY, 30).is_none());
+    }
+
+    #[test]
+    fn parse_error_is_reported_without_aborting() {
+        let mut input = base_input("run-broken");
+        input.parse_errors = vec!["parse_error: ato_state_receipt.json (bad json)".to_string()];
+        let candidate = evaluate_run(&input, 0, 30).unwrap();
+        assert_eq!(candidate.recommendation, "resume");
+        assert!(candidate.needs_human);
+        assert!(candidate.reasons.iter().any(|r| r.contains("parse_error")));
+    }
+
+    #[test]
+    fn broken_json_run_does_not_abort_scan_of_other_runs() {
+        let store = FsArtifactStore;
+        let repo = temp_dir("fda-gc-broken-json");
+        let runs_root = repo.join("artifacts").join("runs");
+
+        // 壊れた JSON を含む run（それ以外は完了扱い）。
+        let broken = runs_root.join("run-broken");
+        store.create_dir_all(&broken).unwrap();
+        store
+            .write_json(
+                &broken.join("merge_receipt.json"),
+                &json!({"status": "merge_ready"}),
+            )
+            .unwrap();
+        store
+            .write_json(
+                &broken.join("validation_report.json"),
+                &json!({"verdict": "pass"}),
+            )
+            .unwrap();
+        store
+            .write_text(&broken.join("ato_state_receipt.json"), "{ this is not json")
+            .unwrap();
+
+        // (c) を持つ通常の検出対象 run。
+        let ato_failed = runs_root.join("run-ato-failed");
+        store.create_dir_all(&ato_failed).unwrap();
+        store
+            .write_json(
+                &ato_failed.join("merge_receipt.json"),
+                &json!({"status": "merge_ready"}),
+            )
+            .unwrap();
+        store
+            .write_json(
+                &ato_failed.join("validation_report.json"),
+                &json!({"verdict": "pass"}),
+            )
+            .unwrap();
+        store
+            .write_json(
+                &ato_failed.join("ato_state_receipt.json"),
+                &json!({"status": "failed"}),
+            )
+            .unwrap();
+
+        let config = GcConfig {
+            repo_root: repo.clone(),
+            artifacts_root: PathBuf::from("artifacts/runs"),
+            max_age_days: 30,
+            print_json: false,
+        };
+        let result = gc_with(&config, &store, system_unix_seconds()).unwrap();
+
+        // scan は abort せず両 run を報告する。
+        assert_eq!(result.scanned_runs, 2);
+        let broken_candidate = result
+            .candidates
+            .iter()
+            .find(|c| c.run == "run-broken")
+            .expect("broken run must be a candidate");
+        assert_eq!(broken_candidate.recommendation, "resume");
+        assert!(broken_candidate.needs_human);
+        assert!(broken_candidate
+            .reasons
+            .iter()
+            .any(|r| r.contains("parse_error") && r.contains("ato_state_receipt.json")));
+        assert!(result.candidates.iter().any(|c| c.run == "run-ato-failed"));
+        // 壊れたファイル自体は変更されない。
+        assert_eq!(
+            store
+                .read_text(&broken.join("ato_state_receipt.json"))
+                .unwrap(),
+            "{ this is not json"
+        );
     }
 
     #[test]

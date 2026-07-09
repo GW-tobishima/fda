@@ -53,6 +53,10 @@ pub(crate) struct ReviewGateStatus {
     pub(crate) design_qa_required: bool,
     pub(crate) design_qa_status: String,
     pub(crate) design_qa_evidence_links: Vec<String>,
+    /// tier=low 緩和で forge_reviewer を not_applicable にした理由。
+    pub(crate) forge_reviewer_relaxed_reason: Option<String>,
+    /// tier=low 緩和で design_qa を not_applicable にした理由。
+    pub(crate) design_qa_relaxed_reason: Option<String>,
 }
 
 impl ReviewGateStatus {
@@ -120,7 +124,7 @@ pub(crate) fn review(config: &ReviewConfig) -> Result<ReviewResult, String> {
     }
 
     let guard = implement_human_decision_guard(&artifact_dir)?;
-    let gate = review_gate_status_from_artifacts(&artifact_dir, target_repo_exists)?;
+    let gate = review_gate_status_from_artifacts(&artifact_dir, &repo_root, target_repo_exists)?;
     let human_clear =
         guard.unresolved_decision_ids.is_empty() && guard.non_approval_decision_ids.is_empty();
     let review_ready = human_clear && gate.is_pass() && target_repo_exists;
@@ -145,6 +149,8 @@ pub(crate) fn review(config: &ReviewConfig) -> Result<ReviewResult, String> {
         design_qa_required: gate.design_qa_required,
         design_qa_status: &gate.design_qa_status,
         design_qa_evidence_links: &gate.design_qa_evidence_links,
+        forge_reviewer_relaxed_reason: gate.forge_reviewer_relaxed_reason.as_deref(),
+        design_qa_relaxed_reason: gate.design_qa_relaxed_reason.as_deref(),
     };
     let guard_view = HumanDecisionGuardView {
         unresolved_decision_ids: &guard.unresolved_decision_ids,
@@ -379,6 +385,7 @@ pub(crate) fn review_runtime_context(artifact_dir: &Path) -> RuntimeContext {
 
 fn review_gate_status_from_artifacts(
     artifact_dir: &Path,
+    repo_root: &Path,
     target_repo_exists: bool,
 ) -> Result<ReviewGateStatus, String> {
     let implementation_path = artifact_dir.join("implementation_receipt.json");
@@ -462,7 +469,21 @@ fn review_gate_status_from_artifacts(
     issues.extend(pr_reviewer.issues.clone());
     evidence_links.extend(pr_reviewer.evidence_links.clone());
 
-    let forge_reviewer_required = changed_files.iter().any(|path| requires_forge_review(path));
+    // F4 比例ゲート: tier=low かつ非ガバナンスの場合、conditional reviewer 要求を
+    // review_agent_gate.json の既存契約 (status=not_applicable + not_applicable_reason)
+    // として記録する。merge 側は同じ判定を live 再計算して検証する。
+    let store = FsArtifactStore;
+    let risk_tier = crate::application::risk_tier::stored_risk_tier(&store, artifact_dir);
+    let relaxation = crate::application::risk_tier::proportional_relaxation(
+        &store,
+        repo_root,
+        risk_tier.as_deref(),
+        &changed_files,
+    );
+
+    let forge_paths_triggered = changed_files.iter().any(|path| requires_forge_review(path));
+    let forge_relaxed = forge_paths_triggered && relaxation.forge_reviewer;
+    let forge_reviewer_required = forge_paths_triggered && !forge_relaxed;
     let forge_reviewer = reviewer_receipt_status_any(
         artifact_dir,
         "forge_reviewer",
@@ -479,7 +500,9 @@ fn review_gate_status_from_artifacts(
     issues.extend(forge_reviewer.issues.clone());
     evidence_links.extend(forge_reviewer.evidence_links.clone());
 
-    let design_qa_required = changed_files.iter().any(|path| requires_design_qa(path));
+    let design_paths_triggered = changed_files.iter().any(|path| requires_design_qa(path));
+    let design_relaxed = design_paths_triggered && relaxation.design_qa;
+    let design_qa_required = design_paths_triggered && !design_relaxed;
     let design_qa = reviewer_receipt_status(
         artifact_dir,
         "design_qa_receipt.json",
@@ -490,6 +513,14 @@ fn review_gate_status_from_artifacts(
     )?;
     issues.extend(design_qa.issues.clone());
     evidence_links.extend(design_qa.evidence_links.clone());
+
+    let forge_reviewer_relaxed_reason = (forge_relaxed
+        && forge_reviewer.status == "not_applicable")
+        .then(|| relaxation.reason.clone())
+        .flatten();
+    let design_qa_relaxed_reason = (design_relaxed && design_qa.status == "not_applicable")
+        .then(|| relaxation.reason.clone())
+        .flatten();
 
     let status = if issues.is_empty() {
         "ready".to_string()
@@ -511,6 +542,8 @@ fn review_gate_status_from_artifacts(
         design_qa_required,
         design_qa_status: design_qa.status,
         design_qa_evidence_links: design_qa.evidence_links,
+        forge_reviewer_relaxed_reason,
+        design_qa_relaxed_reason,
     })
 }
 
