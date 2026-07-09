@@ -372,7 +372,9 @@ fn merge_approval_granted(artifact_dir: &Path) -> Result<bool, String> {
         }))
 }
 
-fn is_merge_approval_decision(decision: &HumanDecisionSummary) -> bool {
+/// decision が merge approval を扱うものかの判定。epic 継続ループ（epic.rs）の
+/// resume command 解決でも同一基準を使う（drift 防止のため単一実装）。
+pub(crate) fn is_merge_approval_decision(decision: &HumanDecisionSummary) -> bool {
     let fields = [
         decision.decision_id.as_str(),
         decision.summary.as_str(),

@@ -1,5 +1,6 @@
 {
   "schema_version": "fda.epic_progress_state.v1",
+  "advisory": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない",
   "epic_id": "EPIC-FORGE-DASHBOARD-001",
   "generated_at_unix": 1783555200,
   "prs": [
@@ -39,5 +40,9 @@
     "blocked": 0,
     "waiting_human": 0,
     "not_started": 1
-  }
+  },
+  "scan_notes": [
+    "fda-start-1783550009/external_pr_receipt.json: epic_id `EPIC-OTHER-001` が現在の epic `EPIC-FORGE-DASHBOARD-001` と一致しないため状態根拠から除外しました"
+  ],
+  "scan_errors": []
 }
