@@ -41,13 +41,33 @@ ATO / GitHub API の live 取得。
 ┌ ヘッダ: FDA Mission Control / repo 名 / 生成時刻 / [read-only projection] バッジ
 ├ サマリ行: 実行中 run 数 / 未解決 Human Decision 数 / AI Repair 中 / merge 待ち
 ├ ① Decision Inbox（人間レーン・最優先）
-│    run / 判断ID / 要約 / 期限ゲート(required_before) / 推奨オプション /
-│    resume command（コピー用 <code>）
+│    run / 判断ID / 判断 type（小表示） / 要約 / 期限ゲート(required_before) /
+│    推奨オプション / resume command（コピー用 <code>） /
+│    precedent（過去の同 type + 署名類似判断の折りたたみ。答え・誰が・帰結・一致理由） /
+│    適用可能な委任契約の outline バッジ「DC-xxx 適用可」+ 常時可視「（提案・自動適用なし）」
 ├ ② AI Repair Lane（AIレーン）
 │    run / repair状態 / 失敗分類 / retry n/limit / 次コマンド
-├ ③ Runs（run カード一覧。判断待ち → repair → エラー → 前進可能 → その他 → 完了 の優先順）
+├ ③ Epic 進捗（epic_progress_state.json 最新 1 件の投影。無ければセクション非表示）
+│    冒頭に advisory（非権威の明文）を必ず表示。PR ごとの status バッジ列 + summary。
+│    目的: Epic 全体の進捗を 1 目で見る（実装開始許可・merge 承認・merge の証明ではない）
+├ ④ Runs（run カード一覧。判断待ち → repair → エラー → 前進可能 → その他 → 完了 の優先順）
+│    アクティブな run（判断待ち・repair・エラー・前進可能）のみ常時表示。
+│    完了・その他は「完了・その他の run (N件)」の折りたたみ（既定閉）に送り、
+│    下段の道場・庭師への到達距離を短くする。
 │    phase バッジ / phase 理由 / QA・merge 状態 / PR リンク /
 │    次アクション / 主要成果物へのリンク（/artifact 経由）
+├ ⑤ 道場（判断の振り返り）
+│    回答済み判断 → その後（run の帰結）の時系列テーブル（新しい順・上限 50 件。
+│    超過時は冒頭に「最新 N 件を表示中（全 M 件）」を明示）。
+│    目的: 人間が自分の判断の帰結と向き合い判断力を育てる（良い判断も痛い判断も同列）。
+│    帰結は判断単位ではなく run 単位の投影である（因果を主張しない）。
+│    同一 run に複数判断がある場合は「run 内 N 判断で共通」と各行に注記する。
+│    契約適用は「authority + 契約適用 DC-xxx（塗りバッジ）」で表示し、
+│    inbox の「適用可」outline バッジと視覚区別する（生の decided_by 文字列は出さない）。
+├ ⑥ 庭師（棚卸し docket）
+│    gc_docket.json があれば候補テーブル（run / 理由 / 推奨 / needs_human バッジ）。
+│    無ければ「docket なし（fda gc で生成）」。fda gc は削除・変更をしない旨を常に併記。
+│    目的: stale / 不整合 run の例外だけを人間に提示する
 └ フッタ: 正本の所在（artifacts・ATO・GitHub）と「UI からは何も変更できない」注記
 ```
 
@@ -60,6 +80,23 @@ ATO / GitHub API の live 取得。
 | ready_for_* / merge_ready | 青 | 次コマンドで前進できる |
 | merged / *_complete | 緑 | 完了 |
 | blocked / adapter_unavailable | 灰 + 赤枠 | fail-closed 停止。理由を必ず併記 |
+
+道場・precedent の帰結（outcome）バッジの意味論（phase バッジとは別系統。
+run 単位の帰結を表し、判断単位の因果を主張しない）:
+
+| outcome ラベル | 色 | 意味 |
+|---|---|---|
+| merged | 緑 | run は merge 済み（github_merge_receipt の succeeded / merge_executed で判定） |
+| merge_ready | 青 | merge gate 通過・人間の merge 承認待ち |
+| human_approval | 琥珀 | merge gate が human_approval_required |
+| blocked | 赤 | QA failed または merge gate blocked / adapter_unavailable |
+| repair | 紫（専用色 `--outcome-repair`・ライト/ダーク両対応） | run で repair が発生した「過去の痛い帰結」。琥珀（今の人間待ち）と視覚分離する |
+| pending | 灰 | まだ帰結が出ていない |
+
+precedent の一致判定は「decision type 一致 + summary 正規化署名の完全一致 / 接頭辞一致」で、
+一致理由（完全一致 / 接頭辞一致）を各 precedent に小表示する。
+既知の限界: 同型の定型文 summary（テンプレート文言）は署名が常時一致するため、
+precedent は根拠（type + 署名）を添えた参考情報であり、判断の代行・自動適用ではない。
 
 アクセシビリティ / 実装制約: 外部 CDN・フォント・JS ライブラリなし（オフライン完結）、
 システムフォント、`prefers-color-scheme` でライト/ダーク両対応、日本語 UI。
