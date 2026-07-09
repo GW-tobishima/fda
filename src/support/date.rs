@@ -2,7 +2,8 @@
 //!
 //! application 層は `SystemTime` / `UNIX_EPOCH` を直接使えない（architecture gate）。
 //! そのため「UNIX 秒 → YYYY-MM-DD」への変換だけをここに集約し、delegation contract の
-//! `expires` 比較（`expires >= today`）に使う。現在時刻の取得自体は infra clock 経由で行い、
+//! `expires` 比較（UTC 暦日基準の strict 比較。`today < expires` のときのみ有効＝
+//! expires 当日から無効）に使う。現在時刻の取得自体は infra clock 経由で行い、
 //! ここには純粋な暦計算しか置かない。
 
 /// UNIX 秒（UTC）を `YYYY-MM-DD` 文字列へ変換する。

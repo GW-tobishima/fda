@@ -1,0 +1,27 @@
+# delegation_contract.yaml の書式例（EXAMPLE — 効力を持たない）
+#
+# - これは**書式例であり、いかなる効力も持たない**。このファイルを置いても契約は成立しない。
+# - `.fda/delegation_contract.yaml` に**人間が自らの手で編集・追記する行為が「制定」**である。
+#   AI は `.fda/delegation_contract.yaml` を作成・編集してはならない
+#   （AI に許されるのは、この example の提示と `fda policy propose` による提案まで）。
+# - match_summary_keywords は**全キーワードの AND 一致**（1 つでも summary に含まれなければ
+#   適用されない）。`fda start` の定型文言ではなく、**対象判断を特定できる具体語
+#   （4 文字以上）**を書くこと。包括委任（実質すべての将来判断に合致する語）は禁止。
+# - expires は必須。**UTC 暦日基準で expires 当日から無効**（today < expires のときのみ有効）。
+# - 適用は `fda decide <ID> --by-contract <rule_id>` の明示指定時のみ。条件を 1 つでも
+#   満たさなければ fail-closed で人間判断へ戻る。自動適用はされない。
+#
+# 以下は架空の狭い例: 「docs のみの dependabot 変更」に限定した risk_approval の委任。
+delegation_contract:
+  - rule_id: DC-001
+    decision_type: risk_approval
+    match_summary_keywords:
+      - "docsのみの変更"
+      - "dependabot"
+    answer: accept_risk
+    authority: "<承認権限を持つ人間の名前>"
+    enacted_from:
+      - "artifacts/runs/<run-id> <decision-id>"
+      - "artifacts/runs/<run-id> <decision-id>"
+    expires: "2026-12-31"
+    note: 書式例（効力なし）。実契約は人間が .fda/delegation_contract.yaml へ自ら記述する。

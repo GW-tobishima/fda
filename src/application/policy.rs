@@ -5,27 +5,37 @@
 //! 同型判断を「委任契約の候補」として `policy_proposal.{json,md}` に**提案するだけ**である。
 //! **`.fda` へは絶対に書かない**。契約の制定は人間が `.fda/delegation_contract.yaml` を
 //! 編集・追記する行為のみで、AI は提案までしか行わない（自己制定・自動適用の禁止）。
+//! **AI は `.fda/delegation_contract.yaml` を作成・編集してはならない**（AI に許されるのは
+//! `docs/standards/fda-v1/examples/delegation_contract.example.yaml` の提示と本コマンドの
+//! 提案出力まで）。
 //!
 //! 併せて delegation contract の読取・照合ヘルパ（`fda decide --by-contract` /
 //! `fda status` の適用可ヒント）を提供する。適用は明示指定時だけ、かつ fail-closed。
+//! keyword は**全キーワードの AND 一致**、expires は **UTC 暦日基準で当日から無効**
+//! （today < expires のときのみ有効）。
 
 use serde::Serialize;
 use serde_json::{json, Value};
 use std::collections::BTreeMap;
-use std::path::Path;
+use std::env;
+use std::path::{Path, PathBuf};
 
 use crate::application::decisions::{
     read_decision_receipts, read_json_value, recorded_decision_receipts_from_packet, value_string,
     value_string_array,
 };
-use crate::application::ports::ArtifactStore;
+use crate::application::ports::{ArtifactStore, ArtifactValidator};
 use crate::cli::args::PolicyConfig;
 use crate::infra::clock::system_unix_seconds;
 use crate::infra::fs_store::{list_dir_names, FsArtifactStore};
+use crate::infra::json_schema::JsonSchemaArtifactValidator;
 use crate::support::date::is_valid_ymd;
 use crate::support::paths::{display_path, resolve_path};
 
 const POLICY_PROPOSAL_SCHEMA_VERSION: &str = "fda.policy_proposal.v1";
+/// policy_proposal.json のランタイム自己検証に使う schema の相対パス。
+const POLICY_PROPOSAL_SCHEMA_RELATIVE: &str =
+    "docs/standards/delivery-artifacts-v0/schemas/policy_proposal.schema.json";
 /// 正規化署名で先頭から見る最大文字数（記号・数字を除去後）。素朴実装で十分。
 const SIGNATURE_PREFIX_CHARS: usize = 40;
 /// 1 候補に載せる代表 summary（keyword 候補）の最大件数。
@@ -146,16 +156,16 @@ fn policy_propose_with(
         )
     })?;
     let proposal_path = out_dir.join("policy_proposal.json");
-    store.write_json(
-        &proposal_path,
-        &proposal_value(
-            now_unix,
-            &artifacts_root_display,
-            config.min_occurrences,
-            scanned_runs,
-            &candidates,
-        ),
-    )?;
+    let proposal = proposal_value(
+        now_unix,
+        &artifacts_root_display,
+        config.min_occurrences,
+        scanned_runs,
+        &candidates,
+    );
+    store.write_json(&proposal_path, &proposal)?;
+    // 出力直後に自身の policy_proposal.json を schema でランタイム自己検証する（fail-closed）。
+    validate_proposal_against_schema(store, &repo_root, &proposal)?;
     let proposal_markdown_path = out_dir.join("policy_proposal.md");
     store.write_text(
         &proposal_markdown_path,
@@ -251,6 +261,70 @@ fn accumulate_run(
     Ok(())
 }
 
+/// policy_proposal.schema.json を解決する。propose は target repo でも動くため、
+/// profile.rs の schema 探索と同様に env → repo_root → cwd → CARGO_MANIFEST_DIR の順で探す。
+/// 見つからなければ fail-closed（自己検証できない提案は出力成功にしない）。
+fn resolve_policy_proposal_schema(
+    store: &impl ArtifactStore,
+    repo_root: &Path,
+) -> Result<PathBuf, String> {
+    let mut candidates: Vec<PathBuf> = Vec::new();
+    for variable in ["FDA_SCHEMA_REPO_ROOT", "FDA_REPO_ROOT"] {
+        if let Some(root) = env::var_os(variable).map(PathBuf::from) {
+            candidates.push(root.join(POLICY_PROPOSAL_SCHEMA_RELATIVE));
+        }
+    }
+    candidates.push(repo_root.join(POLICY_PROPOSAL_SCHEMA_RELATIVE));
+    if let Ok(current_dir) = env::current_dir() {
+        candidates.push(current_dir.join(POLICY_PROPOSAL_SCHEMA_RELATIVE));
+    }
+    candidates
+        .push(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(POLICY_PROPOSAL_SCHEMA_RELATIVE));
+    candidates
+        .into_iter()
+        .find(|path| store.exists(path))
+        .ok_or_else(|| {
+            format!(
+                "policy_proposal schema が見つかりません（fail-closed）: {POLICY_PROPOSAL_SCHEMA_RELATIVE}"
+            )
+        })
+}
+
+/// 出力した policy_proposal.json をランタイムで schema 自己検証する（LOW 指摘: schema 配線）。
+/// 違反があれば Err（コマンドは fail）。
+fn validate_proposal_against_schema(
+    store: &impl ArtifactStore,
+    repo_root: &Path,
+    proposal: &Value,
+) -> Result<(), String> {
+    let schema_path = resolve_policy_proposal_schema(store, repo_root)?;
+    let schema_json = read_json_value(store, &schema_path)?;
+    let validator = JsonSchemaArtifactValidator;
+    validator
+        .compile_schema(&schema_json)
+        .map_err(|error| format!("policy_proposal schema compile failed: {}", error.message))?;
+    let errors = validator
+        .validate_json_schema(&schema_json, proposal)
+        .map_err(|error| {
+            format!(
+                "policy_proposal schema validation failed: {}",
+                error.message
+            )
+        })?;
+    if errors.is_empty() {
+        return Ok(());
+    }
+    Err(format!(
+        "policy_proposal.json が schema ({}) に違反しています: {}",
+        display_path(repo_root, &schema_path),
+        errors
+            .iter()
+            .map(|error| error.message.clone())
+            .collect::<Vec<_>>()
+            .join("; ")
+    ))
+}
+
 /// 記号・数字・空白を除去し、残った文字（英字・CJK 等）の先頭 N 文字を署名にする素朴実装。
 fn normalize_summary_signature(summary: &str) -> String {
     summary
@@ -309,8 +383,15 @@ fn proposal_markdown(
         "**制定は人間が下記 YAML スニペットを `.fda/delegation_contract.yaml` へ編集・追記する行為のみです**\n",
     );
     body.push_str(
-        "（`expires` 必須・`authority` は承認権限を持つ人間を記入。AI は制定・自動適用をしません）。\n\n",
+        "（`expires` 必須・`authority` は承認権限を持つ人間を記入。AI は制定・自動適用をしません）。\n",
     );
+    body.push_str(
+        "**match_summary_keywords は全キーワードの AND 一致です。** 下記スニペットの keywords は\n",
+    );
+    body.push_str(
+        "代表 summary の引用にすぎないため、そのまま使わず**対象判断を特定できる具体語（4 文字以上）へ\n",
+    );
+    body.push_str("人間が置き換えて**ください（定型文言による包括委任の禁止）。\n\n");
 
     if candidates.is_empty() {
         body.push_str(&format!(
@@ -346,7 +427,9 @@ fn candidate_yaml_snippet(candidate: &PolicyCandidate) -> String {
         "    decision_type: {}\n",
         yaml_double_quote(&candidate.decision_type)
     ));
-    snippet.push_str("    match_summary_keywords:\n");
+    snippet.push_str(
+        "    match_summary_keywords: # AND 一致。具体語（4 文字以上）へ人間が置き換えること\n",
+    );
     for keyword in &candidate.match_summary_keywords {
         snippet.push_str(&format!("      - {}\n", yaml_double_quote(keyword)));
     }
@@ -424,6 +507,9 @@ pub(crate) fn read_delegation_contract_rules(
 /// `fda decide --by-contract <rule_id>` の評価。全条件を満たす場合のみ Ok。
 /// 1 つでも満たさなければ、人間判断へ戻す明示メッセージ付きの Err を返す（fail-closed）。
 /// 他ルールが不正でも、対象 rule のみを見るため巻き込みはしない。
+///
+/// - keyword は**全キーワードの AND 一致**（過剰一般化への機械的ガード。security_qa 指摘）。
+/// - expires は **UTC 暦日基準で当日から無効**（today < expires のときのみ有効）。
 pub(crate) fn evaluate_contract_for_decision(
     rules: &[Value],
     rule_id: &str,
@@ -473,19 +559,21 @@ pub(crate) fn evaluate_contract_for_decision(
             ),
         ));
     }
+    // AND 一致: 全キーワードが summary に含まれる場合のみ適用（空キーワードは常に不一致 = fail-closed）。
     if !keywords
         .iter()
-        .any(|keyword| !keyword.is_empty() && decision_summary.contains(keyword.as_str()))
+        .all(|keyword| !keyword.is_empty() && decision_summary.contains(keyword.as_str()))
     {
         return Err(reject(
             rule_id,
             decision_id,
-            "match_summary_keywords のいずれも対象判断の summary に含まれません",
+            "match_summary_keywords の全キーワード（AND 一致）が対象判断の summary に含まれていません",
         ));
     }
-    if expires.as_str() < today_ymd {
+    // strict 比較: expires 当日から失効（UTC 暦日基準）。
+    if expires.as_str() <= today_ymd {
         return Err(format!(
-            "{rule_id} は expires ({expires}) 切れのため適用できません。fda decide {decision_id} --answer <答え> で人間が回答してください。"
+            "{rule_id} は expires ({expires}) 切れのため適用できません（UTC 暦日基準・expires 当日から無効）。fda decide {decision_id} --answer <答え> で人間が回答してください。"
         ));
     }
     Ok(ContractApplication {
@@ -540,13 +628,16 @@ fn rule_applies(
     let Some(expires) = value_string(rule, "expires") else {
         return false;
     };
-    if !is_valid_ymd(&expires) || expires.as_str() < today_ymd {
+    // strict 比較: expires 当日から失効（UTC 暦日基準）。
+    if !is_valid_ymd(&expires) || expires.as_str() <= today_ymd {
         return false;
     }
     let keywords = value_string_array(rule, "match_summary_keywords");
-    keywords
-        .iter()
-        .any(|keyword| !keyword.is_empty() && decision_summary.contains(keyword.as_str()))
+    // AND 一致: 全キーワードが summary に含まれる場合のみ「適用可」ヒントを出す。
+    !keywords.is_empty()
+        && keywords
+            .iter()
+            .all(|keyword| !keyword.is_empty() && decision_summary.contains(keyword.as_str()))
 }
 
 #[cfg(test)]
@@ -742,6 +833,38 @@ mod tests {
     }
 
     #[test]
+    fn contract_rejected_when_only_some_keywords_match() {
+        // AND 一致: 契約は 2 keyword を持つが、summary には 1 語しか含まれない → 適用拒否。
+        let err = evaluate_contract_for_decision(
+            &contract_rules(),
+            "DC-001",
+            "HD-FDA-001",
+            "spec_decision",
+            "Scope In / Scope Out だけを含み Intake の正の本という語は含まない判断",
+            "2026-07-09",
+        )
+        .unwrap_err();
+        assert!(err.contains("AND"));
+        assert!(err.contains("fda decide HD-FDA-001 --answer"));
+    }
+
+    #[test]
+    fn contract_rejected_on_expiry_boundary_day() {
+        // strict 比較: expires 当日（today == expires）から失効（UTC 暦日基準）。
+        let err = evaluate_contract_for_decision(
+            &contract_rules(),
+            "DC-001",
+            "HD-FDA-001",
+            "spec_decision",
+            SUMMARY,
+            "2026-10-01",
+        )
+        .unwrap_err();
+        assert!(err.contains("expires"));
+        assert!(err.contains("当日から無効"));
+    }
+
+    #[test]
     fn contract_rejected_when_rule_missing() {
         let err = evaluate_contract_for_decision(
             &contract_rules(),
@@ -759,8 +882,39 @@ mod tests {
     fn applicable_rule_ids_lists_valid_rule_and_skips_expired() {
         let ids = applicable_rule_ids(&contract_rules(), "spec_decision", SUMMARY, "2026-07-09");
         assert_eq!(ids, vec!["DC-001".to_string()]);
+        // 境界日（today == expires）もヒント対象外（strict・当日から失効）。
+        let boundary =
+            applicable_rule_ids(&contract_rules(), "spec_decision", SUMMARY, "2026-10-01");
+        assert!(boundary.is_empty());
         let none = applicable_rule_ids(&contract_rules(), "spec_decision", SUMMARY, "2026-10-02");
         assert!(none.is_empty());
+        // AND 一致: 1 語しか一致しない summary はヒント対象外。
+        let partial = applicable_rule_ids(
+            &contract_rules(),
+            "spec_decision",
+            "Scope In / Scope Out のみ含む判断",
+            "2026-07-09",
+        );
+        assert!(partial.is_empty());
+    }
+
+    #[test]
+    fn proposal_json_is_schema_validated_at_runtime() {
+        // 正常系: propose の出力は schema 検証を通過して pass になる
+        // （propose 内で fail-closed 検証済み。ここでは候補ありの出力で明示確認）。
+        let repo = temp_dir("fda-policy-schema-wire");
+        let runs = repo.join("artifacts").join("runs");
+        for run in ["run-a", "run-b", "run-c"] {
+            write_same_type_decision(&runs, run, "approve_scope");
+        }
+        let result = propose(&repo, 3);
+        assert_eq!(result.verdict, "pass");
+        assert_eq!(result.candidate_count, 1);
+
+        // 異常系: schema 違反の値（必須フィールド欠落）は Err（fail-closed）。
+        let broken = json!({"schema_version": "fda.policy_proposal.v1"});
+        let err = validate_proposal_against_schema(&FsArtifactStore, &repo, &broken).unwrap_err();
+        assert!(err.contains("schema"));
     }
 
     #[test]
