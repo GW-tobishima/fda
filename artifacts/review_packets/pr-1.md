@@ -144,3 +144,9 @@ MERGE_APPROVAL: not_granted
   review packet）が同ディレクトリに未追跡ファイルとして存在する。本タスクのスコープ外のため変更していないが、
   PR #1 の GitHub merge フローとは矛盾する記述（`HUMAN_DECISIONS_REQUIRED` が「承認済み」となっている）を
   含むため、混同しないよう注意。本 packet（`pr-1.md`）が PR #1 の正本である。
+
+## ATO_TRACE
+
+- ATO Task Key: fda-v1-5-20260708
+- ATO Run ID: run_01KX22MBQ3RBXFX0F4Y5HWZB8H
+- Epic: EPIC-FDA-V1-5 / planned_pr_id: PR-V15-001
