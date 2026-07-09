@@ -1,0 +1,29 @@
+{
+  "schema_version": "fda.security_qa_receipt.v0",
+  "receipt_id": "receipt-security-qa-pr-v15-005",
+  "role": "security_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-005",
+  "reviewed_planned_pr_id": "PR-V15-005",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/6",
+  "reviewed_commits": ["9002395", "204de96", "320cdeb"],
+  "verdict": "pass",
+  "findings": [
+    "low(non-blocking, 設計上のトレードオフとして記録): 新セクション（道場 / 庭師 / Epic 進捗）は既存 `/api/state.json`（read-only, 127.0.0.1 bind）に判断履歴（decision_journal: 誰が・何を・いつ答えたか、最大50件）を追加で集約する。閲覧できる者に見える判断履歴の範囲が広がるトレードオフであり、`fda ui` 既存の read-only projection 原則（書き込みエンドポイント無し・127.0.0.1 のみ bind）の範囲内だが、走査コスト（全 run の decision_receipts.json 読込）は表示上限（上限50）とは独立して発生するため、run 数が非常に多い環境では走査コスト自体の再評価が将来必要になり得る。"
+  ],
+  "evidence": [
+    "grep -n escape_html src/rendering/mission_control.rs => decision_journal（summary/answer/authority/type）、precedent（run/decision_id/answer/一致理由）、gc_docket（run/reasons/recommendation）、epic_progress（advisory/title/status）の新規描画経路が全て escape_html を経由することを確認（生 HTML 注入経路なし）",
+    "cargo test --lib rendering::mission_control::tests::page_escapes_html_in_new_sections => pass（decision_journal.summary / gc_docket.candidates[].reasons / decision_inbox.precedents[].answer への <script>/<img>/<b> 注入がいずれもエスケープされることを確認）",
+    "git show 204de96 -- src/rendering/mission_control.rs docs/v1/mission_control_uiux.md（run 単位帰結の因果非主張の明記、advisory の非権威明文の UI 投影）",
+        "git grep -n \"fn \\(post\\|put\\|delete\\|patch\\)\" src/application/ui.rs => 該当なし（`fda ui` に書き込みハンドラが追加されていないことを確認、既存 GET / と GET /api/state.json のみ）",
+    "cargo run -q -- validate-artifacts => 76 passed, 0 failed, 44 skipped",
+    "cargo fmt --all -- --check => clean"
+  ],
+  "summary": "本 PR（F3 道場 UI）は read-only projection の追加のみで書き込みエンドポイントは無い。新規描画対象（decision_journal / precedent / gc_docket / epic_progress）は全経路が escape_html を通ることを確認し、XSS 注入経路は見当たらない。low 1 件（`/api/state.json` への判断履歴集約は閲覧範囲を広げるトレードオフであり、走査コストは表示上限と独立に発生する）を non-blocking の設計上のトレードオフとして記録し、pass 判定を維持する。repair commit 204de96・polish commit 320cdeb 反映後の再検証でも回帰なし（cargo test --lib 265 passed、validate-artifacts 76 passed）。",
+  "generated_at_unix_seconds": 1783567900
+}

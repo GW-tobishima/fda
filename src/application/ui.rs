@@ -1,12 +1,29 @@
 use serde_json::{json, Value};
-use std::path::PathBuf;
+use std::collections::BTreeMap;
+use std::path::{Path, PathBuf};
 
+use crate::application::decisions::{
+    decision_summaries_from_packet, decision_type_from_packet, read_decision_receipts,
+    read_json_value, recorded_decision_receipts_from_packet, value_string,
+};
+use crate::application::policy::{
+    applicable_rule_ids, normalize_summary_signature, read_delegation_contract_rules,
+};
 use crate::application::ports::{ArtifactStore, AtoConfig};
 use crate::application::status;
 use crate::cli::args::StatusConfig;
 use crate::infra::clock::system_unix_seconds;
 use crate::infra::fs_store::{list_dir_names, list_file_names, FsArtifactStore};
+use crate::infra::yaml::SerdeYamlValidator;
+use crate::support::date::unix_seconds_to_ymd;
 use crate::support::paths::resolve_path;
+
+/// 道場（decision journal）に載せる回答済み判断の上限。新しい順に切り取る。
+const DECISION_JOURNAL_LIMIT: usize = 50;
+/// Decision Inbox の 1 判断あたりに添付する precedent（過去の同型判断）の上限。
+const MAX_PRECEDENTS_PER_DECISION: usize = 3;
+/// 正規化署名の類似判定に使う共通接頭辞の最小長（これ未満は「似ていない」）。
+const SIGNATURE_SIMILARITY_MIN_PREFIX: usize = 6;
 
 /// `fda ui` の設定。infra の HTTP server からも参照するため
 /// cli::args ではなく application 層に置く（infra は crate::cli を import できない）。
@@ -42,6 +59,22 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
     run_names.sort();
     run_names.reverse();
 
+    // human_decision_packet.json は run ごとに 1 回だけ読む（道場コーパスと inbox の
+    // type 解決の両方で使い回し、二重読込をしない）。
+    let packets = read_decision_packets(&store, &runs_root, &run_names);
+
+    // 道場（判断の振り返り）用に、全 run の回答済み判断とその後の帰結を先に収集する。
+    // これは Decision Inbox の precedent 照合にも使う（同一コーパスを二度読まない）。
+    let decision_records =
+        collect_decision_records(&store, &runs_root, &run_names, &runs_root_display, &packets);
+
+    // 未解決判断に適用可能な delegation contract を precedent に添える（自動適用はしない）。
+    // read-only projection のため契約 YAML が壊れていてもヒント無しへ degrade する（fail-soft）。
+    let yaml = SerdeYamlValidator;
+    let contract_rules =
+        read_delegation_contract_rules(&store, &yaml, &repo_root).unwrap_or_default();
+    let today = unix_seconds_to_ymd(system_unix_seconds());
+
     // (表示優先度, run名) でソートする。判断待ち → repair → エラー → 前進可能 → その他 → 完了。
     let mut prioritized_runs: Vec<(u8, String, Value)> = Vec::new();
     let mut decision_inbox = Vec::new();
@@ -62,12 +95,34 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
         match status::status(&status_config) {
             Ok(result) => {
                 let value = serde_json::to_value(&result).map_err(|e| e.to_string())?;
+                // packet は冒頭で 1 回だけ読んだコーパスを使い回す（run 毎の二重読込をしない）。
+                let packet = packets.get(name.as_str());
                 for decision in &result.unresolved_decisions {
                     open_decisions += 1;
+                    let decision_type = packet
+                        .and_then(|packet| decision_type_from_packet(packet, &decision.decision_id))
+                        .unwrap_or_default();
+                    let signature = normalize_summary_signature(&decision.summary);
+                    let precedents = find_precedents(
+                        &decision_records,
+                        name,
+                        &decision.decision_id,
+                        &decision_type,
+                        &signature,
+                    );
+                    let applicable_contract = applicable_contract_for_decision(
+                        &contract_rules,
+                        &decision_type,
+                        &decision.summary,
+                        &today,
+                        &decision.decision_id,
+                        &run_rel,
+                    );
                     decision_inbox.push(json!({
                         "run": name,
                         "run_dir": run_rel,
                         "decision_id": decision.decision_id,
+                        "type": decision_type,
                         "summary": decision.summary,
                         "required_before": decision.required_before,
                         "recommended_option_id": decision.recommended_option_id,
@@ -76,6 +131,8 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
                             "fda decide {} --answer <answer> --artifacts {run_rel}",
                             decision.decision_id
                         ),
+                        "precedents": precedents,
+                        "applicable_contract": applicable_contract,
                     }));
                 }
                 let repair_status = result.repair.repair_loop_status.as_str();
@@ -110,6 +167,8 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
                     json!({
                         "run": name,
                         "run_dir": run_rel,
+                        // 表示優先度（0=判断待ち…5=完了）。レンダラの「完了・その他」折りたたみに使う。
+                        "priority": priority,
                         "status": value,
                         "artifacts": artifacts,
                     }),
@@ -122,6 +181,7 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
                     json!({
                         "run": name,
                         "run_dir": run_rel,
+                        "priority": 2,
                         "error": error,
                     }),
                 ));
@@ -133,6 +193,12 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
         .into_iter()
         .map(|(_, _, run)| run)
         .collect();
+
+    // 道場: 回答済み判断を新しい順に上限まで。庭師 / Epic は既存 artifact の投影。
+    let decision_journal_total = decision_records.len();
+    let decision_journal = decision_journal(&decision_records);
+    let gc_docket = build_gc_docket(&store, &runs_root);
+    let epic_progress = build_epic_progress(&store, &runs_root, &run_names);
 
     Ok(json!({
         "schema_version": "fda.mission_control_snapshot.v0",
@@ -149,7 +215,382 @@ pub(crate) fn mission_control_snapshot(config: &UiConfig) -> Result<Value, Strin
         "decision_inbox": decision_inbox,
         "repair_lane": repair_lane,
         "runs": runs,
+        "decision_journal": decision_journal,
+        // 道場の切り詰め表示用（上限超過時に「最新 N 件を表示中（全 M 件）」を出す）。
+        "decision_journal_total": decision_journal_total,
+        "gc_docket": gc_docket,
+        "epic_progress": epic_progress,
     }))
+}
+
+/// 1 run の帰結（回答済み判断の「その後」）。
+///
+/// **判断単位ではなく run 単位の投影**であり、因果を主張しない（同 run の全判断で共有し、
+/// UI では「run 内 N 判断で共通」と明示する）。
+#[derive(Clone)]
+struct RunOutcome {
+    /// merge_receipt.json の `status`（実 schema の唯一の status キー）。
+    /// 値: blocked / human_approval_required / merge_ready / adapter_unavailable / missing。
+    merge_status: String,
+    repair_occurred: bool,
+    qa_status: String,
+    /// UI バッジ用の 1 語ラベル:
+    /// merged / blocked / human_approval / repair / merge_ready / pending。
+    label: String,
+}
+
+/// 回答済み判断 1 件 + その run の帰結（道場 / precedent 双方の素データ）。
+struct DecisionRecord {
+    run: String,
+    run_dir: String,
+    decision_id: String,
+    decision_type: String,
+    summary: String,
+    signature: String,
+    answer: String,
+    decided_by: String,
+    contract_rule_id: Option<String>,
+    /// 契約適用時の承認権限者（receipt の `authority`。表示は authority + 契約バッジ）。
+    authority: Option<String>,
+    decided_at_unix: u64,
+    outcome: RunOutcome,
+}
+
+/// 存在すれば JSON を読む。壊れていても Err にせず None（read-only projection の fail-soft）。
+fn optional_json_soft(store: &impl ArtifactStore, path: &Path) -> Option<Value> {
+    if !store.exists(path) {
+        return None;
+    }
+    read_json_value(store, path).ok()
+}
+
+/// 各 run の human_decision_packet.json を 1 回だけ読んだコーパス。
+/// inbox の type 解決と道場コーパス収集の両方で使い回す（run 毎の二重読込をしない）。
+fn read_decision_packets(
+    store: &impl ArtifactStore,
+    runs_root: &Path,
+    run_names: &[String],
+) -> BTreeMap<String, Value> {
+    let mut packets = BTreeMap::new();
+    for name in run_names {
+        // `_gc` / `_policy` などの内部ディレクトリは対象外。
+        if name.starts_with('_') {
+            continue;
+        }
+        if let Some(packet) = optional_json_soft(
+            store,
+            &runs_root.join(name).join("human_decision_packet.json"),
+        ) {
+            packets.insert(name.clone(), packet);
+        }
+    }
+    packets
+}
+
+/// 同 run の receipt から「回答済み判断のその後」を組み立てる。
+///
+/// 実 schema 準拠:
+/// - merge_receipt.json は `status` キーのみ
+///   （blocked / human_approval_required / merge_ready / adapter_unavailable。
+///     `merged` は status には現れない）。
+/// - merged 判定は github_merge_receipt.json（status=succeeded または merge_executed=true）。
+fn run_outcome(store: &impl ArtifactStore, run_dir: &Path) -> RunOutcome {
+    let merge_status = optional_json_soft(store, &run_dir.join("merge_receipt.json"))
+        .as_ref()
+        .and_then(|merge| value_string(merge, "status"))
+        .unwrap_or_else(|| "missing".to_string());
+    let github_merged = optional_json_soft(store, &run_dir.join("github_merge_receipt.json"))
+        .map(|receipt| {
+            value_string(&receipt, "status").as_deref() == Some("succeeded")
+                || receipt.get("merge_executed").and_then(Value::as_bool) == Some(true)
+        })
+        .unwrap_or(false);
+    let repair_occurred = store.exists(&run_dir.join("repair_receipt.json"));
+    let qa_status = optional_json_soft(store, &run_dir.join("qa_receipt.json"))
+        .as_ref()
+        .and_then(|qa| value_string(qa, "status"))
+        .unwrap_or_else(|| "missing".to_string());
+
+    let label = if github_merged {
+        "merged"
+    } else if qa_status == "failed"
+        || merge_status == "blocked"
+        || merge_status == "adapter_unavailable"
+    {
+        "blocked"
+    } else if merge_status == "human_approval_required" {
+        "human_approval"
+    } else if repair_occurred {
+        "repair"
+    } else if merge_status == "merge_ready" {
+        "merge_ready"
+    } else {
+        "pending"
+    }
+    .to_string();
+
+    RunOutcome {
+        merge_status,
+        repair_occurred,
+        qa_status,
+        label,
+    }
+}
+
+/// 全 run を走査し、回答済み判断（decision_receipts に answer があるもの）を収集する。
+/// packet / receipt が壊れている run は fail-soft でスキップする（主 run ループが別途エラー表示）。
+fn collect_decision_records(
+    store: &impl ArtifactStore,
+    runs_root: &Path,
+    run_names: &[String],
+    runs_root_display: &str,
+    packets: &BTreeMap<String, Value>,
+) -> Vec<DecisionRecord> {
+    let mut records = Vec::new();
+    for name in run_names {
+        // `_gc` / `_policy` などの内部ディレクトリは対象外。
+        if name.starts_with('_') {
+            continue;
+        }
+        let Some(packet) = packets.get(name.as_str()) else {
+            continue;
+        };
+        let run_dir = runs_root.join(name);
+        let mut receipts = read_decision_receipts(store, &run_dir.join("decision_receipts.json"))
+            .unwrap_or_default();
+        for (decision_id, receipt) in recorded_decision_receipts_from_packet(packet) {
+            receipts.entry(decision_id).or_insert(receipt);
+        }
+        if receipts.is_empty() {
+            continue;
+        }
+        let outcome = run_outcome(store, &run_dir);
+        let run_rel = format!("{runs_root_display}/{name}");
+        for decision in decision_summaries_from_packet(packet) {
+            let Some(receipt) = receipts.get(&decision.decision_id).or_else(|| {
+                decision
+                    .alias_ids
+                    .iter()
+                    .find_map(|alias| receipts.get(alias))
+            }) else {
+                continue;
+            };
+            let Some(answer) = value_string(receipt, "answer") else {
+                continue;
+            };
+            let decision_type =
+                decision_type_from_packet(packet, &decision.decision_id).unwrap_or_default();
+            let decided_by = value_string(receipt, "decided_by").unwrap_or_else(|| "-".to_string());
+            let contract_rule_id = value_string(receipt, "contract_rule_id");
+            let authority = value_string(receipt, "authority");
+            let decided_at_unix = value_string(receipt, "decided_at_unix_seconds")
+                .and_then(|raw| raw.parse::<u64>().ok())
+                .unwrap_or(0);
+            let signature = normalize_summary_signature(&decision.summary);
+            records.push(DecisionRecord {
+                run: name.clone(),
+                run_dir: run_rel.clone(),
+                decision_id: decision.decision_id.clone(),
+                decision_type,
+                summary: decision.summary.clone(),
+                signature,
+                answer,
+                decided_by,
+                contract_rule_id,
+                authority,
+                decided_at_unix,
+                outcome: outcome.clone(),
+            });
+        }
+    }
+    records
+}
+
+/// 道場テーブル用に、回答済み判断を新しい順（decided_at → run 名）に上限まで投影する。
+fn decision_journal(records: &[DecisionRecord]) -> Vec<Value> {
+    // run 内の判断数（帰結が run 単位の投影であることを UI で明示するための注記に使う）。
+    let mut per_run_counts: BTreeMap<&str, usize> = BTreeMap::new();
+    for record in records {
+        *per_run_counts.entry(record.run.as_str()).or_insert(0) += 1;
+    }
+    let mut ordered: Vec<&DecisionRecord> = records.iter().collect();
+    ordered.sort_by(|a, b| {
+        b.decided_at_unix
+            .cmp(&a.decided_at_unix)
+            .then_with(|| b.run.cmp(&a.run))
+            .then_with(|| a.decision_id.cmp(&b.decision_id))
+    });
+    ordered
+        .into_iter()
+        .take(DECISION_JOURNAL_LIMIT)
+        .map(|record| {
+            json!({
+                "run": record.run,
+                "run_dir": record.run_dir,
+                "decision_id": record.decision_id,
+                "type": record.decision_type,
+                "summary": record.summary,
+                "answer": record.answer,
+                "decided_by": record.decided_by,
+                "contract_rule_id": record.contract_rule_id,
+                "authority": record.authority,
+                "decided_at_unix": record.decided_at_unix,
+                // 帰結は判断単位ではなく run 単位の投影（因果を主張しない）。
+                "run_decision_count": per_run_counts.get(record.run.as_str()).copied().unwrap_or(1),
+                "outcome": outcome_value(&record.outcome),
+            })
+        })
+        .collect()
+}
+
+fn outcome_value(outcome: &RunOutcome) -> Value {
+    json!({
+        "label": outcome.label,
+        "merge_status": outcome.merge_status,
+        "repair_occurred": outcome.repair_occurred,
+        "qa_status": outcome.qa_status,
+    })
+}
+
+/// Decision Inbox の 1 判断に対する precedent（過去の同 type + 署名類似の判断）を最大 3 件返す。
+/// 自分自身（同 run + 同 decision_id）は除外する。
+fn find_precedents(
+    records: &[DecisionRecord],
+    current_run: &str,
+    current_decision_id: &str,
+    decision_type: &str,
+    signature: &str,
+) -> Vec<Value> {
+    let mut matches: Vec<&DecisionRecord> = records
+        .iter()
+        .filter(|record| {
+            !(record.run == current_run && record.decision_id == current_decision_id)
+                && !record.decision_type.is_empty()
+                && record.decision_type == decision_type
+                && signatures_similar(&record.signature, signature)
+        })
+        .collect();
+    matches.sort_by(|a, b| {
+        b.decided_at_unix
+            .cmp(&a.decided_at_unix)
+            .then_with(|| b.run.cmp(&a.run))
+            .then_with(|| a.decision_id.cmp(&b.decision_id))
+    });
+    matches
+        .into_iter()
+        .take(MAX_PRECEDENTS_PER_DECISION)
+        .map(|record| {
+            json!({
+                "run": record.run,
+                "decision_id": record.decision_id,
+                "answer": record.answer,
+                "decided_by": record.decided_by,
+                "outcome": record.outcome.label,
+                // 一致理由の可視化: exact（署名完全一致）/ prefix（接頭辞一致）。
+                "match": if record.signature == signature { "exact" } else { "prefix" },
+            })
+        })
+        .collect()
+}
+
+/// 正規化署名の類似判定: 完全一致、または共通接頭辞が閾値以上なら「似ている」。
+fn signatures_similar(a: &str, b: &str) -> bool {
+    if a.is_empty() || b.is_empty() {
+        return false;
+    }
+    if a == b {
+        return true;
+    }
+    let common_prefix = a.chars().zip(b.chars()).take_while(|(x, y)| x == y).count();
+    common_prefix >= SIGNATURE_SIMILARITY_MIN_PREFIX
+}
+
+/// 未解決判断に適用可能な delegation contract があれば `{rule_id, resume_command}` を返す。
+/// 自動適用はしない（人間が `--by-contract` を明示実行する resume command を提示するだけ）。
+fn applicable_contract_for_decision(
+    rules: &[Value],
+    decision_type: &str,
+    summary: &str,
+    today: &str,
+    decision_id: &str,
+    run_rel: &str,
+) -> Value {
+    let rule_ids = applicable_rule_ids(rules, decision_type, summary, today);
+    match rule_ids.first() {
+        Some(rule_id) => json!({
+            "rule_id": rule_id,
+            "resume_command": format!(
+                "fda decide {decision_id} --by-contract {rule_id} --artifacts {run_rel}"
+            ),
+        }),
+        None => Value::Null,
+    }
+}
+
+/// 庭師 docket（`<runs_root>/_gc/gc_docket.json`）を投影する。無ければ Null。
+fn build_gc_docket(store: &impl ArtifactStore, runs_root: &Path) -> Value {
+    let Some(docket) = optional_json_soft(store, &runs_root.join("_gc").join("gc_docket.json"))
+    else {
+        return Value::Null;
+    };
+    let candidates = docket
+        .get("candidates")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    let needs_human_count = candidates
+        .iter()
+        .filter(|candidate| candidate.get("needs_human").and_then(Value::as_bool) == Some(true))
+        .count();
+    json!({
+        "generated_at_unix": docket.get("generated_at_unix").cloned().unwrap_or(Value::Null),
+        "scanned_runs": docket.get("scanned_runs").cloned().unwrap_or(Value::Null),
+        "summary": {
+            "candidate_count": candidates.len(),
+            "needs_human_count": needs_human_count,
+        },
+        "candidates": candidates,
+    })
+}
+
+/// Epic 進捗（各 run dir の `epic_progress_state.json`）のうち最新 1 件を投影する。無ければ Null。
+fn build_epic_progress(
+    store: &impl ArtifactStore,
+    runs_root: &Path,
+    run_names: &[String],
+) -> Value {
+    let mut best: Option<(u64, Value)> = None;
+    for name in run_names {
+        if name.starts_with('_') {
+            continue;
+        }
+        let Some(state) = optional_json_soft(
+            store,
+            &runs_root.join(name).join("epic_progress_state.json"),
+        ) else {
+            continue;
+        };
+        let generated = state
+            .get("generated_at_unix")
+            .and_then(Value::as_u64)
+            .unwrap_or(0);
+        // strict > で最新を選ぶ。run_names は辞書順逆順（新しい run 名が先）で走査されるため、
+        // generated_at_unix が同値の tie では新しい run 名の state が先に確定し保持される。
+        if best.as_ref().map(|(g, _)| generated > *g).unwrap_or(true) {
+            best = Some((generated, state));
+        }
+    }
+    match best {
+        Some((_, state)) => json!({
+            "epic_id": state.get("epic_id").cloned().unwrap_or(Value::Null),
+            "generated_at_unix": state.get("generated_at_unix").cloned().unwrap_or(Value::Null),
+            // 非権威 projection の明文（epic_progress_state.v1 の必須フィールド）を UI へ引き継ぐ。
+            "advisory": state.get("advisory").cloned().unwrap_or(Value::Null),
+            "prs": state.get("prs").cloned().unwrap_or_else(|| Value::Array(Vec::new())),
+            "summary": state.get("summary").cloned().unwrap_or(Value::Null),
+        }),
+        None => Value::Null,
+    }
 }
 
 fn run_priority(phase: &str, repair_status: &str, qa_failed: bool, merge_gate: &str) -> u8 {
@@ -257,5 +698,529 @@ mod tests {
         let snapshot = mission_control_snapshot(&config).unwrap();
         assert_eq!(snapshot["summary"]["run_count"], 0);
         assert!(snapshot["runs"].as_array().unwrap().is_empty());
+        // 追加フィールドは不在時に Null / 空へ degrade する（read-only projection）。
+        assert!(snapshot["decision_journal"].as_array().unwrap().is_empty());
+        assert!(snapshot["gc_docket"].is_null());
+        assert!(snapshot["epic_progress"].is_null());
+    }
+
+    fn config_for(repo: &Path) -> UiConfig {
+        UiConfig {
+            repo_root: repo.to_path_buf(),
+            runs_root: PathBuf::from("artifacts/runs"),
+            port: 0,
+            open_browser: false,
+            print_json: false,
+        }
+    }
+
+    /// 回答済み判断を 1 件持つ run を書く（packet の decisions[] + decision_receipts）。
+    fn write_answered_run(
+        runs_root: &Path,
+        run: &str,
+        decision_id: &str,
+        decision_type: &str,
+        summary: &str,
+        answer: &str,
+        decided_by: &str,
+        decided_at: u64,
+    ) {
+        let run_dir = runs_root.join(run);
+        FsArtifactStore.create_dir_all(&run_dir).unwrap();
+        write_json(
+            &run_dir.join("human_decision_packet.json"),
+            &json!({
+                "schema_version": "fda.human_decision_packet.v0",
+                "status": "resolved",
+                "decisions": [{
+                    "decision_id": decision_id,
+                    "type": decision_type,
+                    "summary": summary,
+                    "required_before": "Design Gate",
+                    "options": [{"id": "yes"}, {"id": "no"}],
+                    "recommended_option_id": "yes"
+                }]
+            }),
+        );
+        write_json(
+            &run_dir.join("decision_receipts.json"),
+            &json!({
+                "schema_version": "fda.decision_receipts.v0",
+                "receipts": [{
+                    "decision_id": decision_id,
+                    "answer": answer,
+                    "decided_by": decided_by,
+                    "decided_at_unix_seconds": decided_at.to_string()
+                }]
+            }),
+        );
+    }
+
+    /// 未解決判断を 1 件持つ run を書く（receipt 無し）。
+    fn write_unresolved_run(
+        runs_root: &Path,
+        run: &str,
+        decision_id: &str,
+        decision_type: &str,
+        summary: &str,
+    ) {
+        let run_dir = runs_root.join(run);
+        FsArtifactStore.create_dir_all(&run_dir).unwrap();
+        write_json(
+            &run_dir.join("human_decision_packet.json"),
+            &json!({
+                "schema_version": "fda.human_decision_packet.v0",
+                "status": "waiting_human",
+                "decisions": [{
+                    "decision_id": decision_id,
+                    "type": decision_type,
+                    "summary": summary,
+                    "required_before": "Design Gate",
+                    "options": [{"id": "yes"}, {"id": "no"}],
+                    "recommended_option_id": "yes"
+                }]
+            }),
+        );
+    }
+
+    #[test]
+    fn journal_links_answered_decision_to_merge_outcome() {
+        let repo = temp_dir("fda-ui-journal");
+        let runs_root = repo.join("artifacts").join("runs");
+        write_answered_run(
+            &runs_root,
+            "fda-start-200",
+            "HD-A-001",
+            "spec_decision",
+            "Scope In / Scope Out を Intake 正本として固定してよいか",
+            "approve_scope",
+            "human",
+            1000,
+        );
+        // 同 run の帰結: merge gate 通過（実 schema: status キーのみ）+ GitHub merge 実行済み。
+        // merged は merge_receipt の status には現れず github_merge_receipt で判定する。
+        write_json(
+            &runs_root.join("fda-start-200").join("merge_receipt.json"),
+            &json!({"status": "merge_ready"}),
+        );
+        write_json(
+            &runs_root
+                .join("fda-start-200")
+                .join("github_merge_receipt.json"),
+            &json!({"status": "succeeded", "merge_executed": true}),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let journal = snapshot["decision_journal"].as_array().unwrap();
+        assert_eq!(journal.len(), 1);
+        assert_eq!(journal[0]["decision_id"], "HD-A-001");
+        assert_eq!(journal[0]["answer"], "approve_scope");
+        assert_eq!(journal[0]["decided_by"], "human");
+        assert_eq!(journal[0]["type"], "spec_decision");
+        assert_eq!(journal[0]["outcome"]["label"], "merged");
+        assert_eq!(journal[0]["outcome"]["merge_status"], "merge_ready");
+        assert_eq!(journal[0]["run_decision_count"], 1);
+    }
+
+    #[test]
+    fn outcome_reflects_blocked_and_human_approval_gates_not_pending() {
+        let repo = temp_dir("fda-ui-outcome-gates");
+        let runs_root = repo.join("artifacts").join("runs");
+        // gate=blocked の run（実在値）。
+        write_answered_run(
+            &runs_root,
+            "run-blocked",
+            "HD-BLK-001",
+            "spec_decision",
+            "blocked になった判断",
+            "yes",
+            "human",
+            10,
+        );
+        write_json(
+            &runs_root.join("run-blocked").join("merge_receipt.json"),
+            &json!({"status": "blocked"}),
+        );
+        // gate=human_approval_required の run（実在値）。
+        write_answered_run(
+            &runs_root,
+            "run-approval",
+            "HD-APR-001",
+            "spec_decision",
+            "人間承認待ちの判断",
+            "yes",
+            "human",
+            20,
+        );
+        write_json(
+            &runs_root.join("run-approval").join("merge_receipt.json"),
+            &json!({"status": "human_approval_required"}),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let journal = snapshot["decision_journal"].as_array().unwrap();
+        let label_of = |id: &str| {
+            journal
+                .iter()
+                .find(|entry| entry["decision_id"] == id)
+                .map(|entry| entry["outcome"]["label"].as_str().unwrap().to_string())
+                .unwrap()
+        };
+        // blocked / human_approval_required が 'pending' に誤表示されない。
+        assert_eq!(label_of("HD-BLK-001"), "blocked");
+        assert_eq!(label_of("HD-APR-001"), "human_approval");
+    }
+
+    #[test]
+    fn journal_carries_contract_authority_and_run_decision_count() {
+        let repo = temp_dir("fda-ui-journal-contract");
+        let runs_root = repo.join("artifacts").join("runs");
+        // 1 run に 2 判断（片方は契約適用: contract_rule_id + authority が receipt に載る）。
+        let run_dir = runs_root.join("fda-start-700");
+        FsArtifactStore.create_dir_all(&run_dir).unwrap();
+        write_json(
+            &run_dir.join("human_decision_packet.json"),
+            &json!({
+                "schema_version": "fda.human_decision_packet.v0",
+                "status": "resolved",
+                "decisions": [
+                    {
+                        "decision_id": "HD-X-001",
+                        "type": "spec_decision",
+                        "summary": "契約で回答した判断",
+                        "required_before": "Design Gate",
+                        "options": [{"id": "yes"}, {"id": "no"}],
+                        "recommended_option_id": "yes"
+                    },
+                    {
+                        "decision_id": "HD-X-002",
+                        "type": "risk_decision",
+                        "summary": "人間が回答した判断",
+                        "required_before": "Design Gate",
+                        "options": [{"id": "yes"}, {"id": "no"}],
+                        "recommended_option_id": "yes"
+                    }
+                ]
+            }),
+        );
+        write_json(
+            &run_dir.join("decision_receipts.json"),
+            &json!({
+                "schema_version": "fda.decision_receipts.v0",
+                "receipts": [
+                    {
+                        "decision_id": "HD-X-001",
+                        "answer": "approve_scope",
+                        "decided_by": "delegation_contract:DC-001:k_tobishima",
+                        "contract_rule_id": "DC-001",
+                        "authority": "k_tobishima",
+                        "decided_at_unix_seconds": "200"
+                    },
+                    {
+                        "decision_id": "HD-X-002",
+                        "answer": "accept_risk",
+                        "decided_by": "human",
+                        "decided_at_unix_seconds": "100"
+                    }
+                ]
+            }),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let journal = snapshot["decision_journal"].as_array().unwrap();
+        assert_eq!(journal.len(), 2);
+        let contract_entry = journal
+            .iter()
+            .find(|entry| entry["decision_id"] == "HD-X-001")
+            .unwrap();
+        assert_eq!(contract_entry["contract_rule_id"], "DC-001");
+        assert_eq!(contract_entry["authority"], "k_tobishima");
+        // 帰結は run 単位の投影: 同 run の 2 判断で共通であることが分かる。
+        assert_eq!(contract_entry["run_decision_count"], 2);
+        let human_entry = journal
+            .iter()
+            .find(|entry| entry["decision_id"] == "HD-X-002")
+            .unwrap();
+        assert!(human_entry["authority"].is_null());
+        assert_eq!(human_entry["run_decision_count"], 2);
+    }
+
+    #[test]
+    fn journal_orders_newest_first_and_marks_repair_outcome() {
+        let repo = temp_dir("fda-ui-journal-order");
+        let runs_root = repo.join("artifacts").join("runs");
+        write_answered_run(
+            &runs_root,
+            "fda-start-100",
+            "HD-OLD-001",
+            "spec_decision",
+            "古い判断",
+            "yes",
+            "human",
+            100,
+        );
+        write_answered_run(
+            &runs_root,
+            "fda-start-300",
+            "HD-NEW-001",
+            "risk_decision",
+            "新しい判断",
+            "no",
+            "human",
+            300,
+        );
+        // 新しい run では repair が発生していた（帰結バッジ = repair）。
+        write_json(
+            &runs_root.join("fda-start-300").join("repair_receipt.json"),
+            &json!({"status": "repair_planned"}),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let journal = snapshot["decision_journal"].as_array().unwrap();
+        assert_eq!(journal.len(), 2);
+        // decided_at の新しい順。
+        assert_eq!(journal[0]["decision_id"], "HD-NEW-001");
+        assert_eq!(journal[0]["outcome"]["label"], "repair");
+        assert_eq!(journal[0]["outcome"]["repair_occurred"], true);
+        assert_eq!(journal[1]["decision_id"], "HD-OLD-001");
+        assert_eq!(journal[1]["outcome"]["label"], "pending");
+    }
+
+    #[test]
+    fn precedent_attaches_same_type_matches_capped_at_three() {
+        let repo = temp_dir("fda-ui-precedent");
+        let runs_root = repo.join("artifacts").join("runs");
+        let summary = "入力から抽出した Scope In / Scope Out を Intake 正本として固定してよいか";
+        // 過去に同 type + 同署名の回答済み判断が 4 件。
+        for (idx, run) in ["run-p1", "run-p2", "run-p3", "run-p4"].iter().enumerate() {
+            write_answered_run(
+                &runs_root,
+                run,
+                "HD-PAST-001",
+                "spec_decision",
+                summary,
+                "approve_scope",
+                "human",
+                (idx as u64) + 1,
+            );
+        }
+        // 別 type の判断（precedent に混ざってはいけない）。
+        write_answered_run(
+            &runs_root,
+            "run-other",
+            "HD-OTHER-001",
+            "risk_decision",
+            summary,
+            "accept_risk",
+            "human",
+            9,
+        );
+        // 現在の未解決判断（同 type + 同署名）。
+        write_unresolved_run(
+            &runs_root,
+            "fda-start-999",
+            "HD-NOW-001",
+            "spec_decision",
+            summary,
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let inbox = snapshot["decision_inbox"].as_array().unwrap();
+        let now = inbox
+            .iter()
+            .find(|entry| entry["decision_id"] == "HD-NOW-001")
+            .expect("current decision must be in inbox");
+        let precedents = now["precedents"].as_array().unwrap();
+        assert_eq!(precedents.len(), MAX_PRECEDENTS_PER_DECISION);
+        for precedent in precedents {
+            assert_eq!(precedent["decision_id"], "HD-PAST-001");
+            assert_eq!(precedent["answer"], "approve_scope");
+            assert!(precedent["run"].as_str().unwrap().starts_with("run-p"));
+            // 同一 summary なので署名完全一致（一致理由が snapshot に載る）。
+            assert_eq!(precedent["match"], "exact");
+        }
+    }
+
+    #[test]
+    fn signatures_similar_accepts_prefix_match_and_rejects_short_prefix() {
+        // 完全一致ではない部分一致: 共通接頭辞が閾値（6 文字）以上なら類似。
+        assert!(signatures_similar(
+            "scopeinを固定してよいか",
+            "scopeinを別の対象へ"
+        ));
+        // 共通接頭辞が閾値未満なら不一致。
+        assert!(!signatures_similar("scope", "scoop"));
+        // 空署名は常に不一致。
+        assert!(!signatures_similar("", "scopein"));
+    }
+
+    #[test]
+    fn applicable_contract_present_when_rule_matches() {
+        let repo = temp_dir("fda-ui-contract-ok");
+        let runs_root = repo.join("artifacts").join("runs");
+        let summary = "入力から抽出した Scope In / Scope Out を Intake 正本として固定してよいか";
+        write_unresolved_run(
+            &runs_root,
+            "fda-start-500",
+            "HD-C-001",
+            "spec_decision",
+            summary,
+        );
+        // 有効な delegation contract（expires は十分未来）。
+        FsArtifactStore.create_dir_all(&repo.join(".fda")).unwrap();
+        FsArtifactStore
+            .write_text(
+                &repo.join(".fda").join("delegation_contract.yaml"),
+                "delegation_contract:\n  - rule_id: DC-001\n    decision_type: spec_decision\n    match_summary_keywords:\n      - \"Scope In / Scope Out\"\n    answer: approve_scope\n    authority: k_tobishima\n    enacted_from:\n      - \"run HD-C-001\"\n    expires: \"2099-01-01\"\n",
+            )
+            .unwrap();
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let inbox = snapshot["decision_inbox"].as_array().unwrap();
+        let entry = inbox
+            .iter()
+            .find(|entry| entry["decision_id"] == "HD-C-001")
+            .expect("decision must be in inbox");
+        assert_eq!(entry["applicable_contract"]["rule_id"], "DC-001");
+        assert_eq!(
+            entry["applicable_contract"]["resume_command"],
+            "fda decide HD-C-001 --by-contract DC-001 --artifacts artifacts/runs/fda-start-500"
+        );
+    }
+
+    #[test]
+    fn applicable_contract_is_null_when_contract_yaml_broken() {
+        let repo = temp_dir("fda-ui-contract-broken");
+        let runs_root = repo.join("artifacts").join("runs");
+        write_unresolved_run(
+            &runs_root,
+            "fda-start-600",
+            "HD-B-001",
+            "spec_decision",
+            "Scope In / Scope Out を固定してよいか",
+        );
+        // 壊れた YAML でもクラッシュせずヒント無しへ degrade する（fail-soft）。
+        FsArtifactStore.create_dir_all(&repo.join(".fda")).unwrap();
+        FsArtifactStore
+            .write_text(
+                &repo.join(".fda").join("delegation_contract.yaml"),
+                "delegation_contract: [ this is : not valid yaml",
+            )
+            .unwrap();
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        let inbox = snapshot["decision_inbox"].as_array().unwrap();
+        let entry = inbox
+            .iter()
+            .find(|entry| entry["decision_id"] == "HD-B-001")
+            .expect("decision must be in inbox");
+        assert!(entry["applicable_contract"].is_null());
+    }
+
+    #[test]
+    fn gc_and_epic_snapshot_included_when_present() {
+        let repo = temp_dir("fda-ui-gc-epic");
+        let runs_root = repo.join("artifacts").join("runs");
+        FsArtifactStore
+            .create_dir_all(&runs_root.join("_gc"))
+            .unwrap();
+        FsArtifactStore
+            .create_dir_all(&runs_root.join("epic-run"))
+            .unwrap();
+        // gc docket。
+        write_json(
+            &runs_root.join("_gc").join("gc_docket.json"),
+            &json!({
+                "schema_version": "fda.gc_docket.v1",
+                "generated_at_unix": 1783555200u64,
+                "scanned_runs": 3,
+                "candidates": [
+                    {"run": "run-a", "reasons": ["stale"], "recommendation": "archive", "needs_human": true},
+                    {"run": "run-b", "reasons": ["no validation"], "recommendation": "resume", "needs_human": false}
+                ]
+            }),
+        );
+        // epic progress（run dir 配下。advisory は v1 schema の必須フィールド）。
+        write_json(
+            &runs_root.join("epic-run").join("epic_progress_state.json"),
+            &json!({
+                "schema_version": "fda.epic_progress_state.v1",
+                "advisory": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない",
+                "epic_id": "EPIC-FDA-V1-5",
+                "generated_at_unix": 1783555200u64,
+                "prs": [
+                    {"planned_pr_id": "PR-V15-001", "sequence": 1, "title": "one", "status": "merged", "evidence": [], "reasons": []}
+                ],
+                "summary": {"merged": 1, "open": 0, "blocked": 0, "waiting_human": 0, "not_started": 0}
+            }),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        assert_eq!(snapshot["gc_docket"]["summary"]["candidate_count"], 2);
+        assert_eq!(snapshot["gc_docket"]["summary"]["needs_human_count"], 1);
+        assert_eq!(
+            snapshot["gc_docket"]["candidates"]
+                .as_array()
+                .unwrap()
+                .len(),
+            2
+        );
+        assert_eq!(snapshot["epic_progress"]["epic_id"], "EPIC-FDA-V1-5");
+        // advisory（非権威の明文）が snapshot に引き継がれる。
+        assert_eq!(
+            snapshot["epic_progress"]["advisory"],
+            "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない"
+        );
+        assert_eq!(
+            snapshot["epic_progress"]["prs"].as_array().unwrap()[0]["status"],
+            "merged"
+        );
+        assert_eq!(snapshot["epic_progress"]["summary"]["merged"], 1);
+    }
+
+    #[test]
+    fn epic_progress_picks_latest_by_generated_at() {
+        let repo = temp_dir("fda-ui-epic-latest");
+        let runs_root = repo.join("artifacts").join("runs");
+        FsArtifactStore
+            .create_dir_all(&runs_root.join("epic-old"))
+            .unwrap();
+        FsArtifactStore
+            .create_dir_all(&runs_root.join("epic-new"))
+            .unwrap();
+        write_json(
+            &runs_root.join("epic-old").join("epic_progress_state.json"),
+            &json!({"schema_version": "fda.epic_progress_state.v1", "epic_id": "OLD", "generated_at_unix": 100u64, "prs": [], "summary": {}}),
+        );
+        write_json(
+            &runs_root.join("epic-new").join("epic_progress_state.json"),
+            &json!({"schema_version": "fda.epic_progress_state.v1", "epic_id": "NEW", "generated_at_unix": 500u64, "prs": [], "summary": {}}),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        assert_eq!(snapshot["epic_progress"]["epic_id"], "NEW");
+    }
+
+    #[test]
+    fn epic_progress_tie_prefers_newer_run_name() {
+        let repo = temp_dir("fda-ui-epic-tie");
+        let runs_root = repo.join("artifacts").join("runs");
+        for run in ["epic-a", "epic-b"] {
+            FsArtifactStore
+                .create_dir_all(&runs_root.join(run))
+                .unwrap();
+        }
+        // generated_at_unix が同値の tie。辞書順で新しい run 名（epic-b）が優先される。
+        write_json(
+            &runs_root.join("epic-a").join("epic_progress_state.json"),
+            &json!({"schema_version": "fda.epic_progress_state.v1", "epic_id": "FROM-A", "generated_at_unix": 500u64, "prs": [], "summary": {}}),
+        );
+        write_json(
+            &runs_root.join("epic-b").join("epic_progress_state.json"),
+            &json!({"schema_version": "fda.epic_progress_state.v1", "epic_id": "FROM-B", "generated_at_unix": 500u64, "prs": [], "summary": {}}),
+        );
+
+        let snapshot = mission_control_snapshot(&config_for(&repo)).unwrap();
+        assert_eq!(snapshot["epic_progress"]["epic_id"], "FROM-B");
     }
 }

@@ -1,0 +1,36 @@
+{
+  "schema_version": "fda.functional_qa_receipt.v0",
+  "receipt_id": "receipt-functional-qa-pr-v15-005",
+  "role": "functional_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-005",
+  "reviewed_planned_pr_id": "PR-V15-005",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/6",
+  "reviewed_commits": ["9002395", "204de96", "320cdeb"],
+  "verdict": "pass",
+  "acceptance_criteria_checked": [
+    "AC1: 回答済み判断 + 帰結を持つ run 群で道場（decision_journal）に判断→その後（run の帰結）が新しい順の時系列で表示される。帰結は run 単位の投影であり run 内複数判断は共通注記が付くこと。",
+    "AC2: 未解決判断 + 同 type の過去判断で precedent が最大 3 件、一致理由（完全一致/接頭辞一致）付きで decision inbox に添付される。適用可能な delegation contract があれば契約バッジ + resume command が添付されること。",
+    "AC3: gc_docket（庭師の棚卸し候補）と epic_progress（Epic 進捗・advisory 非権威明文）の双方が、生成済みであれば表示され、無ければ適切な空状態メッセージが出ること。"
+  ],
+  "findings": [],
+  "evidence": [
+    "cargo test --lib rendering::mission_control => 10 passed（page_renders_dojo_gc_epic_sections / page_renders_precedent_and_contract_in_inbox / outcome_badge_marks_human_approval_as_badge_human 含む）",
+    "cargo test --lib application::ui:: => 13 passed（journal_links_answered_decision_to_merge_outcome / precedent_attaches_same_type_matches_capped_at_three / gc_and_epic_snapshot_included_when_present / epic_progress_tie_prefers_newer_run_name 含む）",
+    "cargo test --lib => 265 passed; 0 failed; 0 ignored",
+    "cargo run -q -- validate-artifacts => 76 passed, 0 failed, 44 skipped",
+    "python -m unittest discover -s tests -v => Ran 68 tests, OK",
+    "実機 E2E（AC1/AC2）: `cargo run -q --bin fda -- ui --artifacts-root artifacts/runs --port 4877` を起動し `GET /api/state.json` を確認。既存 2 run（fda-start-1783546909 / fda-start-1783555082）の decision_receipts.json 計 6 件が decision_journal に集約され `decision_journal_total=6` であることを確認。`GET /` (200) の HTML に「道場（判断の振り返り）」「あなたの過去の判断がその後どうなったかの鏡です」「庭師（棚卸し docket）」が含まれることを確認。",
+    "実機 E2E（AC3・Epic 進捗）: `fda continue --epic --artifacts artifacts/runs/fda-start-1783555082 --artifacts-root artifacts/runs --json` を実行し epic_progress_state.json / next_planned_pr_decision.json を一時生成。再度 `GET /` を取得し「Epic 進捗」「PR-V15-001」「この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない」を含むことを確認。",
+    "実機 E2E（AC3・庭師）: `fda gc --artifacts-root artifacts/runs --json` を実行し `artifacts/runs/_gc/gc_docket.json`（candidate_count=4, needs_human_count=0）を一時生成。`GET /` に「庭師（棚卸し docket）」セクションと候補 run 名（例: poc-2f-aicx-study-bot-live）が表示されることを確認。",
+    "後片付け: 実機 E2E で生成した epic_progress_state.json / next_planned_pr_decision.json / artifacts/runs/_gc/ を検証後に削除し、`git status --short` が空（変更なし）であることを確認して run dir を実行前の状態へ復元済み。",
+    "cargo fmt --all -- --check => clean"
+  ],
+  "summary": "AC1（道場: 判断→run 帰結の時系列表示、run 単位の共通帰結注記）/ AC2（decision inbox precedent 最大3件 + 一致理由 + 契約バッジ）/ AC3（gc_docket・epic_progress の表示、および無い場合の空状態メッセージ）を unit テスト（rendering 10 + ui 13）に加え、実際の repo 状態（既存 run の decision_receipts 計6件）に対する UI 実起動 E2E、および `fda continue --epic` / `fda gc` で一時生成した実 Epic 進捗・gc docket データに対する UI 実起動 E2E で検証し、いずれも pass。検証用に一時生成したファイルは確認後に削除し、run dir / artifacts/runs 配下を実行前の状態へ復元済み（git status クリーンを確認）。repair commit 204de96 反映後・polish commit 320cdeb（human_approval バッジ色修正）反映後のいずれでも cargo test --lib 265 passed、validate-artifacts 76 passed、python unittest 68 passed を再確認し、回帰なし。",
+  "generated_at_unix_seconds": 1783567900
+}

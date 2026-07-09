@@ -326,7 +326,8 @@ fn validate_proposal_against_schema(
 }
 
 /// 記号・数字・空白を除去し、残った文字（英字・CJK 等）の先頭 N 文字を署名にする素朴実装。
-fn normalize_summary_signature(summary: &str) -> String {
+/// `fda ui` の precedent 照合（同 type 判断の正規化署名類似）でも再利用する。
+pub(crate) fn normalize_summary_signature(summary: &str) -> String {
     summary
         .chars()
         .filter(|ch| ch.is_alphabetic())
