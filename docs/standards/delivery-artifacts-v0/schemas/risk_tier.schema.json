@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/risk_tier.schema.json",
+  "title": "Risk Tier",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "tier",
+    "reasons",
+    "matched_low_risk_paths",
+    "policy_source"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.risk_tier.v1" },
+    "tier": { "type": "string", "enum": ["low", "standard", "high"] },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "matched_low_risk_paths": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "policy_source": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

@@ -41,6 +41,8 @@ pub(crate) struct MergeResult {
     pub(crate) forge_status: String,
     pub(crate) forge_promotion_decision: String,
     pub(crate) risk_classification: String,
+    pub(crate) risk_tier: Option<String>,
+    pub(crate) proportional_gate_notes: Vec<String>,
     pub(crate) merge_execute_requested: bool,
     pub(crate) merge_method: String,
     pub(crate) merge_executed: bool,
@@ -67,6 +69,8 @@ pub(crate) struct MergeGateStatus {
     pub(crate) forge_claim_ids: Vec<String>,
     pub(crate) forge_proof_obligations: Vec<String>,
     pub(crate) risk_classification: String,
+    pub(crate) risk_tier: Option<String>,
+    pub(crate) proportional_gate_notes: Vec<String>,
     pub(crate) policy_disposition: String,
     pub(crate) planned_pr_id: String,
     pub(crate) actual_pr_url: Option<String>,
@@ -320,6 +324,8 @@ pub(crate) fn merge_run(config: &MergeConfig) -> Result<MergeResult, String> {
         forge_status: gate.forge_status,
         forge_promotion_decision: gate.forge_promotion_decision,
         risk_classification: gate.risk_classification,
+        risk_tier: gate.risk_tier,
+        proportional_gate_notes: gate.proportional_gate_notes,
         merge_execute_requested: merge_execution.requested,
         merge_method: merge_execution.method,
         merge_executed: merge_execution.merge_executed,
@@ -409,6 +415,8 @@ fn merge_gate_view(gate: &MergeGateStatus) -> MergeGateView<'_> {
         forge_claim_ids: &gate.forge_claim_ids,
         forge_proof_obligations: &gate.forge_proof_obligations,
         risk_classification: &gate.risk_classification,
+        risk_tier: gate.risk_tier.as_deref(),
+        proportional_gate_notes: &gate.proportional_gate_notes,
         policy_disposition: &gate.policy_disposition,
         planned_pr_id: &gate.planned_pr_id,
         actual_pr_url: gate.actual_pr_url.as_deref(),
@@ -492,6 +500,12 @@ fn merge_gate_status_from_artifacts(
 ) -> Result<MergeGateStatus, String> {
     let mut issues = context_issues;
     let mut evidence_links = Vec::new();
+    // F4 比例ゲート: risk_tier.json があれば読む。無ければ現行動作（standard 扱い）。
+    let (risk_tier, risk_tier_reasons) = read_risk_tier(artifact_dir)?;
+    let mut proportional_gate_notes = Vec::new();
+    if risk_tier.is_some() {
+        evidence_links.push("risk_tier.json".to_string());
+    }
     let mut qa_status = "missing".to_string();
     let mut repair_status = "not_provided".to_string();
     let mut ci_status = "missing".to_string();
@@ -677,8 +691,10 @@ fn merge_gate_status_from_artifacts(
         actual_pr_url.as_deref(),
         &planned_pr_id,
         &changed_files,
+        risk_tier.as_deref(),
         &mut issues,
         &mut evidence_links,
+        &mut proportional_gate_notes,
     );
 
     let forge = forge_gate_status_from_artifacts(artifact_dir, &planned_pr_id, context, repo_root)?;
@@ -708,6 +724,35 @@ fn merge_gate_status_from_artifacts(
             "risk_register.json or risk_register.md is required before fda merge".to_string(),
         );
     }
+
+    // F4 比例ゲート: tier=high は human_required_for 該当を blocking issue として明示する
+    // （fail-closed をさらに強める方向。tier=low の軽量化は上の conditional reviewer で実施済み）。
+    match risk_tier.as_deref() {
+        Some("high") => {
+            proportional_gate_notes.push(
+                "risk_tier=high: フルゲート維持のうえ human_required_for 該当を blocking issue として明示"
+                    .to_string(),
+            );
+            if risk_tier_reasons.is_empty() {
+                issues.push(
+                    "risk_tier=high のため human decision の解決が必要です（risk_tier.json）"
+                        .to_string(),
+                );
+            } else {
+                for reason in &risk_tier_reasons {
+                    issues.push(format!(
+                        "risk_tier=high は human decision を要求します: {reason}"
+                    ));
+                }
+            }
+        }
+        Some("low") => proportional_gate_notes.push(
+            "risk_tier=low: 必須 3 reviewer (pr_reviewer/functional_qa/security_qa) は不変、conditional は比例軽量化"
+                .to_string(),
+        ),
+        _ => {}
+    }
+
     let human_approval_risk =
         matches!(risk_classification.as_str(), "high_risk" | "regulated_risk");
     let auto_merge_allowed = repository_auto_merge_allowed(target_repo);
@@ -744,6 +789,8 @@ fn merge_gate_status_from_artifacts(
         forge_claim_ids: forge.claim_ids,
         forge_proof_obligations: forge.proof_obligations,
         risk_classification,
+        risk_tier,
+        proportional_gate_notes,
         policy_disposition,
         planned_pr_id,
         actual_pr_url,
@@ -758,8 +805,10 @@ fn enforce_review_agent_gate_before_merge(
     actual_pr_url: Option<&str>,
     planned_pr_id: &str,
     changed_files: &[String],
+    risk_tier: Option<&str>,
     issues: &mut Vec<String>,
     evidence_links: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
 ) {
     let store = FsArtifactStore;
     let review_gate_path = artifact_dir.join("review_agent_gate.json");
@@ -777,7 +826,9 @@ fn enforce_review_agent_gate_before_merge(
                 actual_pr_url,
                 planned_pr_id,
                 changed_files,
+                risk_tier,
                 issues,
+                proportional_notes,
             ),
             Err(error) => issues.push(format!(
                 "failed to read review_agent_gate.json before merge: {error}"
@@ -871,7 +922,9 @@ fn validate_review_agent_gate_json(
     actual_pr_url: Option<&str>,
     planned_pr_id: &str,
     changed_files: &[String],
+    risk_tier: Option<&str>,
     issues: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
 ) {
     match value_string(gate, "status").as_deref() {
         Some("passed") => {}
@@ -957,29 +1010,42 @@ fn validate_review_agent_gate_json(
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
+    // F4 比例ゲート: tier=low の run は forge_reviewer / design_qa の conditional 要求を
+    // auto not_applicable にする（理由を必ず記録）。必須 3 reviewer は不変（fail-closed 維持）。
+    let low_risk_tier = risk_tier == Some("low");
     if changed_files
         .iter()
         .any(|path| requires_forge_review_for_merge(path))
     {
-        validate_required_conditional_reviewer(
-            "forge_reviewer",
-            &["forge_reviewer", "qax2", "orchestrator"],
-            &conditional_reviewers,
-            artifact_dir,
-            issues,
-        );
+        if low_risk_tier {
+            proportional_notes
+                .push("forge_reviewer: auto not_applicable (reason: risk_tier=low)".to_string());
+        } else {
+            validate_required_conditional_reviewer(
+                "forge_reviewer",
+                &["forge_reviewer", "qax2", "orchestrator"],
+                &conditional_reviewers,
+                artifact_dir,
+                issues,
+            );
+        }
     }
     if changed_files
         .iter()
         .any(|path| requires_design_qa_for_merge(path))
     {
-        validate_required_conditional_reviewer(
-            "design_qa",
-            &["design_qa"],
-            &conditional_reviewers,
-            artifact_dir,
-            issues,
-        );
+        if low_risk_tier {
+            proportional_notes
+                .push("design_qa: auto not_applicable (reason: risk_tier=low)".to_string());
+        } else {
+            validate_required_conditional_reviewer(
+                "design_qa",
+                &["design_qa"],
+                &conditional_reviewers,
+                artifact_dir,
+                issues,
+            );
+        }
     }
 }
 
@@ -1567,6 +1633,19 @@ fn external_pr_scope_blocks_merge(receipt: &Value) -> bool {
     };
     let kind = value_string(scope, "kind").unwrap_or_else(|| "unknown".to_string());
     kind != "within_scope"
+}
+
+/// artifact_dir の risk_tier.json（F4）を読む。無ければ (None, empty)。
+fn read_risk_tier(artifact_dir: &Path) -> Result<(Option<String>, Vec<String>), String> {
+    let path = artifact_dir.join("risk_tier.json");
+    if !path.exists() {
+        return Ok((None, Vec::new()));
+    }
+    let value = read_json_value(&path)?;
+    Ok((
+        value_string(&value, "tier"),
+        value_string_array(&value, "reasons"),
+    ))
 }
 
 fn risk_classification_from_artifacts(

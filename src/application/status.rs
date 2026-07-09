@@ -59,6 +59,7 @@ pub(crate) struct MergeStatus {
     pub(crate) policy_disposition: Option<String>,
     pub(crate) ci_status: Option<String>,
     pub(crate) risk_classification: Option<String>,
+    pub(crate) risk_tier: Option<String>,
     pub(crate) actual_pr_url: Option<String>,
 }
 
@@ -253,6 +254,7 @@ fn merge_status(store: &impl ArtifactStore, artifact_dir: &Path) -> Result<Merge
         policy_disposition: source.and_then(|value| value_string(value, "policy_disposition")),
         ci_status: source.and_then(|value| value_string(value, "ci_status")),
         risk_classification: source.and_then(|value| value_string(value, "risk_classification")),
+        risk_tier: source.and_then(|value| value_string(value, "risk_tier")),
         actual_pr_url: source.and_then(|value| value_string(value, "actual_pr_url")),
     })
 }

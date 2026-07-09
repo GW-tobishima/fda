@@ -3257,6 +3257,97 @@ MERGE_APPROVAL: not_granted\n\n\
     }
 
     #[test]
+    fn merge_low_risk_tier_relaxes_conditional_reviewers() {
+        let base = env::temp_dir().join(format!(
+            "fda-merge-low-tier-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_merge_inputs(&artifacts, "passed", "delivery");
+        // forge_reviewer を要求する変更 (.fda/gates.yaml)。tier 無しなら blocked になる。
+        let mut external_pr = read_json_value(&artifacts.join("external_pr_receipt.json")).unwrap();
+        external_pr["changed_files"] = json!([".fda/gates.yaml"]);
+        write_json_file(&artifacts.join("external_pr_receipt.json"), &external_pr).unwrap();
+        write_json_file(
+            &artifacts.join("risk_tier.json"),
+            &json!({
+                "schema_version": "fda.risk_tier.v1",
+                "tier": "low",
+                "reasons": ["全 scope パスが delivery_policy.low_risk_paths に一致します"],
+                "matched_low_risk_paths": [".fda/gates.yaml"],
+                "policy_source": ".fda/delivery_policy.yaml"
+            }),
+        )
+        .unwrap();
+
+        let result = merge_run(&merge_config(artifacts, out.clone(), target)).unwrap();
+
+        assert_eq!(result.verdict, "pass");
+        assert_eq!(result.merge_gate_status, "merge_ready");
+        assert_eq!(result.risk_tier.as_deref(), Some("low"));
+        assert!(result
+            .proportional_gate_notes
+            .iter()
+            .any(|note| note.contains("forge_reviewer") && note.contains("not_applicable")));
+        let summary = read_json_value(&out.join("merge_gate_summary.json")).unwrap();
+        assert_eq!(
+            summary.get("risk_tier").and_then(Value::as_str),
+            Some("low")
+        );
+        assert!(!summary
+            .get("issues")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .any(|issue| issue
+                .as_str()
+                .is_some_and(|text| text.contains("forge_reviewer must be marked required"))));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
+    fn merge_without_risk_tier_keeps_conditional_reviewer_enforcement() {
+        let base = env::temp_dir().join(format!(
+            "fda-merge-no-tier-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_merge_inputs(&artifacts, "passed", "delivery");
+        let mut external_pr = read_json_value(&artifacts.join("external_pr_receipt.json")).unwrap();
+        external_pr["changed_files"] = json!([".fda/gates.yaml"]);
+        write_json_file(&artifacts.join("external_pr_receipt.json"), &external_pr).unwrap();
+        // risk_tier.json は置かない -> 現行動作 (standard 扱い) を維持する。
+
+        let result = merge_run(&merge_config(artifacts, out.clone(), target)).unwrap();
+
+        assert_eq!(result.verdict, "blocked");
+        assert_eq!(result.merge_gate_status, "blocked");
+        assert_eq!(result.risk_tier, None);
+        let summary = read_json_value(&out.join("merge_gate_summary.json")).unwrap();
+        assert!(summary
+            .get("issues")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .any(|issue| issue.as_str().is_some_and(|text| {
+                text.contains("conditional reviewer forge_reviewer must be marked required")
+            })));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
     fn merge_blocks_missing_review_agent_gate_reviewer_evidence() {
         let base = env::temp_dir().join(format!(
             "fda-merge-review-agent-evidence-test-{}-{}",

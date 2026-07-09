@@ -20,6 +20,7 @@ pub(crate) enum Command {
     Status(StatusConfig),
     NotifyTest(NotifyConfig),
     Ui(UiConfig),
+    Gc(GcConfig),
     ValidateArtifacts(ValidateConfig),
 }
 
@@ -171,6 +172,15 @@ pub(crate) struct StatusConfig {
     pub(crate) print_json: bool,
 }
 
+/// `fda gc`（F5 庭師）の設定。read-only スキャン + docket 出力のみで、
+/// 既存 run への変更・削除は一切しない。ATO 同期も行わない。
+pub(crate) struct GcConfig {
+    pub(crate) repo_root: PathBuf,
+    pub(crate) artifacts_root: PathBuf,
+    pub(crate) max_age_days: u64,
+    pub(crate) print_json: bool,
+}
+
 pub(crate) struct NotifyConfig {
     pub(crate) repo_root: PathBuf,
     pub(crate) artifact_dir: PathBuf,
@@ -248,6 +258,9 @@ pub(crate) fn parse_args(args: Vec<String>) -> Result<Command, String> {
     }
     if command == "ui" {
         return parse_ui_args(&args[1..]);
+    }
+    if command == "gc" {
+        return parse_gc_args(&args[1..]);
     }
     if command != "validate-artifacts" {
         crate::cli::output::print_help();
@@ -970,6 +983,45 @@ fn parse_ui_args(args: &[String]) -> Result<Command, String> {
         runs_root,
         port,
         open_browser,
+        print_json,
+    }))
+}
+
+fn parse_gc_args(args: &[String]) -> Result<Command, String> {
+    let mut repo_root = PathBuf::from(".");
+    let mut artifacts_root = PathBuf::from("artifacts/runs");
+    let mut max_age_days: u64 = 30;
+    let mut print_json = false;
+
+    let mut index = 0;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--repo-root" => {
+                index += 1;
+                repo_root = PathBuf::from(expect_value(args, index, "--repo-root")?);
+            }
+            "--artifacts-root" => {
+                index += 1;
+                artifacts_root = PathBuf::from(expect_value(args, index, "--artifacts-root")?);
+            }
+            "--max-age-days" => {
+                index += 1;
+                max_age_days = expect_value(args, index, "--max-age-days")?
+                    .parse::<u64>()
+                    .map_err(|_| "--max-age-days requires a non-negative integer".to_string())?;
+            }
+            "--json" => {
+                print_json = true;
+            }
+            other => return Err(format!("unknown option `{other}`")),
+        }
+        index += 1;
+    }
+
+    Ok(Command::Gc(GcConfig {
+        repo_root,
+        artifacts_root,
+        max_age_days,
         print_json,
     }))
 }

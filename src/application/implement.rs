@@ -114,6 +114,14 @@ fn implement_dry_run(
         &out_dir.join("implementation_handoff.md"),
     ));
 
+    // F4 比例ゲート: Scope In と delivery_policy から risk tier を判定し risk_tier.json を出力する。
+    artifacts_written.push(crate::application::risk_tier::write_risk_tier_artifact(
+        &store,
+        &repo_root,
+        &artifact_dir,
+        &out_dir,
+    )?);
+
     write_text_file(
         &out_dir.join("codex_prompt.md"),
         &codex_dry_run_prompt_markdown(&target_repo, &context),

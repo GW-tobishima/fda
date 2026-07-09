@@ -1,6 +1,7 @@
 pub(crate) mod decide;
 pub(crate) mod decisions;
 pub(crate) mod design;
+pub(crate) mod gc;
 pub(crate) mod implement;
 pub(crate) mod merge;
 pub(crate) mod notify;
@@ -10,6 +11,7 @@ pub(crate) mod ports;
 pub(crate) mod profile;
 pub(crate) mod repair;
 pub(crate) mod review;
+pub(crate) mod risk_tier;
 pub(crate) mod runtime;
 pub(crate) mod start;
 pub(crate) mod status;
