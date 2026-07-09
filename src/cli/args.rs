@@ -21,6 +21,7 @@ pub(crate) enum Command {
     NotifyTest(NotifyConfig),
     Ui(UiConfig),
     Gc(GcConfig),
+    Policy(PolicyConfig),
     ValidateArtifacts(ValidateConfig),
 }
 
@@ -44,8 +45,12 @@ pub(crate) struct DecideConfig {
     pub(crate) repo_root: PathBuf,
     pub(crate) artifact_dir: PathBuf,
     pub(crate) decision_id: String,
+    /// 人間が明示回答する場合の答え。`--by-contract` 使用時は空で、契約の answer を使う。
     pub(crate) answer: String,
     pub(crate) decided_by: String,
+    /// `--by-contract <rule_id>`。指定時は delegation contract の answer で回答を記録する。
+    /// `--answer` とは排他。
+    pub(crate) by_contract: Option<String>,
     pub(crate) ato: AtoConfig,
     pub(crate) print_json: bool,
 }
@@ -181,6 +186,16 @@ pub(crate) struct GcConfig {
     pub(crate) print_json: bool,
 }
 
+/// `fda policy propose`（F1 判断の立法化）の設定。read-only スキャン + 提案出力のみで、
+/// `.fda` へは一切書き込まない。ATO 同期も行わない。制定は人間の YAML 編集のみ。
+pub(crate) struct PolicyConfig {
+    pub(crate) repo_root: PathBuf,
+    pub(crate) artifacts_root: PathBuf,
+    pub(crate) out: PathBuf,
+    pub(crate) min_occurrences: u64,
+    pub(crate) print_json: bool,
+}
+
 pub(crate) struct NotifyConfig {
     pub(crate) repo_root: PathBuf,
     pub(crate) artifact_dir: PathBuf,
@@ -261,6 +276,9 @@ pub(crate) fn parse_args(args: Vec<String>) -> Result<Command, String> {
     }
     if command == "gc" {
         return parse_gc_args(&args[1..]);
+    }
+    if command == "policy" {
+        return parse_policy_args(&args[1..]);
     }
     if command != "validate-artifacts" {
         crate::cli::output::print_help();
@@ -452,6 +470,7 @@ fn parse_decide_args(args: &[String]) -> Result<Command, String> {
     let mut artifact_dir = PathBuf::from(".");
     let mut decision_id = None;
     let mut answer = None;
+    let mut by_contract = None;
     let mut decided_by = "human".to_string();
     let mut ato = AtoConfig::default();
     let mut print_json = false;
@@ -475,6 +494,10 @@ fn parse_decide_args(args: &[String]) -> Result<Command, String> {
                 index += 1;
                 answer = Some(expect_value(args, index, "--answer")?);
             }
+            "--by-contract" => {
+                index += 1;
+                by_contract = Some(expect_value(args, index, "--by-contract")?);
+            }
             "--decided-by" => {
                 index += 1;
                 decided_by = expect_value(args, index, "--decided-by")?;
@@ -493,12 +516,20 @@ fn parse_decide_args(args: &[String]) -> Result<Command, String> {
         index += 1;
     }
 
+    if answer.is_some() && by_contract.is_some() {
+        return Err("--answer and --by-contract are mutually exclusive".to_string());
+    }
+    if answer.is_none() && by_contract.is_none() {
+        return Err("decide requires --answer <answer> or --by-contract <rule-id>".to_string());
+    }
+
     Ok(Command::Decide(DecideConfig {
         repo_root,
         artifact_dir,
         decision_id: decision_id.ok_or_else(|| "decide requires <decision-id>".to_string())?,
-        answer: answer.ok_or_else(|| "--answer is required".to_string())?,
+        answer: answer.unwrap_or_default(),
         decided_by,
+        by_contract,
         ato,
         print_json,
     }))
@@ -1026,6 +1057,57 @@ fn parse_gc_args(args: &[String]) -> Result<Command, String> {
     }))
 }
 
+fn parse_policy_args(args: &[String]) -> Result<Command, String> {
+    if args.first().map(String::as_str) != Some("propose") {
+        return Err("policy requires subcommand `propose`".to_string());
+    }
+    let mut repo_root = PathBuf::from(".");
+    let mut artifacts_root = PathBuf::from("artifacts/runs");
+    let mut out = PathBuf::from("artifacts/runs/_policy");
+    let mut min_occurrences: u64 = 3;
+    let mut print_json = false;
+
+    let mut index = 1;
+    while index < args.len() {
+        match args[index].as_str() {
+            "--repo-root" => {
+                index += 1;
+                repo_root = PathBuf::from(expect_value(args, index, "--repo-root")?);
+            }
+            "--artifacts-root" => {
+                index += 1;
+                artifacts_root = PathBuf::from(expect_value(args, index, "--artifacts-root")?);
+            }
+            "--out" => {
+                index += 1;
+                out = PathBuf::from(expect_value(args, index, "--out")?);
+            }
+            "--min-occurrences" => {
+                index += 1;
+                min_occurrences = expect_value(args, index, "--min-occurrences")?
+                    .parse::<u64>()
+                    .map_err(|_| "--min-occurrences requires a positive integer".to_string())?;
+                if min_occurrences == 0 {
+                    return Err("--min-occurrences requires a positive integer".to_string());
+                }
+            }
+            "--json" => {
+                print_json = true;
+            }
+            other => return Err(format!("unknown option `{other}`")),
+        }
+        index += 1;
+    }
+
+    Ok(Command::Policy(PolicyConfig {
+        repo_root,
+        artifacts_root,
+        out,
+        min_occurrences,
+        print_json,
+    }))
+}
+
 fn parse_notify_args(args: &[String]) -> Result<Command, String> {
     if args.first().map(String::as_str) != Some("test") {
         return Err("notify requires subcommand `test`".to_string());
@@ -1087,4 +1169,78 @@ fn parse_notify_args(args: &[String]) -> Result<Command, String> {
         ato,
         print_json,
     }))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn args(items: &[&str]) -> Vec<String> {
+        items.iter().map(|item| item.to_string()).collect()
+    }
+
+    #[test]
+    fn decide_with_answer_parses() {
+        match parse_args(args(&["decide", "HD-FDA-001", "--answer", "yes"])) {
+            Ok(Command::Decide(config)) => {
+                assert_eq!(config.answer, "yes");
+                assert!(config.by_contract.is_none());
+            }
+            _ => panic!("expected decide command"),
+        }
+    }
+
+    #[test]
+    fn decide_with_by_contract_parses() {
+        match parse_args(args(&["decide", "HD-FDA-001", "--by-contract", "DC-001"])) {
+            Ok(Command::Decide(config)) => {
+                assert_eq!(config.by_contract.as_deref(), Some("DC-001"));
+                assert_eq!(config.answer, "");
+            }
+            _ => panic!("expected decide command"),
+        }
+    }
+
+    #[test]
+    fn decide_answer_and_by_contract_are_mutually_exclusive() {
+        match parse_args(args(&[
+            "decide",
+            "HD-FDA-001",
+            "--answer",
+            "yes",
+            "--by-contract",
+            "DC-001",
+        ])) {
+            Err(err) => assert!(err.contains("mutually exclusive")),
+            Ok(_) => panic!("expected mutual-exclusion error"),
+        }
+    }
+
+    #[test]
+    fn decide_requires_answer_or_by_contract() {
+        match parse_args(args(&["decide", "HD-FDA-001"])) {
+            Err(err) => assert!(err.contains("--answer") && err.contains("--by-contract")),
+            Ok(_) => panic!("expected required-one error"),
+        }
+    }
+
+    #[test]
+    fn policy_propose_defaults_parse() {
+        match parse_args(args(&["policy", "propose"])) {
+            Ok(Command::Policy(config)) => {
+                assert_eq!(config.min_occurrences, 3);
+                assert_eq!(config.artifacts_root, PathBuf::from("artifacts/runs"));
+                assert_eq!(config.out, PathBuf::from("artifacts/runs/_policy"));
+            }
+            _ => panic!("expected policy command"),
+        }
+    }
+
+    #[test]
+    fn policy_requires_propose_subcommand() {
+        match parse_args(args(&["policy"])) {
+            Err(err) => assert!(err.contains("propose")),
+            Ok(_) => panic!("expected propose subcommand error"),
+        }
+    }
 }

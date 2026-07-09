@@ -19,6 +19,7 @@ ALLOWED_APPLICATION_INFRA_USES = {
     "src/application/status.rs": {
         "use crate::infra::clock::system_unix_seconds;",
         "use crate::infra::fs_store::FsArtifactStore;",
+        "use crate::infra::yaml::SerdeYamlValidator;",
     },
     "src/application/design.rs": {
         "use crate::infra::clock::SystemClock;",
@@ -27,10 +28,15 @@ ALLOWED_APPLICATION_INFRA_USES = {
     "src/application/decide.rs": {
         "use crate::infra::clock::SystemClock;",
         "use crate::infra::fs_store::FsArtifactStore;",
+        "use crate::infra::yaml::SerdeYamlValidator;",
     },
     "src/application/gc.rs": {
         "use crate::infra::clock::system_unix_seconds;",
         "use crate::infra::fs_store::{list_dir_names, modified_unix_seconds, FsArtifactStore};",
+    },
+    "src/application/policy.rs": {
+        "use crate::infra::clock::system_unix_seconds;",
+        "use crate::infra::fs_store::{list_dir_names, FsArtifactStore};",
     },
     "src/application/risk_tier.rs": {
         "use crate::infra::yaml::SerdeYamlValidator;",

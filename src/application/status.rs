@@ -3,14 +3,18 @@ use serde_json::Value;
 use std::path::{Path, PathBuf};
 
 use crate::application::decisions::{
-    decision_answers_from_receipts, decision_summaries_from_packet, read_decision_receipts,
-    read_json_value, value_string,
+    decision_answers_from_receipts, decision_summaries_from_packet, decision_type_from_packet,
+    read_decision_receipts, read_json_value, value_string,
 };
+use crate::application::policy::{applicable_rule_ids, read_delegation_contract_rules};
 use crate::application::ports::ArtifactStore;
 use crate::cli::args::StatusConfig;
 use crate::domain::entities::HumanDecisionSummary;
 use crate::domain::policies::decision::decision_blockers;
+use crate::infra::clock::system_unix_seconds;
 use crate::infra::fs_store::FsArtifactStore;
+use crate::infra::yaml::SerdeYamlValidator;
+use crate::support::date::unix_seconds_to_ymd;
 use crate::support::paths::{display_path, resolve_path};
 
 #[derive(Debug, Serialize)]
@@ -21,6 +25,8 @@ pub(crate) struct StatusResult {
     pub(crate) current_phase: String,
     pub(crate) phase_reason: String,
     pub(crate) unresolved_decisions: Vec<HumanDecisionSummary>,
+    /// 適用可能な delegation contract のヒント（自動適用はしない。人間が明示指定）。
+    pub(crate) contract_hints: Vec<String>,
     pub(crate) notification: NotificationStatus,
     pub(crate) qa: QaStatus,
     pub(crate) repair: RepairStatus,
@@ -98,6 +104,7 @@ fn status_with_store(
     }
 
     let unresolved_decisions = unresolved_decisions(store, &artifact_dir)?;
+    let contract_hints = contract_hints(store, &repo_root, &artifact_dir, &unresolved_decisions);
     let notification = notification_status(store, &artifact_dir)?;
     let qa = qa_status(store, &artifact_dir)?;
     let repair = repair_status(store, &artifact_dir)?;
@@ -129,12 +136,50 @@ fn status_with_store(
         current_phase,
         phase_reason,
         unresolved_decisions,
+        contract_hints,
         notification,
         qa,
         repair,
         merge,
         next_actions,
     })
+}
+
+/// 未解決判断に適用可能な delegation contract を「適用可」ヒントとして返す。
+/// 自動適用はしない（人間が `fda decide <ID> --by-contract <rule>` を明示実行する）。
+/// read-only projection のため、契約 YAML の不整合はヒント無しへ degrade する（authoritative
+/// gate は decide --by-contract 側で fail-closed）。
+fn contract_hints(
+    store: &impl ArtifactStore,
+    repo_root: &Path,
+    artifact_dir: &Path,
+    unresolved: &[HumanDecisionSummary],
+) -> Vec<String> {
+    if unresolved.is_empty() {
+        return Vec::new();
+    }
+    let yaml = SerdeYamlValidator;
+    let rules = read_delegation_contract_rules(store, &yaml, repo_root).unwrap_or_default();
+    if rules.is_empty() {
+        return Vec::new();
+    }
+    let packet_path = artifact_dir.join("human_decision_packet.json");
+    let Ok(packet) = read_json_value(store, &packet_path) else {
+        return Vec::new();
+    };
+    let today = unix_seconds_to_ymd(system_unix_seconds());
+    let mut hints = Vec::new();
+    for decision in unresolved {
+        let decision_type =
+            decision_type_from_packet(&packet, &decision.decision_id).unwrap_or_default();
+        for rule_id in applicable_rule_ids(&rules, &decision_type, &decision.summary, &today) {
+            hints.push(format!(
+                "{rule_id} 適用可: fda decide {} --by-contract {rule_id}",
+                decision.decision_id
+            ));
+        }
+    }
+    hints
 }
 
 fn unresolved_decisions(

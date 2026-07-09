@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fda-v1/repository-profile/delegation_contract_yaml.schema.json",
+  "title": ".fda/delegation_contract.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["delegation_contract"],
+  "properties": {
+    "delegation_contract": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rule" }
+    }
+  },
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "decision_type",
+        "match_summary_keywords",
+        "answer",
+        "authority",
+        "enacted_from",
+        "expires"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "pattern": "^DC-"
+        },
+        "decision_type": { "type": "string", "minLength": 1 },
+        "match_summary_keywords": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "answer": { "type": "string", "minLength": 1 },
+        "authority": { "type": "string", "minLength": 1 },
+        "enacted_from": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "expires": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

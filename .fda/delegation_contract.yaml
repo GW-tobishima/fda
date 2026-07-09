@@ -1,0 +1,20 @@
+# FDA delegation contract（委任契約）— optional profile
+#
+# このファイルは profile gate の必須 7 ファイルには含まれない任意ファイルである。
+# ここに人間がルールを編集・追記する行為そのものが「制定」であり、AI は制定しない
+# （`fda policy propose` は候補を artifacts/runs/_policy/ に提案するだけで .fda へは書かない）。
+# 各ルールは契約 ID 引用・期限（expires）必須で、fda decide --by-contract <rule_id> のときだけ
+# 明示適用される。expires 切れ・type / keyword 不一致は fail-closed で人間判断へ戻る。
+delegation_contract:
+  - rule_id: DC-001
+    decision_type: spec_decision
+    match_summary_keywords:
+      - "Scope In / Scope Out"
+      - "Intake 正本"
+    answer: approve_scope
+    authority: k_tobishima
+    enacted_from:
+      - "artifacts/runs/fda-start-1783546909 HD-FDA-001"
+      - "artifacts/runs/fda-start-1783555082 HD-FDA-001"
+    expires: "2026-10-01"
+    note: 実際に 2 回承認された同型判断

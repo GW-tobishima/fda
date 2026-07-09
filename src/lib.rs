@@ -6730,6 +6730,7 @@ MERGE_APPROVAL: not_granted\n\n\
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -6814,6 +6815,7 @@ MERGE_APPROVAL: not_granted\n\n\
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -6873,6 +6875,7 @@ MERGE_APPROVAL: not_granted\n\n\
                 decision_id: decision_id.to_string(),
                 answer: answer.to_string(),
                 decided_by: "test".to_string(),
+                by_contract: None,
                 ato: AtoConfig::default(),
                 print_json: false,
             })
@@ -6892,6 +6895,7 @@ MERGE_APPROVAL: not_granted\n\n\
             decision_id: "HD-FDA-001".to_string(),
             answer: "revise".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })
@@ -6995,6 +6999,7 @@ MERGE_APPROVAL: not_granted\n\n\
             decision_id: "HDP-FDA-TOP-001".to_string(),
             answer: "approve_top_level".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })
@@ -7101,6 +7106,7 @@ MERGE_APPROVAL: not_granted\n\n\
             decision_id: "HDP-001".to_string(),
             answer: "B".to_string(),
             decided_by: "test".to_string(),
+            by_contract: None,
             ato: AtoConfig::default(),
             print_json: false,
         })
