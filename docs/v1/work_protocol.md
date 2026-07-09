@@ -46,24 +46,30 @@ ATO task/run を先に開き、各 fda コマンドに
      external_pr_receipt.json を残す。Codex 環境は fda implement --live も可）
 6) fda review                            … 3 read-only reviewer の receipt を集約
    → review_agent_gate_packet.md を artifacts/review_packets/pr-<PR番号>.md に反映
+     （自動反映されない。手動反映が必須。未反映のまま merge に進むと blocked）
    → python3 scripts/check_review_agent_gate.py --pr-number <PR番号>
 7) fda continue                          … QA FAIL 時の repair loop（V1.5: --epic で次 PR 判定）
 8) fda merge                             … merge gate。V1.5 でも auto merge しない。
      merge 前に ato case evaluate --task <key> --no-write --json で Forge gate を試算
+     （verdict=promote でも merge approval ではない。fda merge 自体の Forge gate は
+       ローカル forge_projection.json を評価し、hold / blocked のまま merge に進まない）
 9) fda status / fda ui / fda open        … 状態確認・Mission Control・run 単体 hub
 ```
 
 ## 4. Review Agent Gate（PR 必須証跡）
 
-- PR ごとに `artifacts/review_packets/pr-<PR番号>.md` を作り `REVIEW_AGENT_GATE` を記録する。
+- PR を作る前、または PR を更新した直後に、`ato agent broker --task <key> --role <role> --json`
+  または repo-local policy（`.fda/agent_roles.yaml`）から必要 reviewer を確認する。
+- PR ごとに `artifacts/review_packets/pr-<PR番号>.md` を作り `REVIEW_AGENT_GATE` を記録する
+  （`review_agent_gate_packet.md` からの反映は自動ではない）。
 - 必須 read-only reviewer: `pr_reviewer` / `functional_qa` / `security_qa`。
 - ATO / Forge / FDA の証跡・handoff・review packet・human decision 境界に触れる場合は
   `forge_reviewer`（無ければ `qax2` 代替 + 理由記録）。UI / frontend / browser に触れる場合は
   `design_qa`。該当しない場合も `design_qa: not_applicable` と理由を残す。
 - checker: `python3 scripts/check_review_agent_gate.py --pr-number <PR番号>`
   （python3 が無ければ `python` / `py -3`。Rust 側は `FDA_PYTHON` → python3 → python → py -3）。
-- `REVIEW_AGENT_OK` は merge approval ではない。FAIL / pending / evidence 不足は
-  PR ready / merge に進めず、AI repair・QA repair・typed human decision へ戻す。
+- `REVIEW_AGENT_OK` は merge approval ではない。`REVIEW_AGENT_HOLD` / FAIL / pending /
+  evidence 不足は PR ready / merge に進めず、AI repair・QA repair・typed human decision へ戻す。
 
 ## 5. 禁止事項（fail-closed）
 
