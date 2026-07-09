@@ -1,0 +1,41 @@
+{
+  "schema_version": "fda.pr_reviewer_receipt.v0",
+  "receipt_id": "receipt-pr-reviewer-pr-v15-002",
+  "role": "pr_reviewer",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-002",
+  "reviewed_planned_pr_id": "PR-V15-002",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/3",
+  "reviewed_commits": ["4a4aacb", "73dbbfe", "ecc8781"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "high1: 統治ファイル（.fda/** 配下・scripts/check_review_agent_gate.py 等）が forge_reviewer 緩和判定から実質的に除外されておらず、比例緩和が governance-critical な変更にも適用され得る（security_qa の HIGH-2 と同一事象を PR 一貫性の観点から指摘）",
+    "medium1: merge.rs が review.rs / review_agent_gate.json の既存 schema 契約を使わず独自にスキップ判定しており、二重ゲート化して不整合を生み得る（forge_reviewer 指摘と同一事象）",
+    "low1: fda gc が壊れた JSON（ato_state_receipt.json / human_decision_packet.json 等）を検出すると scan 全体を abort し、他 run の棚卸しが止まる",
+    "low2: detailed_design.md の F4 節に「ac_test_mapping 最低件数免除」の記述が残り、実装の厳格側判定と乖離している"
+  ],
+  "repair_commits": ["73dbbfe"],
+  "final_verdict": "pass",
+  "findings": [
+    "low(non-blocking, 将来課題): hard guard パス集合（risk_tier.rs::is_governance_critical_path）と merge.rs::requires_forge_review_for_merge の対称化は未実施",
+    "low(non-blocking, 将来課題): scripts/check_review_agent_gate.py が review packet 自己申告の changed_files を実際の git diff と突合していない",
+    "low(work1 で対応済み): 自己申告 changed_files 基準の土台となる .github/workflows/ci.yml 自体が governance hard guard の対象外だった",
+    "low(work1 で対応済み): tests/test_review_agent_gate.py 自体が governance hard guard の対象外だった（gate の自己検証コードが無防備）"
+  ],
+  "repair_commits_polish": ["ecc8781"],
+  "polish_notes": "本 PR の残余 low 4 件のうち、is_governance_critical_path の対称化と checker の changed_files 突合は将来 hardening 課題として残す一方、tests/test_review_agent_gate.py と .github/workflows/ci.yml の2件は commit ecc8781 で is_governance_critical_path に追加し解消した。cargo test --lib は 207 passed のまま（既存 governance_critical_paths_are_hardcoded テストへの assert 追加のみで回帰なし）。",
+  "evidence": [
+    "git show 4a4aacb --stat",
+    "git show 73dbbfe (HIGH-2: governance-critical パスのハードガード導入 / forge_reviewer 指摘: 二重ゲート不整合の解消)",
+    "git show ecc8781 -- src/application/risk_tier.rs",
+    "cargo test --lib => 207 passed; 0 failed",
+    "python3 scripts/check_architecture_boundaries.py => architecture boundary check passed"
+  ],
+  "summary": "初回レビューで high1（統治ファイルの forge_reviewer バイパス）/ medium1（merge.rs 独自スキップ判定による二重ゲート不整合）/ low1・low2（gc の壊れた JSON で scan abort、detailed_design.md の記述乖離）を指摘。repair commit 73dbbfe で全て解消したことを確認し、再レビューで pass。再レビュー時に残余 low 4 件（非 blocking、将来 hardening）を追記し、うち2件（tests/test_review_agent_gate.py・.github/workflows/ci.yml の hard guard 未対象）は本 PR の commit ecc8781 で解消済み。残り2件（hard guard パス集合の対称化、checker の changed_files 実 diff 突合）は将来課題として review packet に記録する。",
+  "generated_at_unix_seconds": 1783561221
+}

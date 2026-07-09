@@ -65,7 +65,8 @@ pub(crate) fn decide(config: &DecideConfig) -> Result<DecideResult, String> {
         return Err(format!("unknown decision id `{}`", config.decision_id));
     };
 
-    // `--by-contract` 指定時は delegation contract を評価し、合致 + 未失効のときだけ
+    // `--by-contract` 指定時は delegation contract を評価し、合致（type 一致 +
+    // 全キーワードの AND 一致）+ 未失効（UTC 暦日基準・expires 当日から無効）のときだけ
     // 契約の answer で回答を記録する。1 つでも満たさなければ fail-closed で人間判断へ戻す。
     let now_unix = clock.now_unix_seconds();
     let contract_application = if let Some(rule_id) = &config.by_contract {

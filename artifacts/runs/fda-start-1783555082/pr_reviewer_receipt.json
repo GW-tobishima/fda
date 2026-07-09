@@ -1,0 +1,31 @@
+{
+  "schema_version": "fda.pr_reviewer_receipt.v0",
+  "receipt_id": "receipt-pr-reviewer-pr-v15-001",
+  "role": "pr_reviewer",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-001",
+  "reviewed_planned_pr_id": "PR-V15-001",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/1",
+  "reviewed_commits": ["43a3dc0", "39612bc", "1b1d209"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "high1: docs/v1/work_protocol.md から REVIEW_AGENT_HOLD の列挙が脱落している",
+    "medium3: scope approval の禁止列挙・review_agent_gate_packet.md からの手動反映注記・ato agent broker 手順が脱落している",
+    "low1: Forge gate の詳細（PromotionDecision / verdict 種別）が簡略化されている"
+  ],
+  "repair_commits": ["39612bc", "1b1d209"],
+  "final_verdict": "pass",
+  "findings": [],
+  "evidence": [
+    "git show 43a3dc0 -- docs/v1/work_protocol.md",
+    "git diff 43a3dc0..1b1d209 -- docs/v1/work_protocol.md",
+    "docs/v1/work_protocol.md 内 REVIEW_AGENT_HOLD 列挙・scope approval 禁止列挙・手動反映注記・ato agent broker 手順・Forge gate 詳細の再確認"
+  ],
+  "summary": "初回レビューで high1（REVIEW_AGENT_HOLD 列挙脱落）/ medium3（scope approval 脱落・手動反映注記脱落・broker 手順脱落）/ low1（Forge gate 詳細簡略化）を指摘。repair commit 39612bc および 1b1d209 で全指摘を解消したことを確認し、pass 判定とした。",
+  "generated_at_unix_seconds": 1783557227
+}

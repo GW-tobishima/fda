@@ -1,0 +1,29 @@
+{
+  "schema_version": "fda.functional_qa_receipt.v0",
+  "receipt_id": "receipt-functional-qa-pr-v15-001",
+  "role": "functional_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-001",
+  "reviewed_planned_pr_id": "PR-V15-001",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/1",
+  "reviewed_commits": ["43a3dc0", "39612bc", "1b1d209"],
+  "verdict": "pass",
+  "findings": [],
+  "acceptance_criteria_checked": [
+    "AC1: work_protocol.md に重複記述がなく、他ドキュメントが正本を参照していること",
+    "AC2: 4 概念カーネル（Work/Evidence/Decision/Knowledge）の help 表現が一貫していること",
+    "AC3: cargo test（183 pass）と check_architecture_boundaries.py（pass）が実コマンドで検証されていること"
+  ],
+  "evidence": [
+    "cargo test --lib => 183 passed",
+    "python3 scripts/check_architecture_boundaries.py => pass",
+    "docs/v1/work_protocol.md / AGENTS.md / CLAUDE.md / .claude/skills/fda-delivery/SKILL.md の正本参照関係の確認"
+  ],
+  "summary": "AC1（重複記述なし・正本参照）/ AC2（4 概念グループ help）/ AC3（cargo test 183 pass + architecture gate pass）を実コマンドで検証し、全て pass。初回から repair を要する指摘なし。",
+  "generated_at_unix_seconds": 1783557227
+}

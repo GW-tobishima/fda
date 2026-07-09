@@ -1,0 +1,34 @@
+{
+  "schema_version": "fda.functional_qa_receipt.v0",
+  "receipt_id": "receipt-functional-qa-pr-v15-002",
+  "role": "functional_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-002",
+  "reviewed_planned_pr_id": "PR-V15-002",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/3",
+  "reviewed_commits": ["4a4aacb", "73dbbfe", "ecc8781"],
+  "verdict": "pass",
+  "findings": [
+    "non-blocking1: fda gc の stale 判定 (--max-age-days) の境界値テストは day 単位のみで秒単位の境界は未検証",
+    "non-blocking2: risk_tier.json の policy_source フィールドは delivery_policy.yaml 欠落時に固定文字列 <missing:...> になるが、部分欠落（low_risk_paths のみ欠落等）のケースの表示は未検証"
+  ],
+  "acceptance_criteria_checked": [
+    "AC1: assess_risk_tier が scope_paths と delivery_policy のみから low/standard/high を純粋に判定し、fda implement --dry-run 実行で risk_tier.json が実際に生成されること（実CLI実行 + risk_tier.json のフィールド比較で確認）",
+    "AC2: fda gc が read-only スキャンのみを行い、既存 run（artifacts/runs/**）の内容・mtime を変更しないこと（実行前後のディレクトリ内容ハッシュ比較で確認）",
+    "AC3: fda merge が保存済み risk_tier=low を無検証で信頼せず、merge 時に changed_files を live 再計算し stored/live 不一致時は緩和を却下すること（実CLI実行 + merge summary 出力の比較で確認）"
+  ],
+  "evidence": [
+    "cargo test --lib => 207 passed; 0 failed（relaxation / governance / merge 受理・却下 / review 緩和生成 / gc parse_error を含む）",
+    "cargo run -q -- validate-artifacts --out <tmp>/fda-validation-report.json => 70 passed, 0 failed, 43 skipped",
+    "python3 -m unittest discover -s tests -v => Ran 68 tests, OK",
+    "python3 scripts/check_architecture_boundaries.py => architecture boundary check passed",
+    "risk_tier.json / gc_docket.json の docs/standards/delivery-artifacts-v0/examples/forge_dashboard_epic 配下 example を validate-artifacts で passed 確認（ハッシュ/フィールド比較）"
+  ],
+  "summary": "AC1（risk tier 純ロジック + 実 CLI dry-run 生成物）/ AC2（gc の read-only 性、実行前後の内容比較）/ AC3（merge 時 live 再検証、stored/live mismatch の却下）を実コマンド実行 + 生成物のフィールド/ハッシュ比較で検証し、初回から全て pass。non-blocking の改善余地2件（stale 判定の秒単位境界、policy 部分欠落時の表示）を記録したが repair を要するものではない。本 PR の commit ecc8781（governance hard guard パス追加のみ）後も cargo test --lib 207 passed で回帰なしを再確認した。",
+  "generated_at_unix_seconds": 1783561221
+}

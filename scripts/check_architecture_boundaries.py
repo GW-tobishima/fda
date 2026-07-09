@@ -37,6 +37,7 @@ ALLOWED_APPLICATION_INFRA_USES = {
     "src/application/policy.rs": {
         "use crate::infra::clock::system_unix_seconds;",
         "use crate::infra::fs_store::{list_dir_names, FsArtifactStore};",
+        "use crate::infra::json_schema::JsonSchemaArtifactValidator;",
     },
     "src/application/epic.rs": {
         "use crate::infra::clock::system_unix_seconds;",

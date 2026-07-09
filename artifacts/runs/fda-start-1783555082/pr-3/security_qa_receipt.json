@@ -1,0 +1,32 @@
+{
+  "schema_version": "fda.security_qa_receipt.v0",
+  "receipt_id": "receipt-security-qa-pr-v15-002",
+  "role": "security_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-002",
+  "reviewed_planned_pr_id": "PR-V15-002",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/3",
+  "reviewed_commits": ["4a4aacb", "73dbbfe", "ecc8781"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "HIGH-1: stored tier（risk_tier.json）を無検証で信頼していた（TOCTOU / scope-drift）。merge 時に changed_files を live 再計算せず、risk_tier.json 生成後に scope が拡張されても比例緩和がそのまま適用され得た。",
+    "HIGH-2: .fda/** 配下を含む統治ファイル（scripts/check_review_agent_gate.py 等）の変更が、delivery_policy.yaml の low_risk_paths 指定次第で forge_reviewer 緩和の対象になり得た（YAML 設定による段階的統治弱体化の経路）。"
+  ],
+  "repair_commits": ["73dbbfe"],
+  "final_verdict": "pass",
+  "findings": [],
+  "residual_low_findings_ref": "review packet 側 pr_reviewer 行に記録（本 PR の security scope 外: hard guard パス集合の対称化 / checker の changed_files 突合は非 security の gate-consistency hardening 課題）。",
+  "evidence": [
+    "git show 73dbbfe -- src/application/risk_tier.rs (proportional_relaxation: stored=low かつ live=low の両方成立でのみ緩和を許可)",
+    "git show 73dbbfe -- src/application/risk_tier.rs (is_governance_critical_path: governance-critical パスは low_risk_paths / tier に関係なく forge_reviewer 緩和を不適用、YAML で上書き不可)",
+    "git diff 4a4aacb..73dbbfe -- .fda/delivery_policy.yaml (defense in depth: low_risk_paths から .fda/** を削除)",
+    "cargo test --lib => 207 passed; 0 failed（relaxation 純ロジック・hard guard 判定・merge 受理/却下のテストを含む）"
+  ],
+  "summary": "初回レビューで HIGH-1（stored tier 無検証信頼による TOCTOU / scope-drift）と HIGH-2（統治ファイルの forge_reviewer バイパス経路）を指摘。repair commit 73dbbfe で (1) merge 時に changed_files を live 再計算し stored/live 両方が low の場合のみ緩和を許可する proportional_relaxation、(2) governance-critical パスをコードにハードコードし delivery_policy.yaml では上書き不能にする is_governance_critical_path ハードガード、(3) defense in depth として repo の delivery_policy.yaml から low_risk_paths の .fda/** を削除、の3点を確認し pass 判定とした。本 PR の commit ecc8781（governance hard guard に gate テスト・CI 定義の2パスを追加）は security scope の新規リスクを持ち込まないことを確認した（既存ハードガード関数の対象パス集合を広げるだけで、緩和判定ロジック自体は不変）。",
+  "generated_at_unix_seconds": 1783561221
+}
