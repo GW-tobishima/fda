@@ -91,6 +91,7 @@ ALLOWED_APPLICATION_INFRA_USES = {
     "src/application/ui.rs": {
         "use crate::infra::clock::system_unix_seconds;",
         "use crate::infra::fs_store::{list_dir_names, list_file_names, FsArtifactStore};",
+        "use crate::infra::yaml::SerdeYamlValidator;",
     },
     "src/application/validate.rs": {
         "use crate::infra::clock::SystemClock;",
