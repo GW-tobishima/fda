@@ -1,0 +1,42 @@
+{
+  "schema_version": "fda.pr_reviewer_receipt.v0",
+  "receipt_id": "receipt-pr-reviewer-pr-v15-005",
+  "role": "pr_reviewer",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-005",
+  "reviewed_planned_pr_id": "PR-V15-005",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/6",
+  "reviewed_commits": ["9002395", "204de96", "320cdeb"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "HIGH: run_outcome の判定が merge_receipt の実 schema に存在しないキーを参照する死に分岐で構成されており、テスト側も実在しない架空キーを使った fixture を通していたため、blocked / human_approval_required が実際には常に pending へフォールバックする不具合を検出できず偽の green を報告していた。",
+    "HIGH: 道場（decision_journal）の帰結列が run 単位の投影（merge/qa/repair の状態は run に紐づく）であるにもかかわらず、run 内の全判断に一様に同一帰結を紐付けて表示しており、あたかも各判断固有の帰結であるかのように誤認させる表示だった。",
+    "MEDIUM: precedent の一致理由（完全一致・接頭辞一致）が表示されず一致度が不透明だった。加えて delegation contract 適用済みバッジが生の `decided_by` 文字列（例: `delegation_contract:DC-001:k_tobishima`）と紛らわしく、契約適用と人間判断の区別が視覚的に付きにくかった。",
+    "LOW: review packet 生成時に同一 run の artifact を複数箇所で二重読込しており将来の不整合リスクがあった。",
+    "LOW: epic 最新 run 選択が `generated_at_unix` の `>=` 判定で行われており、同時刻 tie 時にどちらが選ばれるか未定義（テスト無し）だった。",
+    "LOW: outcome_badge() に human_approval の match arm が無く、デフォルトの badge-neutral（灰）にフォールバックしていた（design 正本は琥珀と定義済み）。"
+  ],
+  "repair_commits": ["204de96"],
+  "final_verdict": "pass",
+  "findings": [
+    "resolved(本タスクで解消): human_approval バッジ色の欠落は commit 320cdeb で `outcome_badge()` に match arm を追加し解消（`outcome_badge_marks_human_approval_as_badge_human` テストで固定）。design 正本（docs/v1/mission_control_uiux.md）の琥珀定義と一致した。",
+    "resolved(本タスクで解消): PR body の検証数値・レビュー経緯が repair 前（251 passed / ui 9 + rendering 7）のまま陳腐化していたため、本タスクで polish 後の実測値（265 passed / ui 13 + rendering 10）と 5 役のレビュー経緯に更新した。"
+  ],
+  "evidence": [
+    "git show 9002395 --stat",
+    "git show 204de96 -- src/application/ui.rs src/rendering/mission_control.rs docs/v1/mission_control_uiux.md",
+    "git show 320cdeb -- src/rendering/mission_control.rs (human_approval => badge-human の match arm 追加とテスト)",
+    "cargo test --lib rendering::mission_control => 10 passed（outcome_badge_marks_human_approval_as_badge_human を含む）",
+    "cargo test --lib application::ui:: => 13 passed（outcome_reflects_blocked_and_human_approval_gates_not_pending を含む）",
+    "cargo test --lib => 265 passed; 0 failed; 0 ignored",
+    "cargo fmt --all -- --check => clean",
+    "python scripts/check_architecture_boundaries.py => architecture boundary check passed"
+  ],
+  "summary": "初回レビューで HIGH（merge_receipt 実 schema に無いキーを見る死に分岐 + 架空キー fixture による偽 green）/ HIGH（run 単位の帰結を全判断へ誤帰属）/ MEDIUM（precedent 一致度不透明・契約バッジと生 decided_by 文字列の混同）/ LOW 3 件（packet 二重読込、epic tie 未テスト、outcome_badge に human_approval の match arm欠落）を指摘。repair commit 204de96 で run_outcome の実 schema 準拠化・run 単位帰結の明示（列名変更 + 共通注記 + 設計正本の因果非主張明記）・precedent 一致理由表示・契約バッジの視覚分離・packet 二重読込解消・epic tie テスト追加を確認し、再レビューで pass。残 low 2 件（human_approval バッジ色、PR body 陳腐化）は本タスク（PR #6 review agent gate 証跡整備）で polish commit 320cdeb + PR body 更新により解消済みであることを確認した。",
+  "generated_at_unix_seconds": 1783567900
+}
