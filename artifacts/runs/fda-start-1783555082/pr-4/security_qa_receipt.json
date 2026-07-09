@@ -1,0 +1,36 @@
+{
+  "schema_version": "fda.security_qa_receipt.v0",
+  "receipt_id": "receipt-security-qa-pr-v15-003",
+  "role": "security_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-003",
+  "reviewed_planned_pr_id": "PR-V15-003",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/4",
+  "reviewed_commits": ["8de4e0e", "83cbe7e"],
+  "verdict": "pass",
+  "initial_findings": [
+    "MEDIUM: `--by-contract` の keyword 照合が OR（いずれか1語の部分一致）で成立するため、意図しない decision まで契約適用範囲に含まれ得る（包括委任化のリスク）。",
+    "LOW: `expires` の判定が UTC 暦日の境界（当日扱い）で緩く、失効当日でも適用され得る。",
+    "LOW: `decided_by=delegation_contract:<rule_id>:<authority>` と契約側 `contract_rule_id` の整合を機械的に検証する仕組みがなく、目視確認に依存している（将来課題）。",
+    "LOW: `authority` フィールドが自由記述で、権限保持者の正当性を検証する仕組みがない（設計上の既知の制約として許容）。"
+  ],
+  "repair_commits": ["83cbe7e"],
+  "findings": [
+    "low(将来課題・未対応): decided_by=delegation_contract:*  ⇔ contract_rule_id の整合を validate 側で機械的に検証する仕組みは本 PR では未実装（decision_receipts.json の schema 化と合わせて将来課題）。",
+    "low(設計上の既知の制約・許容): authority は引き続き自由記述。契約の制定自体が人間の YAML 編集のみで、AI が制定・自動適用しない fail-closed 境界で担保されているため、本 PR のセキュリティスコープでは許容範囲と判断。"
+  ],
+  "evidence": [
+    "git show 83cbe7e -- src/application/policy.rs (keyword 照合を ANY→ALL の AND 一致へ変更、docs/standards/fda-v1/schemas/repository-profile/delegation_contract_yaml.schema.json の keywords items に minLength: 4 を追加)",
+    "git show 83cbe7e -- src/support/date.rs (expires を strict 比較へ厳格化: today < expires の UTC 暦日基準、expires 当日から無効)",
+    "git show 83cbe7e -- docs/v1/work_protocol.md (§5 に AI による .fda/delegation_contract.yaml の作成・編集禁止を明記)",
+    "cargo test --lib => 235 passed; 0 failed（境界日拒否・AND 部分一致拒否のテストを含む）",
+    "cargo test --lib（境界日テスト個別確認） => `decide_by_contract_rejects_expired_rule_on_boundary_day` 系 pass"
+  ],
+  "summary": "本 PR の第1巡レビューは pass 判定。medium 1 件（keyword OR 部分一致の緩さによる包括委任化リスク）と low 3 件（expires の UTC 境界の緩さ、decided_by⇔contract_rule_id 整合の機械検証欠如、authority 自由記述）を記録した。pr_reviewer の HIGH 指摘を受けた repair commit 83cbe7e により、keyword 照合が AND 化（schema 側 minLength: 4 も追加）、expires が strict 化（当日から無効）されたことを確認し、medium 1 件・low 1 件（expires）は解消済みとして再確認した。残り low 2 件（decided_by 整合の機械検証、authority 自由記述）は non-blocking の将来課題・既知の設計上の制約として記録し、pass 判定を維持する。",
+  "generated_at_unix_seconds": 1783564617
+}

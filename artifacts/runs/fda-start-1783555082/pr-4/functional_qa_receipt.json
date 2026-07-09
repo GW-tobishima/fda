@@ -1,0 +1,34 @@
+{
+  "schema_version": "fda.functional_qa_receipt.v0",
+  "receipt_id": "receipt-functional-qa-pr-v15-003",
+  "role": "functional_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-003",
+  "reviewed_planned_pr_id": "PR-V15-003",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/4",
+  "reviewed_commits": ["8de4e0e", "83cbe7e"],
+  "verdict": "pass",
+  "findings": [],
+  "acceptance_criteria_checked": [
+    "AC1: `fda policy propose` が同型判断のクラスタリング（type × summary 正規化署名 × answer、min-occurrences 既定3）を行い、候補を `artifacts/runs/_policy/policy_proposal.{json,md}` にのみ出力し `.fda/` 配下を一切変更しないこと（実 CLI 実行 + `.fda/` 配下ファイル一覧のハッシュ比較で確認）。",
+    "AC2: 有効な契約に対して `fda decide <ID> --by-contract <rule_id>` を実行すると、契約の answer で decision が記録され、`decided_by` に `delegation_contract:<rule_id>:<authority>` が付与され、receipt に `contract_rule_id` / `contract_expires` / `authority` が追記されること（実 CLI 実行 + `decision_receipts.json` のフィールド比較で確認）。",
+    "AC3: 期限切れ（expires 経過）/ decision_type 不一致 / keyword 不一致のいずれかに該当するルールでは `--by-contract` が拒否され、人間判断（`fda decide --answer`）へ差し戻されること（実 CLI 実行 + 各条件の否定パターンを個別に実行して拒否を確認）。"
+  ],
+  "evidence": [
+    "cargo test --lib（第1巡・repair 前） => 231 passed; 0 failed（policy / date / decide by-contract / args / validate optional の新規テストを含む）",
+    "cargo test --lib（repair 83cbe7e 後・再検証） => 235 passed; 0 failed（AND 部分一致拒否・expires 境界日・proposal schema 配線・status schema 適合の4テストが追加）",
+    "cargo run -q -- validate-artifacts => 71 passed, 0 failed（`.fda/delegation_contract.yaml` 相当は repair 後は docs example のため対象外、optional profile 不存在時は skip）",
+    "python -m unittest discover -s tests -v => Ran 68 tests, OK",
+    "実 CLI smoke: `fda policy propose --min-occurrences 3 --out artifacts/runs/_policy` 実行前後で `.fda/` 配下 7 ファイルの内容・mtime が不変であることを確認",
+    "実 CLI smoke: `fda decide <ID> --by-contract DC-001` 実行で `decision_receipts.json` に `decided_by=delegation_contract:DC-001:k_tobishima` と `contract_rule_id`/`contract_expires`/`authority` が記録されることを確認",
+    "実 CLI smoke: expires 経過済みルール・decision_type 不一致・keyword 不一致それぞれについて `--by-contract` がエラーで拒否され、人間判断（`--answer`）に差し戻されることを確認",
+    "実 CLI smoke: `--answer` と `--by-contract` の併用がエラーになることを確認"
+  ],
+  "summary": "AC1（policy propose のクラスタリングと .fda 不変）/ AC2（--by-contract 適用時の decided_by・receipt 追記）/ AC3（失効・type 不一致・keyword 不一致時の fail-closed 拒否）を unit テストと実 CLI 実行の両方で検証し、第1巡から pass。第1巡時点（repair 前）は cargo test --lib 231 passed で green。repair 83cbe7e（keyword AND 化・expires strict 化・policy_proposal 自己検証・work_protocol §5 明文化・status_summary.schema.json 追従）後に再検証し、cargo test --lib 235 passed、validate-artifacts 71 passed、python unittest 68 passed でいずれも回帰なしを確認した。",
+  "generated_at_unix_seconds": 1783564617
+}

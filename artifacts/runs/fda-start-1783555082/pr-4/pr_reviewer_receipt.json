@@ -1,0 +1,37 @@
+{
+  "schema_version": "fda.pr_reviewer_receipt.v0",
+  "receipt_id": "receipt-pr-reviewer-pr-v15-003",
+  "role": "pr_reviewer",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-003",
+  "reviewed_planned_pr_id": "PR-V15-003",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/4",
+  "reviewed_commits": ["8de4e0e", "83cbe7e"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "HIGH: AI コミットが live 契約 `.fda/delegation_contract.yaml` を PR に含めて制定しており、work_protocol §5（委任契約の制定は常に人間、AI は提案までという境界）に違反する。",
+    "HIGH: 実例ルール（DC-001）の keywords が定型文言に依存し、keyword 照合が OR（いずれか1語の部分一致）で緩いため、意図しない決定まで包括委任として扱われ得る。",
+    "MEDIUM: PR 説明の enacted_from 根拠（過去に人間が承認した決定への参照）が実際の decision 履歴と不整合で、契約の正当化根拠が追跡できない。",
+    "LOW: 新設した `fda.policy_proposal.v1` schema に対して `fda policy propose` の出力（`policy_proposal.json`）が実行時に検証されておらず、schema が配線されていない。"
+  ],
+  "repair_commits": ["83cbe7e"],
+  "final_verdict": "pass",
+  "findings": [
+    "low(non-blocking, 将来課題): `fda policy propose` は書き込み後に自身の出力を schema 検証するが、検証前に一度 `_policy/` へ書き込む順序のため、検証失敗時に不適合ファイルが `_policy/` に残置され得る（propose の検証→書き込み順序の入れ替えが望ましい）。"
+  ],
+  "evidence": [
+    "git show 8de4e0e --stat",
+    "git show 83cbe7e (HIGH1: .fda/delegation_contract.yaml の削除と docs/standards/fda-v1/examples/delegation_contract.example.yaml への置換 / HIGH2: keyword AND 一致化 + schema minLength: 4)",
+    "git show 83cbe7e -- docs/v1/work_protocol.md (§5 に AI 制定禁止を明記)",
+    "git show 83cbe7e -- src/application/policy.rs (policy_proposal のランタイム自己検証を追加)",
+    "cargo test --lib => 235 passed; 0 failed",
+    "python scripts/check_architecture_boundaries.py => architecture boundary check passed"
+  ],
+  "summary": "初回レビューで HIGH（AI コミットによる live 契約 .fda/delegation_contract.yaml の制定＝work_protocol §5 違反）/ HIGH（定型文言 keywords + OR 部分一致による包括委任化）/ MEDIUM（enacted_from 根拠不整合）/ LOW（policy_proposal schema 未配線）を指摘。repair commit 83cbe7e で live 契約を完全撤去し docs example（効力なし明記）へ置換、keyword 照合を AND 化 + schema minLength 追加、work_protocol §5 に AI 制定禁止を明文化、policy_proposal のランタイム自己検証を追加したことを確認し、再レビューで pass。残 low 1 件（propose の検証→書き込み順序）は非 blocking の将来課題として記録する。",
+  "generated_at_unix_seconds": 1783564617
+}
