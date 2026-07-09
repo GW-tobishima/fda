@@ -492,6 +492,7 @@ fn outcome_badge(label: &str) -> String {
         "merge_ready" => "badge-ready",
         "blocked" => "badge-blocked",
         "repair" => "badge-repair",
+        "human_approval" => "badge-human",
         _ => "badge-neutral",
     };
     format!(
@@ -679,6 +680,12 @@ mod tests {
             escape_html("<a href=\"x\">&'</a>"),
             "&lt;a href=&quot;x&quot;&gt;&amp;&#39;&lt;/a&gt;"
         );
+    }
+
+    #[test]
+    fn outcome_badge_marks_human_approval_as_badge_human() {
+        // human_approval は doc の色定義（琥珀 = badge-human）と一致させる。
+        assert!(outcome_badge("human_approval").contains("badge-human"));
     }
 
     /// 道場 / 庭師 / Epic / precedent / 契約バッジを含む豊富なスナップショット。
