@@ -1,0 +1,34 @@
+{
+  "schema_version": "fda.security_qa_receipt.v0",
+  "receipt_id": "receipt-security-qa-pr-v15-004",
+  "role": "security_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-004",
+  "reviewed_planned_pr_id": "PR-V15-004",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/5",
+  "reviewed_commits": ["535ea49", "50d05ee"],
+  "verdict": "pass",
+  "initial_findings": [
+    "MEDIUM: `epic_progress_state.json` / `next_planned_pr_decision.json` は非権威（advisory）な投影であるにもかかわらず、その旨が JSON 実体（schema の required フィールド・出力）には表現されておらず docs/コメントのみに留まっていた。自動化がこの2ファイルを merge 判定の根拠として誤って消費するリスクがある。",
+    "MEDIUM: receipt の parse error 発生時の扱いが当初 fail-closed（scan 全体を停止）だったため、1 run の壊れた receipt が無関係な他 planned PR の状態可視性まで奪う fail-closed の波及域の広さがあった（可用性とのトレードオフの検討・明文化が必要）。"
+  ],
+  "repair_commits": ["50d05ee"],
+  "findings": [
+    "low(non-blocking, 将来課題): fail-soft 化（scan_errors への記録）は epic 進捗の可視性を優先するトレードオフであり、実 merge gate（`src/application/merge.rs`）が引き続き fail-closed で安全性を担保する設計である旨をモジュール doc コメントで明記済みだが、この trade-off の妥当性は運用実績を踏まえて定期的に再評価することが望ましい。",
+    "low(non-blocking, 設計上の既知の制約・許容): epic_id 突合で除外された receipt（別 epic 由来・epic_id 欠落）は scan_notes に記録されるのみで、悪意ある偽装 receipt の検知・アラートまでは行わない。読み取り専用の advisory 投影であり、実際の merge 可否は merge gate 側の fail-closed 検証に委ねられるため、本 PR のセキュリティスコープでは許容範囲と判断。"
+  ],
+  "evidence": [
+    "git show 50d05ee -- src/application/epic.rs (receipt_epic_matches による epic_id 突合、PrEvidence::conflicting による矛盾検出→fail-closed blocked、scan_run_receipts の parse error→scan_errors 記録による fail-soft 化)",
+    "git show 50d05ee -- docs/standards/delivery-artifacts-v0/schemas/epic_progress_state.schema.json docs/standards/delivery-artifacts-v0/schemas/next_planned_pr_decision.schema.json (advisory の required const フィールド追加)",
+    "git show 50d05ee -- docs/standards/delivery-artifacts-v0/artifact_catalog.md (advisory フィールドの catalog 反映)",
+    "cargo test --lib => 247 passed; 0 failed（conflicting_merged_and_open_evidence_is_blocked / broken_receipt_json_is_fail_soft_and_recorded_in_scan_errors / fake_merged_receipt_from_other_epic_is_ignored を含む）",
+    "cargo run -q -- validate-artifacts => 76 passed, 0 failed, 44 skipped（advisory / scan_notes / scan_errors / human_approval_required 対応済み schema + example を含む）"
+  ],
+  "summary": "本 PR の第1巡レビューは pass 判定。medium 2 件（advisory=非権威の提案である旨が JSON 実体に表現されていない／receipt parse error 時の fail-closed が無関係な他 planned PR まで波及する）を記録し、いずれも blocking ではないと判定したが、pr_reviewer・forge_reviewer の HIGH 指摘を受けた同一の repair commit 50d05ee で併せて解消された。advisory は required const フィールドとして両 schema・出力・catalog に明記され（medium 1 解消）、receipt parse error は scan_errors への記録による fail-soft（gc と同型のトレードオフ、モジュール doc コメントに明記）に変更され、実 merge gate 側の fail-closed 安全性は維持されたまま epic 進捗の可用性が優先されるようになった（medium 1 解消）。残り low 2 件（trade-off の定期再評価、偽装 receipt の積極検知は行わない設計）は non-blocking の将来課題・既知の設計上の制約として記録し、pass 判定を維持する。",
+  "generated_at_unix_seconds": 1783566700
+}

@@ -57,6 +57,9 @@ ATO task/run を先に開き、各 fda コマンドに
      merge 前に ato case evaluate --task <key> --no-write --json で Forge gate を試算
      （verdict=promote でも merge approval ではない。fda merge 自体の Forge gate は
        ローカル forge_projection.json を評価し、hold / blocked のまま merge に進まない）
+     fda の外で merge した場合（GitHub UI / gh 直接）は merge receipt が残らず epic 投影が
+     古くなるため、merge 後に github_merge_receipt.json 相当を該当 run dir に追記して投影を
+     最新化する
 9) fda status / fda ui / fda open        … 状態確認・Mission Control・run 単体 hub
 ```
 
