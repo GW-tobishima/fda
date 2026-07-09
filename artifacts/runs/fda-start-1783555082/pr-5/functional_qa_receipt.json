@@ -1,0 +1,34 @@
+{
+  "schema_version": "fda.functional_qa_receipt.v0",
+  "receipt_id": "receipt-functional-qa-pr-v15-004",
+  "role": "functional_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-004",
+  "reviewed_planned_pr_id": "PR-V15-004",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/5",
+  "reviewed_commits": ["535ea49", "50d05ee"],
+  "verdict": "pass",
+  "findings": [
+    "informational(non-blocking): 実際の epic run dir（artifacts/runs/fda-start-1783555082/）に対して `fda continue --epic` を実行したところ、PR-V15-001〜003 に相当する merge receipt（github_merge_receipt.json 等）が run dir に存在しないため、5件全ての planned PR が not_started と判定された。fda 経由の merge であれば merge.rs が github_merge_receipt.json を残すが、fda の外（GitHub UI / gh 直接）で merge した場合は receipt が残らず epic 投影が古いままになる。receipt 整備（該当 run dir への github_merge_receipt.json 相当の追記）が運用上必須であることを実証した。本タスクで docs/v1/work_protocol.md 手順 8 に追記済み。"
+  ],
+  "acceptance_criteria_checked": [
+    "AC1: epic run dir の `planned_prs.json` と `--artifacts-root`（既定 `artifacts/runs`）配下の全 run の receipt を `planned_pr_id` で突合し、sequence 順で最初の未 merged PR の状態（not_started / in_progress / pr_open / human_approval_required / merge_ready / blocked / merged）を判定する。前 PR が全て merged でない限り後続 PR を選ばない（依存充足）こと（unit テスト + CLI black-box で確認）。",
+    "AC2: epic run dir に未解決 Human Decision があれば verdict=waiting_human とし resume command（`fda decide`）を提示する。全 planned PR が merged なら verdict=complete。merge_ready（承認済み・実行待ち）と human_approval_required（未承認）を区別し、それぞれ `fda merge --execute` / `fda decide <id> --answer approve` を提示すること（repair 後の unit テストで確認）。",
+    "AC3: read-only 原則。既存 run の receipt / handoff を一切書き換えず、epic run dir へ `epic_progress_state.json` / `next_planned_pr_decision.json` の2ファイルのみを書き込み、auto merge / 自動実装開始はしないこと（`writes_two_files_and_leaves_receipts_unchanged` + 実行前後のファイル一覧比較で確認）。"
+  ],
+  "evidence": [
+    "cargo test --lib（第1巡・repair 前） => epic 7 件 + args 2 件を含み 240 passed; 0 failed（コミット 535ea49 記載値）",
+    "cargo test --lib（repair 50d05ee 後・再検証） => 247 passed; 0 failed; 0 ignored（epic 14 件: fake_merged_receipt_from_other_epic_is_ignored / conflicting_merged_and_open_evidence_is_blocked / broken_receipt_json_is_fail_soft_and_recorded_in_scan_errors / first_unmerged_blocked_pr_yields_blocked_verdict / missing_sequence_is_a_fail_closed_error / merge_ready_resume_points_to_merge_execute_with_real_run_dir / human_approval_required_resume_points_to_decide_with_decision_id を含む）",
+    "cargo run -q -- validate-artifacts => 76 passed, 0 failed, 44 skipped",
+    "python -m unittest discover -s tests -v => Ran 68 tests, OK",
+    "CLI black-box: 自作 fixture（epic_id=EPIC-TEST-CLI、planned_pr_id=PR-TEST-001/002）に対し `fda continue --epic --artifacts <epic_run> --artifacts-root <fixture root> --json` を実行。pr1_run/github_merge_receipt.json（status=succeeded）から PR-TEST-001=merged、pr2_run/external_pr_receipt.json（status=opened）から PR-TEST-002=pr_open を正しく判定し、PR-TEST-002 が pr_open のため verdict=waiting_human（exit code 1）で後続 PR を選ばないことを確認",
+    "実 Epic E2E: artifacts/runs/fda-start-1783555082/ に対して `fda continue --epic --artifacts artifacts/runs/fda-start-1783555082 --json` を実行し、5 planned PR 全てが not_started（merge receipt 不在のため）、next_planned_pr_id=PR-V15-001、verdict=proceed 相当の投影になることを確認（出力ファイルはレビュー後に削除し run dir を汚さないよう復元済み）"
+  ],
+  "summary": "AC1（sequence 順の依存充足判定）/ AC2（waiting_human・complete・merge_ready と human_approval_required の区別）/ AC3（read-only で2ファイルのみ出力）を unit テスト 7 件（第1巡）+ CLI black-box + 実際の epic run dir に対する E2E 実行で検証し、初回から pass。実行中に、fda の外で merge された PR は merge receipt が run dir に残らず epic 投影が全 not_started のまま古くなるという運用上の穴を実機で確認した（受け入れ判定を左右するブロッキング事項ではなく運用ガイドで対処すべき informational finding として記録。本タスクで docs/v1/work_protocol.md 手順 8 に追記済み）。repair 50d05ee（epic_id 突合・conflicting_evidence の fail-closed 化・receipt parse error の fail-soft 化・merge_ready/human_approval_required の分離）後に cargo test --lib 247 passed、validate-artifacts 76 passed、python unittest 68 passed を再確認し、回帰なしを確認した。",
+  "generated_at_unix_seconds": 1783566700
+}

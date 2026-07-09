@@ -1,0 +1,13 @@
+{
+  "schema_version": "fda.next_planned_pr_decision.v1",
+  "advisory": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "verdict": "waiting_human",
+  "next_planned_pr_id": "PR-FD-002",
+  "reasons": [
+    "sequence 順で最初の未 merged PR は PR-FD-002 で status=pr_open です。merge は人間の承認が必要なため、依存する PR-FD-003 はまだ選べません。"
+  ],
+  "resume_commands": [
+    "PR-FD-002 の PR を review し人間が merge を承認する: fda review --artifacts artifacts/runs/fda-start-1783550002 の後 fda merge --artifacts artifacts/runs/fda-start-1783550002 --target-repo <target repo>"
+  ]
+}

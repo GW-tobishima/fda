@@ -39,6 +39,10 @@ ALLOWED_APPLICATION_INFRA_USES = {
         "use crate::infra::fs_store::{list_dir_names, FsArtifactStore};",
         "use crate::infra::json_schema::JsonSchemaArtifactValidator;",
     },
+    "src/application/epic.rs": {
+        "use crate::infra::clock::system_unix_seconds;",
+        "use crate::infra::fs_store::{list_dir_names, FsArtifactStore};",
+    },
     "src/application/risk_tier.rs": {
         "use crate::infra::yaml::SerdeYamlValidator;",
         "use crate::infra::clock::system_unix_seconds;",

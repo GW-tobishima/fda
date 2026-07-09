@@ -1,0 +1,48 @@
+{
+  "schema_version": "fda.epic_progress_state.v1",
+  "advisory": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない",
+  "epic_id": "EPIC-FORGE-DASHBOARD-001",
+  "generated_at_unix": 1783555200,
+  "prs": [
+    {
+      "planned_pr_id": "PR-FD-001",
+      "sequence": 1,
+      "title": "ダッシュボード骨格 + read-only API",
+      "status": "merged",
+      "evidence": [
+        "fda-start-1783550001/github_merge_receipt.json (status=succeeded)",
+        "fda-start-1783550001/external_pr_receipt.json (status=merged)"
+      ],
+      "reasons": ["merge receipt があり merged です"]
+    },
+    {
+      "planned_pr_id": "PR-FD-002",
+      "sequence": 2,
+      "title": "Case/Claim/Proof 集計ビュー",
+      "status": "pr_open",
+      "evidence": [
+        "fda-start-1783550002/external_pr_receipt.json (status=opened)"
+      ],
+      "reasons": ["external_pr_receipt が opened で PR が開いています"]
+    },
+    {
+      "planned_pr_id": "PR-FD-003",
+      "sequence": 3,
+      "title": "Human Decision Inbox 連携",
+      "status": "not_started",
+      "evidence": [],
+      "reasons": ["この planned PR に紐づく receipt / handoff がありません"]
+    }
+  ],
+  "summary": {
+    "merged": 1,
+    "open": 1,
+    "blocked": 0,
+    "waiting_human": 0,
+    "not_started": 1
+  },
+  "scan_notes": [
+    "fda-start-1783550009/external_pr_receipt.json: epic_id `EPIC-OTHER-001` が現在の epic `EPIC-FORGE-DASHBOARD-001` と一致しないため状態根拠から除外しました"
+  ],
+  "scan_errors": []
+}

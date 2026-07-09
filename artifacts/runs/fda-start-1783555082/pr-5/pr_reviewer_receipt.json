@@ -1,0 +1,41 @@
+{
+  "schema_version": "fda.pr_reviewer_receipt.v0",
+  "receipt_id": "receipt-pr-reviewer-pr-v15-004",
+  "role": "pr_reviewer",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-004",
+  "reviewed_planned_pr_id": "PR-V15-004",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/5",
+  "reviewed_commits": ["535ea49", "50d05ee"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "HIGH: 証跡の畳み込みが epic_id 突合なしの OR ロジックのみで、いずれかの run が merged を報告すれば以後は不可逆に merged として扱われた。別 epic の同名 planned_pr_id receipt を拾って偽 merged を報告し得る、かつ同一 planned PR に merged と PR open の矛盾 evidence が併存しても検出できなかった。",
+    "HIGH: 1 run の receipt が壊れている（parse error）と scan 全体が abort し、無関係な他 planned PR の状態まで判定不能になった。",
+    "MEDIUM: verdict=blocked（先頭の未 merged PR が blocked）の経路に対するテストが無かった。",
+    "LOW: planned_prs.json の sequence 欠落・0 が fail-open（既定値で進行）だったため依存順判定が壊れたまま誤った next を選び得た。",
+    "LOW: waiting_human と blocked がどちらも exit code 1 になるため、自動化がシェルの exit code だけでは両者を区別できない旨が明文化されていなかった。"
+  ],
+  "repair_commits": ["50d05ee"],
+  "final_verdict": "pass",
+  "findings": [
+    "low(non-blocking, 将来課題): merge_ready / human_approval_required 系の resume 解決に使う `resolve_merge_decision_id` は該当 receipt が読めない場合に None へ静かに fallback する防御的分岐（dead arm 寄り）が残っており、到達しないことをテストで明示していない。",
+    "low(non-blocking, 将来課題): epic_id 突合で除外した receipt は scan_notes に記録されるが、`fda gc` の docket には反映されないため、別経路での棚卸しに委ねている。",
+    "low(non-blocking, 将来課題): conflicting_evidence 時の resume_run_dir は意図的に None（人間確認へ）だが、どちらの run を優先確認すべきかの順序ヒントは merged_runs/open_runs の列挙順のみで明示的な優先度表現ではない。"
+  ],
+  "evidence": [
+    "git show 535ea49 --stat",
+    "git show 50d05ee -- src/application/epic.rs (epic_id 突合: receipt_epic_matches / 矛盾検出: PrEvidence::conflicting / fail-soft: scan_errors への集約)",
+    "git show 50d05ee -- src/application/merge.rs (is_merge_approval_decision の pub(crate) 化と epic.rs からの再利用)",
+    "cargo test --lib -- application::epic:: (repair 後) => epic 14 件 pass（fake_merged_receipt_from_other_epic_is_ignored / conflicting_merged_and_open_evidence_is_blocked / broken_receipt_json_is_fail_soft_and_recorded_in_scan_errors / first_unmerged_blocked_pr_yields_blocked_verdict / missing_sequence_is_a_fail_closed_error を含む）",
+    "cargo test --lib => 247 passed; 0 failed",
+    "CLI black-box: 自作 fixture（pr1_run に github_merge_receipt.json status=succeeded、pr2_run に external_pr_receipt.json status=opened）で `fda continue --epic` を実行し、PR-TEST-001=merged / PR-TEST-002=pr_open / verdict=waiting_human（未 merged PR-TEST-002 が pr_open のため後続を選ばない）を確認",
+    "python scripts/check_architecture_boundaries.py => architecture boundary check passed"
+  ],
+  "summary": "初回レビューで HIGH（epic_id 突合なしの OR 畳み込みにより偽 merged・矛盾 evidence を検出できない）/ HIGH（無関係な壊れ receipt で scan 全体 abort）/ MEDIUM（blocked verdict 未テスト）/ LOW（sequence fail-open、waiting_human と blocked の exit code 混同が未明文化）を指摘。repair commit 50d05ee で epic_id 突合＋conflicting_evidence の fail-closed blocked 化、receipt parse error の fail-soft 化（scan_errors 継続走査）、sequence 欠落・0 の fail-closed 化、exit code の区別を --json verdict で行う旨の help / work_protocol.md 明記を確認し、再レビューで pass。残 low 3 件は non-blocking の将来課題として記録する。新規 informational: fda の外（GitHub UI / gh 直接）で人間が merge した場合は merge receipt が run dir に残らず epic 投影が古いままになる（本タスクで docs/v1/work_protocol.md 手順 8 に運用ガイドを追記済み）。",
+  "generated_at_unix_seconds": 1783566700
+}

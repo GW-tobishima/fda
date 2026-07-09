@@ -2,6 +2,7 @@ use std::path::Path;
 
 use crate::application::decide::DecideResult;
 use crate::application::design::DesignResult;
+use crate::application::epic::EpicContinueResult;
 use crate::application::gc::GcResult;
 use crate::application::plan::PlanResult;
 use crate::application::policy::PolicyProposalResult;
@@ -21,6 +22,7 @@ pub(crate) fn print_help() {
     println!("fda implement --dry-run [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--json]");
     println!("fda implement --live [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--live-timeout-seconds <n>] [--repo-root <path>] [--json]");
     println!("fda continue [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--max-retries <n>] [--repo-root <path>] [--json]");
+    println!("fda continue --epic [--artifacts <epic run dir>] [--artifacts-root <dir>] [--repo-root <path>] [--json]  # F2 Epic 継続: 次 planned PR 判定 (read-only, auto merge しない。waiting_human / blocked はどちらも exit 1 のため自動化は --json の verdict で区別する)");
     println!("fda merge [--artifacts <dir>] [--out <dir>] [--target-repo <path>] [--repo-root <path>] [--execute] [--merge-method merge|squash|rebase] [--json]");
     println!();
     println!("[判断 Decision]");
@@ -337,6 +339,63 @@ pub(crate) fn print_status_summary(result: &StatusResult) {
     }
     println!();
     println!("次:");
+    for action in &result.next_actions {
+        println!("{action}");
+    }
+}
+
+pub(crate) fn print_epic_summary(result: &EpicContinueResult) {
+    println!("Epic: {}", result.epic_id);
+    println!("Verdict: {}", result.verdict);
+    println!("注意: {}", result.advisory);
+    if let Some(next) = &result.next_planned_pr_id {
+        println!("Next planned PR: {next}");
+    } else {
+        println!("Next planned PR: なし");
+    }
+    println!(
+        "Summary: merged={} open={} waiting_human={} blocked={} not_started={}",
+        result.summary.merged,
+        result.summary.open,
+        result.summary.waiting_human,
+        result.summary.blocked,
+        result.summary.not_started
+    );
+    println!();
+    println!("進捗（read-only。receipt は書き換えません）:");
+    for pr in &result.prs {
+        println!(
+            "- [{}] {} (seq {}): {}",
+            pr.status, pr.planned_pr_id, pr.sequence, pr.title
+        );
+    }
+    if !result.scan_errors.is_empty() {
+        println!();
+        println!("scan errors（fail-soft で走査は継続済み。verdict には影響しません）:");
+        for error in &result.scan_errors {
+            println!("- {error}");
+        }
+    }
+    if !result.scan_notes.is_empty() {
+        println!();
+        println!("scan notes（epic_id 突合で状態根拠から除外した receipt）:");
+        for note in &result.scan_notes {
+            println!("- {note}");
+        }
+    }
+    if !result.reasons.is_empty() {
+        println!();
+        println!("判定理由:");
+        for reason in &result.reasons {
+            println!("- {reason}");
+        }
+    }
+    println!();
+    println!("成果物:");
+    println!("- {}", result.progress_state_path);
+    println!("- {}", result.next_decision_path);
+    println!();
+    println!("次 (resume commands。auto merge / 自動実装はしません):");
     for action in &result.next_actions {
         println!("{action}");
     }

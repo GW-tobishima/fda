@@ -1,6 +1,7 @@
 pub(crate) mod decide;
 pub(crate) mod decisions;
 pub(crate) mod design;
+pub(crate) mod epic;
 pub(crate) mod gc;
 pub(crate) mod implement;
 pub(crate) mod merge;

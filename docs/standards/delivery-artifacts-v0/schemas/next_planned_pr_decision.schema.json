@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/next_planned_pr_decision.schema.json",
+  "title": "Next Planned PR Decision",
+  "description": "F2 Epic 継続ループ（fda continue --epic）の判定結果。sequence 順で依存充足済み（前 PR が全て merged）の次 PR を選定する。未解決 Human Decision / merge 待ちは waiting_human として人間へ resume command を提示する。auto merge / 自動実装開始はしない。これは非権威の判断支援 projection であり、実装開始許可・merge 承認・merge の証明ではない。自動化は本 artifact を merge 判定に使ってはならない（merge 可否は fda merge の merge gate が fail-closed で判定する）。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "advisory",
+    "epic_id",
+    "verdict",
+    "next_planned_pr_id",
+    "reasons",
+    "resume_commands"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "fda.next_planned_pr_decision.v1"
+    },
+    "advisory": {
+      "type": "string",
+      "const": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない"
+    },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "verdict": {
+      "type": "string",
+      "enum": ["proceed", "waiting_human", "blocked", "complete"]
+    },
+    "next_planned_pr_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "resume_commands": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "verdict": { "const": "complete" } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": { "next_planned_pr_id": { "type": "null" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "verdict": { "const": "proceed" } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": { "next_planned_pr_id": { "type": "string", "minLength": 1 } }
+      }
+    }
+  ],
+  "additionalProperties": false
+}
