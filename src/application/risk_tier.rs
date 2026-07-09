@@ -138,6 +138,8 @@ pub(crate) fn is_governance_critical_path(path: &str) -> bool {
         || normalized.contains("/.fda/")
         || normalized == "scripts/check_review_agent_gate.py"
         || normalized == "scripts/check_architecture_boundaries.py"
+        || normalized == "tests/test_review_agent_gate.py"
+        || normalized == ".github/workflows/ci.yml"
         || normalized.starts_with("src/application/merge")
         || normalized.starts_with("src/application/review")
         || normalized.starts_with("src/application/risk_tier")
@@ -513,6 +515,10 @@ mod tests {
         assert!(is_governance_critical_path(
             "scripts/check_architecture_boundaries.py"
         ));
+        assert!(is_governance_critical_path(
+            "tests/test_review_agent_gate.py"
+        ));
+        assert!(is_governance_critical_path(".github/workflows/ci.yml"));
         assert!(is_governance_critical_path("src/application/merge.rs"));
         assert!(is_governance_critical_path("src/application/review.rs"));
         assert!(is_governance_critical_path("src/application/risk_tier.rs"));
