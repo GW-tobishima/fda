@@ -1,0 +1,29 @@
+{
+  "schema_version": "fda.security_qa_receipt.v0",
+  "receipt_id": "receipt-security-qa-pr-v15-001",
+  "role": "security_qa",
+  "status": "passed",
+  "workspace_policy": "read_only",
+  "source_mutation_allowed": false,
+  "source_mutation_attempted": false,
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-001",
+  "reviewed_planned_pr_id": "PR-V15-001",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/1",
+  "reviewed_commits": ["43a3dc0", "39612bc", "1b1d209"],
+  "initial_verdict": "fail",
+  "initial_findings": [
+    "high1: auto merge 禁止が「常用」に縮退し、単発・例外時の抜け道を許容する表現になっていた",
+    "medium1: scope approval の禁止列挙が脱落していた"
+  ],
+  "repair_commits": ["39612bc"],
+  "final_verdict": "pass",
+  "findings": [],
+  "evidence": [
+    "git show 39612bc -- docs/v1/work_protocol.md",
+    "auto merge 禁止条項（単発・例外を含め禁止）と scope approval 禁止列挙の再確認"
+  ],
+  "summary": "初回レビューで high1（auto merge 禁止の安全境界後退）/ medium1（scope approval 脱落）を指摘。repair commit 39612bc で auto merge 禁止を『単発・例外を含め禁止』へ、scope approval を禁止列挙へ復元したことを確認し、pass 判定とした。",
+  "generated_at_unix_seconds": 1783557227
+}
