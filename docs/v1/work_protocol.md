@@ -48,7 +48,7 @@ ATO task/run を先に開き、各 fda コマンドに
    → review_agent_gate_packet.md を artifacts/review_packets/pr-<PR番号>.md に反映
      （自動反映されない。手動反映が必須。未反映のまま merge に進むと blocked）
    → python3 scripts/check_review_agent_gate.py --pr-number <PR番号>
-7) fda continue                          … QA FAIL 時の repair loop（V1.5: --epic で次 PR 判定）
+7) fda continue                          … QA FAIL 時の repair loop（V1.5: --epic で Epic 継続=次 planned PR 判定。read-only で epic_progress_state.json / next_planned_pr_decision.json を出力し auto merge しない）
 8) fda merge                             … merge gate。V1.5 でも auto merge しない。
      merge 前に ato case evaluate --task <key> --no-write --json で Forge gate を試算
      （verdict=promote でも merge approval ではない。fda merge 自体の Forge gate は

@@ -2688,6 +2688,8 @@ MERGE_APPROVAL: not_granted\n\n\
             max_retries: 3,
             ato: AtoConfig::default(),
             print_json: false,
+            epic: false,
+            artifacts_root: PathBuf::from("artifacts/runs"),
         })
         .unwrap();
 
@@ -2769,6 +2771,8 @@ MERGE_APPROVAL: not_granted\n\n\
             max_retries: 3,
             ato: AtoConfig::default(),
             print_json: false,
+            epic: false,
+            artifacts_root: PathBuf::from("artifacts/runs"),
         })
         .unwrap();
 
@@ -2808,6 +2812,8 @@ MERGE_APPROVAL: not_granted\n\n\
             max_retries: 3,
             ato: AtoConfig::default(),
             print_json: false,
+            epic: false,
+            artifacts_root: PathBuf::from("artifacts/runs"),
         })
         .unwrap();
 
@@ -2864,6 +2870,8 @@ MERGE_APPROVAL: not_granted\n\n\
             max_retries: 3,
             ato: AtoConfig::default(),
             print_json: false,
+            epic: false,
+            artifacts_root: PathBuf::from("artifacts/runs"),
         })
         .unwrap();
 
@@ -2913,6 +2921,8 @@ MERGE_APPROVAL: not_granted\n\n\
             max_retries: 3,
             ato: AtoConfig::default(),
             print_json: false,
+            epic: false,
+            artifacts_root: PathBuf::from("artifacts/runs"),
         })
         .unwrap();
 

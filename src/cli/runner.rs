@@ -2,13 +2,13 @@ use serde::Serialize;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
-use crate::application::{decide, design, gc, plan, policy, start, status, ui, validate};
+use crate::application::{decide, design, epic, gc, plan, policy, start, status, ui, validate};
 use crate::cli::args::{parse_args, AtoConfig, Command};
 use crate::cli::output::{
-    print_continue_summary, print_decide_summary, print_design_summary, print_gc_summary,
-    print_implement_summary, print_merge_summary, print_notify_summary, print_open_summary,
-    print_plan_summary, print_policy_summary, print_review_summary, print_start_summary,
-    print_status_summary, print_validation_summary,
+    print_continue_summary, print_decide_summary, print_design_summary, print_epic_summary,
+    print_gc_summary, print_implement_summary, print_merge_summary, print_notify_summary,
+    print_open_summary, print_plan_summary, print_policy_summary, print_review_summary,
+    print_start_summary, print_status_summary, print_validation_summary,
 };
 use crate::infra::ato_state::{
     canonicalize_repo_root_for_sync, sync_ato_state, AtoDecisionAnswer, AtoStateReceipt,
@@ -123,6 +123,22 @@ pub fn run(args: Vec<String>) -> Result<bool, String> {
             Ok(result.verdict == "pass" && ato_ok(ato_receipt.as_ref()))
         }
         Command::Continue(config) => {
+            if config.epic {
+                // F2 Epic 継続ループ。read-only スキャン + epic run dir へ 2 ファイル出力のみ。
+                // 既存 receipt は書き換えず、ATO 同期もしない（gc / policy と同じ read-only 扱い）。
+                let result = epic::continue_epic(&config)?;
+                if config.print_json {
+                    let value = serde_json::to_value(&result).map_err(|e| e.to_string())?;
+                    println!(
+                        "{}",
+                        serde_json::to_string_pretty(&value).map_err(|e| e.to_string())?
+                    );
+                } else {
+                    print_epic_summary(&result);
+                }
+                // proceed / complete は自動継続可（exit 0）、waiting_human / blocked は人間が必要（exit 1）。
+                return Ok(matches!(result.verdict.as_str(), "proceed" | "complete"));
+            }
             let result = continue_run(&config)?;
             let result_value = result_value(&result)?;
             let ato_receipt = sync_after_command(

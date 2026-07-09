@@ -112,6 +112,10 @@ pub(crate) struct ContinueConfig {
     pub(crate) max_retries: u32,
     pub(crate) ato: AtoConfig,
     pub(crate) print_json: bool,
+    /// `--epic` 指定時は repair gate ではなく F2 Epic 継続ループ（epic.rs）を実行する。
+    pub(crate) epic: bool,
+    /// `--epic` 時に全 run を走査する root（既定 `artifacts/runs`）。repair path では未使用。
+    pub(crate) artifacts_root: PathBuf,
 }
 
 pub(crate) struct MergeConfig {
@@ -783,6 +787,8 @@ fn parse_continue_args(args: &[String]) -> Result<Command, String> {
     let mut max_retries = 3;
     let mut ato = AtoConfig::default();
     let mut print_json = false;
+    let mut epic = false;
+    let mut artifacts_root = PathBuf::from("artifacts/runs");
 
     let mut index = 0;
     while index < args.len() {
@@ -813,6 +819,13 @@ fn parse_continue_args(args: &[String]) -> Result<Command, String> {
                     .parse::<u32>()
                     .map_err(|_| "--max-retries requires a non-negative integer".to_string())?;
             }
+            "--epic" => {
+                epic = true;
+            }
+            "--artifacts-root" => {
+                index += 1;
+                artifacts_root = PathBuf::from(expect_value(args, index, "--artifacts-root")?);
+            }
             "--json" => {
                 print_json = true;
             }
@@ -829,6 +842,8 @@ fn parse_continue_args(args: &[String]) -> Result<Command, String> {
         max_retries,
         ato,
         print_json,
+        epic,
+        artifacts_root,
     }))
 }
 
@@ -1221,6 +1236,39 @@ mod tests {
         match parse_args(args(&["decide", "HD-FDA-001"])) {
             Err(err) => assert!(err.contains("--answer") && err.contains("--by-contract")),
             Ok(_) => panic!("expected required-one error"),
+        }
+    }
+
+    #[test]
+    fn continue_without_epic_defaults_to_repair() {
+        match parse_args(args(&["continue"])) {
+            Ok(Command::Continue(config)) => {
+                assert!(!config.epic);
+                assert_eq!(config.artifacts_root, PathBuf::from("artifacts/runs"));
+            }
+            _ => panic!("expected continue command"),
+        }
+    }
+
+    #[test]
+    fn continue_epic_flag_and_artifacts_root_parse() {
+        match parse_args(args(&[
+            "continue",
+            "--epic",
+            "--artifacts",
+            "artifacts/runs/epic-run",
+            "--artifacts-root",
+            "custom/runs",
+        ])) {
+            Ok(Command::Continue(config)) => {
+                assert!(config.epic);
+                assert_eq!(
+                    config.artifact_dir,
+                    PathBuf::from("artifacts/runs/epic-run")
+                );
+                assert_eq!(config.artifacts_root, PathBuf::from("custom/runs"));
+            }
+            _ => panic!("expected continue command"),
         }
     }
 

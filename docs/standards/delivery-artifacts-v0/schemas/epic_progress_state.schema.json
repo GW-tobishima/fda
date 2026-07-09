@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/epic_progress_state.schema.json",
+  "title": "Epic Progress State",
+  "description": "F2 Epic 継続ループ（fda continue --epic）が planned_prs.json と各 run の receipt から生成する、planned PR ごとの進捗状態。receipt は書き換えず read-only で投影する。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "epic_id",
+    "generated_at_unix",
+    "prs",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "fda.epic_progress_state.v1"
+    },
+    "epic_id": { "type": "string", "minLength": 1 },
+    "generated_at_unix": { "type": "integer", "minimum": 0 },
+    "prs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "planned_pr_id",
+          "sequence",
+          "title",
+          "status",
+          "evidence",
+          "reasons"
+        ],
+        "properties": {
+          "planned_pr_id": { "type": "string", "minLength": 1 },
+          "sequence": { "type": "integer", "minimum": 0 },
+          "title": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "pr_open",
+              "merge_ready",
+              "merged",
+              "blocked"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "reasons": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "description": "6 種の PR status を 5 バケットへ集計する。open=in_progress+pr_open、waiting_human=merge_ready（人間の merge 承認待ち）。",
+      "required": [
+        "merged",
+        "open",
+        "blocked",
+        "waiting_human",
+        "not_started"
+      ],
+      "properties": {
+        "merged": { "type": "integer", "minimum": 0 },
+        "open": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "waiting_human": { "type": "integer", "minimum": 0 },
+        "not_started": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
