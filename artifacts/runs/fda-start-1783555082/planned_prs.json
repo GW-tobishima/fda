@@ -1,0 +1,201 @@
+{
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_prs": [
+    {
+      "acceptance_criteria": [
+        "Given work_protocol.md, When AGENTS.md / CLAUDE.md / fda-delivery skill を読む, Then プロトコル本文は単一正本への参照のみで重複記述が無い.",
+        "Given fda --help, When 表示する, Then 作業/証跡/判断/知識の4概念グループで表示される.",
+        "Given 変更後リポジトリ, When cargo test と architecture gate を実行する, Then すべて pass する."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V15-001",
+      "claim_ids": ["CLM-FDA-V15-001"],
+      "expected_files": [
+        "docs/v1/work_protocol.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".claude/skills/fda-delivery/SKILL.md",
+        "src/cli/output.rs"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PR-V15-001",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "重複プロトコル記述の消滅と help 再編を review packet で確認する。",
+          "expected_evidence": ["review_agent_gate.json", "validation_report.json"],
+          "proof_id": "PROOF-FDA-V15-001",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "F6: 表層分けと work protocol 単一ソース化で語彙増殖と 4 重記述 drift を解消する。",
+      "risk": {
+        "level": "low",
+        "mitigations": ["docs 中心の変更。help はコマンド変更なしの表示再編に限定する"],
+        "summary": "docs-only に近く blast radius は小さい。"
+      },
+      "scope": {
+        "in": ["work_protocol.md 新設", "AGENTS/CLAUDE/skill の縮退", "help 再編"],
+        "out": ["コマンド仕様変更", "schema 変更"]
+      },
+      "sequence": 1,
+      "title": "F6 表層分け + work protocol 単一ソース化"
+    },
+    {
+      "acceptance_criteria": [
+        "Given docs のみを変更する handoff, When fda implement --dry-run を実行する, Then risk_tier.json が tier=low で生成される.",
+        "Given tier=low の run, When fda merge を実行する, Then forge_reviewer / design_qa が理由付き not_applicable になる.",
+        "Given 30日超の未完了 run を含む artifacts/runs, When fda gc を実行する, Then gc_docket に検出され既存 run は変更されない."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V15-002",
+      "claim_ids": ["CLM-FDA-V15-002"],
+      "expected_files": [
+        "src/application/risk_tier.rs",
+        "src/application/gc.rs",
+        "docs/standards/delivery-artifacts-v0/schemas/risk_tier.schema.json"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PR-V15-002",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "risk tier 判定と gc docket 生成の unit test が pass する。",
+          "expected_evidence": ["validation_report.json", "review_agent_gate.json"],
+          "proof_id": "PROOF-FDA-V15-002",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "F4+F5: ガバナンス税を blast radius に比例させ、棚卸しを AI の定常業務にする。",
+      "risk": {
+        "level": "medium",
+        "mitigations": ["low tier でもゲートの種類は減らさない", "gc は docket 生成のみで破壊操作なし"],
+        "summary": "merge gate の条件変更を含むため誤緩和に注意。"
+      },
+      "scope": {
+        "in": ["risk_tier.json 生成と merge/review の比例化", "fda gc"],
+        "out": ["自動削除", "auto merge"]
+      },
+      "sequence": 2,
+      "title": "F4 比例ゲート + F5 庭師 (fda gc)"
+    },
+    {
+      "acceptance_criteria": [
+        "Given 同型判断が3回以上ある decision 履歴, When fda policy propose を実行する, Then 委任契約候補が policy_proposal に出力され .fda へは書かれない.",
+        "Given 有効な delegation_contract.yaml, When fda decide <ID> --by-contract <rule> を実行する, Then 契約の answer で記録され decided_by に契約IDと authority が残る.",
+        "Given 失効した契約, When --by-contract を使う, Then 適用拒否され人間判断へ戻る."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V15-003",
+      "claim_ids": ["CLM-FDA-V15-003"],
+      "expected_files": [
+        "src/application/policy.rs",
+        "docs/standards/fda-v1/schemas/repository-profile/delegation_contract_yaml.schema.json"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PR-V15-003",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "契約の提案・適用・失効拒否の unit test が pass する。",
+          "expected_evidence": ["validation_report.json", "review_agent_gate.json"],
+          "proof_id": "PROOF-FDA-V15-003",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "F1: 人間の判断を委任契約へ昇格させ、人間を個別回答者から立法者にする。",
+      "risk": {
+        "level": "high",
+        "mitigations": ["契約制定は人間の YAML 編集のみ", "expires 必須", "適用時は契約IDを receipt に記録", "不一致・失効は fail-closed"],
+        "summary": "人間権限の委任を扱うため過剰一般化が最大リスク。"
+      },
+      "scope": {
+        "in": ["policy propose", "delegation_contract.yaml (optional profile)", "decide --by-contract"],
+        "out": ["契約の自動制定", "blast radius の機械的強制"]
+      },
+      "sequence": 3,
+      "title": "F1 判断の立法化 (delegation contract)"
+    },
+    {
+      "acceptance_criteria": [
+        "Given planned_prs と各 PR の receipt 群, When fda continue --epic を実行する, Then epic_progress_state.json が PR ごとの状態を正しく示す.",
+        "Given 依存充足済みの未着手 PR, When fda continue --epic を実行する, Then next_planned_pr_decision.json がその PR を指す.",
+        "Given 未解決 Human Decision がある epic, When fda continue --epic を実行する, Then waiting_human と resume command が提示される."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V15-004",
+      "claim_ids": ["CLM-FDA-V15-004"],
+      "expected_files": [
+        "src/application/epic.rs",
+        "docs/standards/delivery-artifacts-v0/schemas/epic_progress_state.schema.json"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PR-V15-004",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "3 PR fixture (merged/open/未着手) の next 判定 unit test が pass する。",
+          "expected_evidence": ["validation_report.json", "review_agent_gate.json"],
+          "proof_id": "PROOF-FDA-V15-004",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "F2: Epic 全体の次 PR 選択をランタイム化し、複数 PR の連続遂行を可能にする。",
+      "risk": {
+        "level": "medium",
+        "mitigations": ["既存 continue (repair gate) は不変", "判定は read-only で receipt を書き換えない"],
+        "summary": "状態推定の誤りは次 PR の誤選択につながる。"
+      },
+      "scope": {
+        "in": ["continue --epic", "epic_progress_state", "next_planned_pr_decision"],
+        "out": ["PR の自動実装開始", "merge 実行"]
+      },
+      "sequence": 4,
+      "title": "F2 Epic 継続ループ (continue --epic)"
+    },
+    {
+      "acceptance_criteria": [
+        "Given 回答済み判断とその後の receipt を持つ run 群, When fda ui を開く, Then 道場セクションに判断→帰結が時系列表示される.",
+        "Given 未解決判断と同 type の過去判断, When Decision Inbox を表示する, Then precedent が最大3件添付される.",
+        "Given gc docket と epic progress, When fda ui を開く, Then 両方が表示される."
+      ],
+      "auto_merge_candidate": false,
+      "case_id": "CASE-FDA-V15-005",
+      "claim_ids": ["CLM-FDA-V15-005"],
+      "expected_files": [
+        "src/application/ui.rs",
+        "src/rendering/mission_control.rs"
+      ],
+      "human_decision_dependencies": [],
+      "planned_pr_id": "PR-V15-005",
+      "proof_strategy": [
+        {
+          "blocking": true,
+          "description": "journal / precedent 構築とレンダリングの unit test が pass する。",
+          "expected_evidence": ["validation_report.json", "review_agent_gate.json"],
+          "proof_id": "PROOF-FDA-V15-005",
+          "type": "schema_validation"
+        }
+      ],
+      "purpose": "F3: UI を道場にする。人間が判断の帰結と向き合い、判断力が育つ場所にする。",
+      "risk": {
+        "level": "low",
+        "mitigations": ["read-only projection 原則は不変", "UI 破損は状態に影響しない"],
+        "summary": "表示層のみ。"
+      },
+      "scope": {
+        "in": ["decision journal", "inbox precedent", "gc/epic 表示"],
+        "out": ["UI からの状態変更", "認証・リモート公開"]
+      },
+      "sequence": 5,
+      "title": "F3 道場 UI (decision journal + precedent)"
+    }
+  ],
+  "program_id": "FDA-V1",
+  "schema_version": "forge_delivery.planned_prs.v0",
+  "source_requirements": [
+    "docs/v1/fda_v1_5_intake.md",
+    "requirements_definition.md",
+    "detailed_design.md"
+  ]
+}

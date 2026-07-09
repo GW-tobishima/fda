@@ -1,0 +1,26 @@
+{
+  "receipts": [
+    {
+      "answer": "approve_scope",
+      "decided_at_unix_seconds": "1783555128",
+      "decided_by": "human",
+      "decision_id": "HD-FDA-001",
+      "input_decision_id": "HD-FDA-001"
+    },
+    {
+      "answer": "accept_classification",
+      "decided_at_unix_seconds": "1783555129",
+      "decided_by": "human",
+      "decision_id": "HD-FDA-002",
+      "input_decision_id": "HD-FDA-002"
+    },
+    {
+      "answer": "confirm_before_design",
+      "decided_at_unix_seconds": "1783555129",
+      "decided_by": "human",
+      "decision_id": "HD-FDA-003",
+      "input_decision_id": "HD-FDA-003"
+    }
+  ],
+  "schema_version": "fda.decision_receipts.v0"
+}

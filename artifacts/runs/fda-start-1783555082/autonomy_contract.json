@@ -1,0 +1,75 @@
+{
+  "allowed_actions": [
+    "Generate design artifacts",
+    "Validate generated JSON artifacts",
+    "Prepare next dry-run handoff"
+  ],
+  "applies_to": [
+    "PR-V1-003",
+    "Design Gate"
+  ],
+  "auto_merge_policy": {
+    "allowed": false,
+    "conditions": [],
+    "forbidden": [
+      "Design Gate は merge approval ではない",
+      "privacy/security/legal risk は human approval 必須"
+    ]
+  },
+  "autonomy_level": "planning_only",
+  "contract_id": "AUTONOMY-FDA-V1-DESIGN-001",
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "escalation_rules": [
+    {
+      "human_decision_packet_required": true,
+      "required_action": "Human Decision を開く",
+      "trigger": "Scope In / Scope Out の変更が必要"
+    },
+    {
+      "human_decision_packet_required": true,
+      "required_action": "Security QA から Human Turn へ戻す",
+      "trigger": "Security High / Critical risk が見つかる"
+    }
+  ],
+  "evidence_policy": {
+    "citations_required": false,
+    "source_trace_required": true,
+    "summary_update_required": true,
+    "verification_required": true
+  },
+  "expires_at": null,
+  "forbidden_actions": [
+    "Modify target repo implementation",
+    "Invoke live MCP implementer",
+    "Create implementation PR",
+    "Merge PR",
+    "Approve security/legal risk"
+  ],
+  "forge_mapping": {
+    "ato_task_graph": [
+      "TASK-FDA-V1-IMPLEMENT-001",
+      "TASK-FDA-V1-FQA-001",
+      "TASK-FDA-V1-SQA-001"
+    ],
+    "claim_ids": [
+      "CLM-FDA-V1-DESIGN-001"
+    ],
+    "gate_requirements": [
+      "Design Gate",
+      "Functional QA brief",
+      "Security QA brief"
+    ],
+    "human_decision_points": [],
+    "planned_prs": [
+      "PPR-FDA-V1-IMPLEMENT-001"
+    ],
+    "proof_obligations": [
+      "PROOF-FDA-V1-DESIGN-001"
+    ]
+  },
+  "next_allowed_phase": [
+    "fda implement --dry-run"
+  ],
+  "program_id": "FDA-V1",
+  "status": "approved"
+}

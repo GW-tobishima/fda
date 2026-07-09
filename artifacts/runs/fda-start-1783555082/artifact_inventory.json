@@ -1,0 +1,329 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "ART-DESIGN-001",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/basic_design.md",
+      "preview_summary": "Design Gate の基本設計",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Basic Design",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-002",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/detailed_design.md",
+      "preview_summary": "Design Gate の詳細設計",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Detailed Design",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-003",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/functional_qa_brief.md",
+      "preview_summary": "Functional QA の確認契約",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Functional QA Brief",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-004",
+      "artifact_type": "generic_receipt",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/security_qa_brief.md",
+      "preview_summary": "Security QA の確認契約",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Security QA Brief",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-005",
+      "artifact_type": "case_graph",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/case_graph.json",
+      "preview_summary": "Design Gate の Case Graph",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Case Graph",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-006",
+      "artifact_type": "task_graph",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/task_graph.json",
+      "preview_summary": "Implementer / QA role を分離した Task Graph",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Task Graph",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-007",
+      "artifact_type": "planned_prs",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/planned_prs.json",
+      "preview_summary": "Design Gate 後の Planned PR 契約",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Planned PRs",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-008",
+      "artifact_type": "autonomy_contract",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/autonomy_contract.json",
+      "preview_summary": "Design Gate の自律境界",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Autonomy Contract",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-009",
+      "artifact_type": "forge_projection",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/forge_projection.json",
+      "preview_summary": "ClaimContract と Proof Obligation",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Forge Projection",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-010",
+      "artifact_type": "runner_explanation",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/runner_explanation.json",
+      "preview_summary": "Design Gate の停止条件と次 action",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Runner Explanation",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-DESIGN-011",
+      "artifact_type": "validation_report",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/validation_report.json",
+      "preview_summary": "Design Gate JSON artifact の schema validation",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-DESIGN-001"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-INTAKE",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "TASK-FDA-V1-IMPLEMENT-001",
+        "TASK-FDA-V1-FQA-001",
+        "TASK-FDA-V1-SQA-001"
+      ],
+      "title": "Validation Report",
+      "updated_at_unix_seconds": 1783555144
+    },
+    {
+      "artifact_id": "ART-ATO-STATE-001",
+      "artifact_type": "ato_state_receipt",
+      "created_at_unix_seconds": 1783555144,
+      "diff_link": null,
+      "evidence_links": [],
+      "latest_version": "v0",
+      "open_in_browser_link": null,
+      "open_in_editor_link": null,
+      "path_or_url": "artifacts/runs/fda-start-1783555082/ato_state_receipt.json",
+      "preview_summary": "ATO task/run/checkpoint/decision/evidence sync receipt",
+      "producer_agent": "forge-delivery-agent",
+      "related_case_ids": [
+        "CASE-FDA-V1-ATO"
+      ],
+      "related_epic_id": "EPIC-FDA-V1-OPERATIONAL",
+      "related_program_id": "FDA-V1",
+      "related_task_ids": [
+        "PR-V1-016"
+      ],
+      "title": "ATO State Receipt",
+      "updated_at_unix_seconds": 1783555144
+    }
+  ],
+  "generated_at_unix_seconds": 1783555144,
+  "groups": [
+    {
+      "artifact_ids": [
+        "ART-DESIGN-001",
+        "ART-DESIGN-002",
+        "ART-DESIGN-003",
+        "ART-DESIGN-004",
+        "ART-DESIGN-005",
+        "ART-DESIGN-006",
+        "ART-DESIGN-007",
+        "ART-DESIGN-008",
+        "ART-DESIGN-009"
+      ],
+      "group_id": "design_artifacts",
+      "title": "Design Gate Artifacts"
+    },
+    {
+      "artifact_ids": [
+        "ART-DESIGN-010",
+        "ART-DESIGN-011"
+      ],
+      "group_id": "run_evidence",
+      "title": "Run Evidence"
+    }
+  ],
+  "schema_version": "fda.artifact_inventory.v0"
+}

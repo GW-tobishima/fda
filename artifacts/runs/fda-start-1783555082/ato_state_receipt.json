@@ -1,0 +1,82 @@
+{
+  "adapter": "ato_cli",
+  "artifact_dir": "artifacts/runs/fda-start-1783555082",
+  "checkpoint_id": "cp_01KX22QF6RE95KJ3BTP8XQMY3P",
+  "commands": [
+    {
+      "command": [
+        "ato",
+        "work",
+        "checkpoint",
+        "--task",
+        "fda-v1-5-20260708",
+        "--run-id",
+        "run_01KX22MBQ3RBXFX0F4Y5HWZB8H",
+        "--kind",
+        "design",
+        "--summary",
+        "<redacted>",
+        "--evidence-surface",
+        "fda_artifact",
+        "--evidence-id",
+        "<redacted>",
+        "--evidence-verdict",
+        "pass",
+        "--validation-status",
+        "passed",
+        "--freshness",
+        "current",
+        "--durability-class",
+        "artifact",
+        "--trust-level",
+        "self_reported",
+        "--json"
+      ],
+      "command_kind": "work_checkpoint",
+      "exit_code": 0,
+      "status": "succeeded",
+      "stderr_summary": null,
+      "stdout_json_detected": true,
+      "stdout_top_level_keys": [
+        "checkpoint",
+        "evidence",
+        "next_recommended_command"
+      ]
+    }
+  ],
+  "decision_mappings": [
+    {
+      "ato_decision_id": "dec_01KX22NKKE6JM1AY9Y3H0C03MR",
+      "fda_decision_id": "HD-FDA-001",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KX22NKN9KB0E99V6BS1SSKZF",
+      "fda_decision_id": "HD-FDA-002",
+      "status": "applied"
+    },
+    {
+      "ato_decision_id": "dec_01KX22NKPYSJNESX2E3KV1A3NV",
+      "fda_decision_id": "HD-FDA-003",
+      "status": "applied"
+    }
+  ],
+  "decision_sync": null,
+  "evidence_edges": [
+    {
+      "evidence_id": "artifacts/runs/fda-start-1783555082/validation_report.json",
+      "evidence_surface": "fda_artifact",
+      "verdict": "pass"
+    }
+  ],
+  "failure_reason": null,
+  "raw_output_stored": false,
+  "receipt_id": "ATO-FDA-DESIGN-001",
+  "receipt_path": "artifacts/runs/fda-start-1783555082/ato_state_receipt.json",
+  "resume_command": null,
+  "run_id": "run_01KX22MBQ3RBXFX0F4Y5HWZB8H",
+  "schema_version": "fda.ato_state_receipt.v0",
+  "stage": "design",
+  "status": "succeeded",
+  "task_key": "fda-v1-5-20260708"
+}

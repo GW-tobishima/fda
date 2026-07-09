@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "case_id": "CASE-FDA-V1-DESIGN-001",
+      "claim_ids": [
+        "CLM-FDA-V1-DESIGN-001"
+      ],
+      "depends_on": [],
+      "planned_pr": "PPR-FDA-V1-IMPLEMENT-001",
+      "purpose": "Design Gate artifact を実装前の正本として生成する",
+      "risk": "medium",
+      "state": "planned"
+    }
+  ],
+  "epic_id": "EPIC-FDA-V1-INTAKE",
+  "program_id": "FDA-V1"
+}
