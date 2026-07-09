@@ -20,6 +20,8 @@ pub(crate) struct ReviewGateView<'a> {
     pub(crate) design_qa_required: bool,
     pub(crate) design_qa_status: &'a str,
     pub(crate) design_qa_evidence_links: &'a [String],
+    pub(crate) forge_reviewer_relaxed_reason: Option<&'a str>,
+    pub(crate) design_qa_relaxed_reason: Option<&'a str>,
 }
 
 pub(crate) struct HumanDecisionGuardView<'a> {
@@ -447,7 +449,10 @@ pub(crate) fn review_agent_gate(
                 "source_mutation_allowed": false,
                 "evidence": evidence_json(gate.forge_reviewer_evidence_links),
                 "not_applicable_reason": if forge_reviewer_status == "not_applicable" {
-                    json!("ATO / Forge / FDA evidence, handoff, review packet, human decision boundary change was not detected in this review artifact set.")
+                    match gate.forge_reviewer_relaxed_reason {
+                        Some(reason) => json!(reason),
+                        None => json!("ATO / Forge / FDA evidence, handoff, review packet, human decision boundary change was not detected in this review artifact set."),
+                    }
                 } else {
                     Value::Null
                 }
@@ -460,7 +465,10 @@ pub(crate) fn review_agent_gate(
                 "source_mutation_allowed": false,
                 "evidence": evidence_json(gate.design_qa_evidence_links),
                 "not_applicable_reason": if design_qa_status == "not_applicable" {
-                    json!("UI / frontend / browser surface change was not detected in this review artifact set.")
+                    match gate.design_qa_relaxed_reason {
+                        Some(reason) => json!(reason),
+                        None => json!("UI / frontend / browser surface change was not detected in this review artifact set."),
+                    }
                 } else {
                     Value::Null
                 }
@@ -509,7 +517,9 @@ pub(crate) fn review_agent_gate_packet_markdown(
         conditional_reviewer_status(gate.forge_reviewer_required, gate.forge_reviewer_status);
     let forge_packet_status = review_agent_packet_status(forge_status);
     let forge_evidence = evidence_markdown(gate.forge_reviewer_evidence_links);
-    let forge_rationale = if gate.forge_reviewer_required {
+    let forge_rationale: &str = if let Some(reason) = gate.forge_reviewer_relaxed_reason {
+        reason
+    } else if gate.forge_reviewer_required {
         if forge_status == "passed" {
             "ATO / Forge / FDA evidence boundary was reviewed by forge_reviewer."
         } else {
@@ -521,7 +531,9 @@ pub(crate) fn review_agent_gate_packet_markdown(
     let design_status = conditional_reviewer_status(gate.design_qa_required, gate.design_qa_status);
     let design_packet_status = review_agent_packet_status(design_status);
     let design_evidence = evidence_markdown(gate.design_qa_evidence_links);
-    let design_rationale = if gate.design_qa_required {
+    let design_rationale: &str = if let Some(reason) = gate.design_qa_relaxed_reason {
+        reason
+    } else if gate.design_qa_required {
         if design_status == "passed" {
             "UI / frontend / visual / browser surface was reviewed by design_qa."
         } else {
@@ -531,6 +543,18 @@ pub(crate) fn review_agent_gate_packet_markdown(
         "UI / frontend / visual / browser surface change was not detected in this review artifact set."
     };
     let pr_evidence = evidence_markdown(gate.pr_reviewer_evidence_links);
+    // 比例緩和を適用した packet は RISK_TIER 行を必ず併記する
+    // (scripts/check_review_agent_gate.py が forge_reviewer not_applicable の
+    // 許容条件としてこの行を要求する)。
+    let risk_tier_line = match (
+        gate.forge_reviewer_relaxed_reason,
+        gate.design_qa_relaxed_reason,
+    ) {
+        (Some(reason), _) | (None, Some(reason)) => {
+            format!("RISK_TIER: low — {reason}\n\n")
+        }
+        (None, None) => String::new(),
+    };
     format!(
         "# FDA Review Agent Gate Packet\n\n\
 program: `{}`\n\
@@ -540,6 +564,7 @@ reviewed_planned_pr: `{}`\n\
 actual_pr: `{}`\n\n\
 ## REVIEW_AGENT_GATE\n\n\
 MERGE_APPROVAL: not_granted\n\n\
+{}\
 | role | status | evidence | rationale |\n\
 |---|---|---|---|\n\
 | pr_reviewer | {} | {} | correctness / regression / blast radius / artifact consistency |\n\
@@ -552,6 +577,7 @@ MERGE_APPROVAL: not_granted\n\n\
         context.epic_id,
         gate.reviewed_planned_pr_id,
         gate.actual_pr_url.unwrap_or("<unavailable>"),
+        risk_tier_line,
         pr_status,
         pr_evidence,
         functional_status,

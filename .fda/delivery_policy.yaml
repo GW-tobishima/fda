@@ -14,10 +14,13 @@ delivery_policy:
     - merge_approval
     - release_approval
     - precedent_conflict
+  # NOTE: .fda/** は意図的に low_risk_paths へ入れない。統治ファイル
+  # (delivery_policy.yaml / gates.yaml 等) を low 扱いすると、まさに .fda 変更を
+  # 見るための forge_reviewer をスキップできてしまう (defense in depth。
+  # コード側の governance hard guard でも同経路は遮断済みで YAML では上書き不可)。
   low_risk_paths:
     - docs/**
     - tests/**
-    - .fda/**
     - artifacts/runs/**
   forbidden_without_human:
     - database_destructive_migration

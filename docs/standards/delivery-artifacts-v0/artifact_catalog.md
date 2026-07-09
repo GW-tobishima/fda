@@ -124,6 +124,8 @@ docs/standards/delivery-artifacts-v0/
 | MCP Dry-run Receipt | MCP adapter dry-runのgate証跡 | Invocation Plan、prompt、target repo cwd | tools/list、cwd、prompt、approval policy、禁止事項、target repo mutationなし | MCP Dry-run Gate |
 | Coding Agent Thread State | repair loop用のthread継続状態 | MCP receipt、provider thread id | continuation tool、last receipt、repair count、open items | Run State, Repair |
 | Agent Role Policy | agent roleごとの権限境界 | Autonomy Contract、QA policy | write/read-only、source mutation可否、禁止事項 | Autonomy, QA Gate |
+| Risk Tier | F4 比例ゲートの risk tier 判定 | Scope In（planned_prs expected_files）、delivery_policy low_risk_paths / human_required_for、risk_register | tier (low/standard/high)、理由、一致した low_risk_paths、policy source。merge 時に live 再計算 + governance hard guard で再検証 | Merge Gate, Review Agent Gate |
+| GC Docket | F5 庭師の棚卸し docket（read-only、削除しない） | artifacts/runs の run 群、mtime、receipt/validation/ato_state/decision 状態 | stale 未完了 / validation 欠落 / ato 失敗 / 未解決判断 / parse_error 候補と recommendation、needs_human | Human-facing Summary |
 | Generic Run State | 汎用Daily Agent Runtimeの状態契約 | schedule、command state、idempotency、artifact refs | dispatch/event/action/maintain/statusの現在状態 | Run State, Claim IDs, Proof Obligations |
 | Generic Receipt | 汎用Daily Agent Runtimeのreceipt契約 | command実行結果、idempotency、artifact refs | dispatch/event_intake/action/maintenance/status receipt examples | Runtime Evidence |
 | Runtime Artifact Contracts | PR-GDAR-001のschema/fixture契約説明 | Planned PRs、Forge Projection | 汎用化対象、AICX artifactとの関係、Claim/Proof対応 | Case, Claim IDs, Proof Obligations |

@@ -2,6 +2,7 @@ use std::path::Path;
 
 use crate::application::decide::DecideResult;
 use crate::application::design::DesignResult;
+use crate::application::gc::GcResult;
 use crate::application::plan::PlanResult;
 use crate::application::start::StartResult;
 use crate::application::status::StatusResult;
@@ -30,6 +31,7 @@ pub(crate) fn print_help() {
     println!("fda status [--artifacts <dir>] [--repo-root <path>] [--json]");
     println!("fda open [--artifacts <dir>] [--out <dir>] [--repo-root <path>] [--json]");
     println!("fda ui [--artifacts-root <dir>] [--port <n>] [--open] [--repo-root <path>]  # read-only Mission Control (127.0.0.1)");
+    println!("fda gc [--artifacts-root <dir>] [--max-age-days <n>] [--repo-root <path>] [--json]  # stale run 棚卸し docket (read-only, 削除しない)");
     println!("fda validate-artifacts [--repo-root <path>] [--schemas <dir>] [--artifacts <dir>] [--model-contracts <dir>] [--out <path>] [--json]");
     println!();
     println!("共通ATO連携: [--ato-sync] [--ato-task <key>] [--ato-run-id <run>] [--ato-backend <backend>] [--ato-db <path>] [--ato-cli <path>]");
@@ -197,6 +199,15 @@ pub(crate) fn print_merge_summary(result: &MergeResult) {
     println!("Policy disposition: {}", result.policy_disposition);
     println!("CI status: {}", result.ci_status);
     println!("Risk classification: {}", result.risk_classification);
+    if let Some(risk_tier) = &result.risk_tier {
+        println!("Risk tier: {risk_tier}");
+    }
+    if !result.proportional_gate_notes.is_empty() {
+        println!("比例ゲート:");
+        for note in &result.proportional_gate_notes {
+            println!("- {note}");
+        }
+    }
     if let Some(actual_pr_url) = &result.actual_pr_url {
         println!("Actual PR: {actual_pr_url}");
     }
@@ -306,8 +317,44 @@ pub(crate) fn print_status_summary(result: &StatusResult) {
     if let Some(risk_classification) = &result.merge.risk_classification {
         println!("- Risk classification: {risk_classification}");
     }
+    if let Some(risk_tier) = &result.merge.risk_tier {
+        println!("- Risk tier: {risk_tier}");
+    }
     if let Some(actual_pr_url) = &result.merge.actual_pr_url {
         println!("- Actual PR: {actual_pr_url}");
+    }
+    println!();
+    println!("次:");
+    for action in &result.next_actions {
+        println!("{action}");
+    }
+}
+
+pub(crate) fn print_gc_summary(result: &GcResult) {
+    println!("GC docket: {}", result.docket_path);
+    println!("Artifacts root: {}", result.artifacts_root);
+    println!("Scanned runs: {}", result.scanned_runs);
+    println!("Candidates: {}", result.candidate_count);
+    println!();
+    if result.candidates.is_empty() {
+        println!("棚卸し候補はありません。");
+    } else {
+        println!("棚卸し候補 (削除・変更はしません):");
+        for candidate in &result.candidates {
+            println!(
+                "- {} [{}]{}",
+                candidate.run,
+                candidate.recommendation,
+                if candidate.needs_human {
+                    " (要人間判断)"
+                } else {
+                    ""
+                }
+            );
+            for reason in &candidate.reasons {
+                println!("    - {reason}");
+            }
+        }
     }
     println!();
     println!("次:");

@@ -131,6 +131,20 @@ def require_non_empty(row: dict[str, str], role: str, field: str) -> None:
         raise GateError(f"{role} の {field} が不足しています")
 
 
+RISK_TIER_LOW_LINE = re.compile(r"^\s*RISK_TIER\s*:\s*low\b(?P<reason>.*)$", re.MULTILINE)
+
+
+def risk_tier_low_reason(section: str) -> str | None:
+    """packet の `RISK_TIER: low — <理由>` 行から理由を返す。無ければ None。"""
+    match = RISK_TIER_LOW_LINE.search(section)
+    if not match:
+        return None
+    reason = match.group("reason").strip().strip("-—:～ ").strip()
+    if not reason or is_placeholder(reason):
+        return None
+    return reason
+
+
 def require_merge_approval_not_granted(section: str) -> None:
     lines = [
         line
@@ -168,9 +182,23 @@ def validate_gate(section: str) -> None:
         and not is_placeholder(rows.get(role, {}).get("evidence", ""))
     ]
     if not forge_ok:
-        raise GateError(
-            "forge_reviewer、qax2、または orchestrator の REVIEW_AGENT_OK evidence が必要です"
-        )
+        # F4 比例ゲート: forge_reviewer 行が not_applicable の場合、packet に
+        # `RISK_TIER: low` 行と理由が併記されているときのみ許容する
+        # (design_qa の既存 not_applicable 許容パスと同型)。それ以外は従来どおり必須。
+        forge_row = rows.get("forge_reviewer")
+        risk_tier_reason = risk_tier_low_reason(section)
+        if (
+            forge_row is not None
+            and status_kind(forge_row.get("status", "")) == "not_applicable"
+            and risk_tier_reason is not None
+            and not is_placeholder(forge_row.get("rationale", ""))
+        ):
+            pass  # risk_tier=low の比例緩和として許容 (merge gate 側で live 再検証される)
+        else:
+            raise GateError(
+                "forge_reviewer、qax2、または orchestrator の REVIEW_AGENT_OK evidence が必要です"
+                " (forge_reviewer not_applicable は RISK_TIER: low 行 + 理由がある場合のみ許容)"
+            )
 
     design_row = rows.get(DESIGN_ROLE)
     if design_row is None:

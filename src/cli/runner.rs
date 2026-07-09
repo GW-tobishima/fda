@@ -2,12 +2,13 @@ use serde::Serialize;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 
-use crate::application::{decide, design, plan, start, status, ui, validate};
+use crate::application::{decide, design, gc, plan, start, status, ui, validate};
 use crate::cli::args::{parse_args, AtoConfig, Command};
 use crate::cli::output::{
-    print_continue_summary, print_decide_summary, print_design_summary, print_implement_summary,
-    print_merge_summary, print_notify_summary, print_open_summary, print_plan_summary,
-    print_review_summary, print_start_summary, print_status_summary, print_validation_summary,
+    print_continue_summary, print_decide_summary, print_design_summary, print_gc_summary,
+    print_implement_summary, print_merge_summary, print_notify_summary, print_open_summary,
+    print_plan_summary, print_review_summary, print_start_summary, print_status_summary,
+    print_validation_summary,
 };
 use crate::infra::ato_state::{
     canonicalize_repo_root_for_sync, sync_ato_state, AtoDecisionAnswer, AtoStateReceipt,
@@ -213,6 +214,20 @@ pub fn run(args: Vec<String>) -> Result<bool, String> {
             }
             crate::ui_serve(&config)?;
             Ok(true)
+        }
+        Command::Gc(config) => {
+            // read-only スキャン + docket 出力のみ。ATO 同期は行わない。
+            let result = gc::gc(&config)?;
+            if config.print_json {
+                let value = serde_json::to_value(&result).map_err(|e| e.to_string())?;
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&value).map_err(|e| e.to_string())?
+                );
+            } else {
+                print_gc_summary(&result);
+            }
+            Ok(result.verdict == "pass")
         }
         Command::ValidateArtifacts(config) => {
             let report = validate::validate(&config)?;

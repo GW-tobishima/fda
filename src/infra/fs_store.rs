@@ -1,10 +1,25 @@
 use serde_json::Value;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::time::UNIX_EPOCH;
 
 use crate::application::ports::ArtifactStore;
 
 pub(crate) struct FsArtifactStore;
+
+/// path の最終更新時刻を UNIX 秒で返す（F5 庭師の stale run 判定に使う）。
+/// application 層は std::fs を直接使えないため、mtime 取得はここに集約する。
+pub(crate) fn modified_unix_seconds(path: &Path) -> Result<u64, String> {
+    let metadata = fs::metadata(path)
+        .map_err(|e| format!("failed to read metadata {}: {e}", path.display()))?;
+    let modified = metadata
+        .modified()
+        .map_err(|e| format!("failed to read mtime {}: {e}", path.display()))?;
+    modified
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_secs())
+        .map_err(|e| format!("mtime before UNIX_EPOCH {}: {e}", path.display()))
+}
 
 pub(crate) fn list_file_names(path: &Path) -> Result<Vec<String>, String> {
     let mut files = Vec::new();

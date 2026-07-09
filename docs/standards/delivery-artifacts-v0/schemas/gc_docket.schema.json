@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/delivery-artifacts-v0/gc_docket.schema.json",
+  "title": "GC Docket",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at_unix",
+    "scanned_runs",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "fda.gc_docket.v1" },
+    "generated_at_unix": { "type": "integer", "minimum": 0 },
+    "scanned_runs": { "type": "integer", "minimum": 0 },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["run", "reasons", "recommendation", "needs_human"],
+        "properties": {
+          "run": { "type": "string", "minLength": 1 },
+          "reasons": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "recommendation": {
+            "type": "string",
+            "enum": ["resume", "archive", "answer_decision"]
+          },
+          "needs_human": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

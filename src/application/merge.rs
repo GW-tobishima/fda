@@ -41,6 +41,8 @@ pub(crate) struct MergeResult {
     pub(crate) forge_status: String,
     pub(crate) forge_promotion_decision: String,
     pub(crate) risk_classification: String,
+    pub(crate) risk_tier: Option<String>,
+    pub(crate) proportional_gate_notes: Vec<String>,
     pub(crate) merge_execute_requested: bool,
     pub(crate) merge_method: String,
     pub(crate) merge_executed: bool,
@@ -67,6 +69,8 @@ pub(crate) struct MergeGateStatus {
     pub(crate) forge_claim_ids: Vec<String>,
     pub(crate) forge_proof_obligations: Vec<String>,
     pub(crate) risk_classification: String,
+    pub(crate) risk_tier: Option<String>,
+    pub(crate) proportional_gate_notes: Vec<String>,
     pub(crate) policy_disposition: String,
     pub(crate) planned_pr_id: String,
     pub(crate) actual_pr_url: Option<String>,
@@ -320,6 +324,8 @@ pub(crate) fn merge_run(config: &MergeConfig) -> Result<MergeResult, String> {
         forge_status: gate.forge_status,
         forge_promotion_decision: gate.forge_promotion_decision,
         risk_classification: gate.risk_classification,
+        risk_tier: gate.risk_tier,
+        proportional_gate_notes: gate.proportional_gate_notes,
         merge_execute_requested: merge_execution.requested,
         merge_method: merge_execution.method,
         merge_executed: merge_execution.merge_executed,
@@ -409,6 +415,8 @@ fn merge_gate_view(gate: &MergeGateStatus) -> MergeGateView<'_> {
         forge_claim_ids: &gate.forge_claim_ids,
         forge_proof_obligations: &gate.forge_proof_obligations,
         risk_classification: &gate.risk_classification,
+        risk_tier: gate.risk_tier.as_deref(),
+        proportional_gate_notes: &gate.proportional_gate_notes,
         policy_disposition: &gate.policy_disposition,
         planned_pr_id: &gate.planned_pr_id,
         actual_pr_url: gate.actual_pr_url.as_deref(),
@@ -492,6 +500,12 @@ fn merge_gate_status_from_artifacts(
 ) -> Result<MergeGateStatus, String> {
     let mut issues = context_issues;
     let mut evidence_links = Vec::new();
+    // F4 比例ゲート: risk_tier.json があれば読む。無ければ現行動作（standard 扱い）。
+    let (risk_tier, risk_tier_reasons) = read_risk_tier(artifact_dir)?;
+    let mut proportional_gate_notes = Vec::new();
+    if risk_tier.is_some() {
+        evidence_links.push("risk_tier.json".to_string());
+    }
     let mut qa_status = "missing".to_string();
     let mut repair_status = "not_provided".to_string();
     let mut ci_status = "missing".to_string();
@@ -677,8 +691,10 @@ fn merge_gate_status_from_artifacts(
         actual_pr_url.as_deref(),
         &planned_pr_id,
         &changed_files,
+        risk_tier.as_deref(),
         &mut issues,
         &mut evidence_links,
+        &mut proportional_gate_notes,
     );
 
     let forge = forge_gate_status_from_artifacts(artifact_dir, &planned_pr_id, context, repo_root)?;
@@ -708,6 +724,35 @@ fn merge_gate_status_from_artifacts(
             "risk_register.json or risk_register.md is required before fda merge".to_string(),
         );
     }
+
+    // F4 比例ゲート: tier=high は human_required_for 該当を blocking issue として明示する
+    // （fail-closed をさらに強める方向。tier=low の軽量化は上の conditional reviewer で実施済み）。
+    match risk_tier.as_deref() {
+        Some("high") => {
+            proportional_gate_notes.push(
+                "risk_tier=high: フルゲート維持のうえ human_required_for 該当を blocking issue として明示"
+                    .to_string(),
+            );
+            if risk_tier_reasons.is_empty() {
+                issues.push(
+                    "risk_tier=high のため human decision の解決が必要です（risk_tier.json）"
+                        .to_string(),
+                );
+            } else {
+                for reason in &risk_tier_reasons {
+                    issues.push(format!(
+                        "risk_tier=high は human decision を要求します: {reason}"
+                    ));
+                }
+            }
+        }
+        Some("low") => proportional_gate_notes.push(
+            "risk_tier=low: 必須 3 reviewer (pr_reviewer/functional_qa/security_qa) は不変、conditional は比例軽量化"
+                .to_string(),
+        ),
+        _ => {}
+    }
+
     let human_approval_risk =
         matches!(risk_classification.as_str(), "high_risk" | "regulated_risk");
     let auto_merge_allowed = repository_auto_merge_allowed(target_repo);
@@ -744,6 +789,8 @@ fn merge_gate_status_from_artifacts(
         forge_claim_ids: forge.claim_ids,
         forge_proof_obligations: forge.proof_obligations,
         risk_classification,
+        risk_tier,
+        proportional_gate_notes,
         policy_disposition,
         planned_pr_id,
         actual_pr_url,
@@ -758,8 +805,10 @@ fn enforce_review_agent_gate_before_merge(
     actual_pr_url: Option<&str>,
     planned_pr_id: &str,
     changed_files: &[String],
+    risk_tier: Option<&str>,
     issues: &mut Vec<String>,
     evidence_links: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
 ) {
     let store = FsArtifactStore;
     let review_gate_path = artifact_dir.join("review_agent_gate.json");
@@ -774,10 +823,13 @@ fn enforce_review_agent_gate_before_merge(
             Ok(gate) => validate_review_agent_gate_json(
                 &gate,
                 artifact_dir,
+                repo_root,
                 actual_pr_url,
                 planned_pr_id,
                 changed_files,
+                risk_tier,
                 issues,
+                proportional_notes,
             ),
             Err(error) => issues.push(format!(
                 "failed to read review_agent_gate.json before merge: {error}"
@@ -865,13 +917,17 @@ fn enforce_review_agent_gate_before_merge(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn validate_review_agent_gate_json(
     gate: &Value,
     artifact_dir: &Path,
+    repo_root: &Path,
     actual_pr_url: Option<&str>,
     planned_pr_id: &str,
     changed_files: &[String],
+    risk_tier: Option<&str>,
     issues: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
 ) {
     match value_string(gate, "status").as_deref() {
         Some("passed") => {}
@@ -957,30 +1013,94 @@ fn validate_review_agent_gate_json(
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
+    // F4 比例ゲート: 緩和は fda review が review_agent_gate.json の既存契約
+    // (status=not_applicable + not_applicable_reason に "risk_tier=low") で表現し、
+    // merge はその正当性を merge 時再検証で「検証」するだけにする（独自スキップ判定を
+    // しない）。stored tier を無検証で信頼せず、changed_files を delivery_policy で
+    // live 再計算し、さらに governance-critical パス（ハードガード、YAML で上書き不可）
+    // を含む場合は forge_reviewer の not_applicable を blocking issue にする。
+    let relaxation = crate::application::risk_tier::proportional_relaxation(
+        &FsArtifactStore,
+        repo_root,
+        risk_tier,
+        changed_files,
+    );
+    proportional_notes.extend(relaxation.notes.iter().cloned());
     if changed_files
         .iter()
         .any(|path| requires_forge_review_for_merge(path))
     {
-        validate_required_conditional_reviewer(
+        validate_conditional_reviewer_with_relaxation(
             "forge_reviewer",
             &["forge_reviewer", "qax2", "orchestrator"],
             &conditional_reviewers,
             artifact_dir,
+            relaxation.forge_reviewer,
+            &relaxation.notes,
             issues,
+            proportional_notes,
         );
     }
     if changed_files
         .iter()
         .any(|path| requires_design_qa_for_merge(path))
     {
-        validate_required_conditional_reviewer(
+        validate_conditional_reviewer_with_relaxation(
             "design_qa",
             &["design_qa"],
             &conditional_reviewers,
             artifact_dir,
+            relaxation.design_qa,
+            &relaxation.notes,
             issues,
+            proportional_notes,
         );
     }
+}
+
+/// conditional reviewer の検証。review_agent_gate.json が
+/// 「not_applicable + not_applicable_reason に risk_tier=low」を主張している場合は
+/// merge 時再検証（live tier 再計算 + ガバナンス・ハードガード）が成立するときのみ
+/// 受理し、成立しない場合は blocking issue にする。それ以外は従来どおり
+/// required=true + passed の完全な証跡を要求する。
+#[allow(clippy::too_many_arguments)]
+fn validate_conditional_reviewer_with_relaxation(
+    label: &str,
+    accepted_roles: &[&str],
+    reviewers: &[Value],
+    artifact_dir: &Path,
+    relaxation_allowed: bool,
+    relaxation_notes: &[String],
+    issues: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
+) {
+    let risk_tier_not_applicable = reviewers.iter().find(|reviewer| {
+        value_string(reviewer, "role")
+            .as_deref()
+            .is_some_and(|role| accepted_roles.contains(&role))
+            && value_string(reviewer, "status").as_deref() == Some("not_applicable")
+            && value_string(reviewer, "not_applicable_reason")
+                .is_some_and(|reason| reason.contains("risk_tier=low"))
+    });
+    if let Some(reviewer) = risk_tier_not_applicable {
+        let reason = value_string(reviewer, "not_applicable_reason").unwrap_or_default();
+        if relaxation_allowed {
+            proportional_notes.push(format!(
+                "{label}: not_applicable ({reason}) を merge 時再検証 (live tier + hard guard) で受理"
+            ));
+        } else {
+            let detail = if relaxation_notes.is_empty() {
+                "risk_tier.json (tier=low) が無いか stale です".to_string()
+            } else {
+                relaxation_notes.join("; ")
+            };
+            issues.push(format!(
+                "review_agent_gate.json conditional reviewer {label} is not_applicable (risk_tier=low) but merge-time revalidation rejected the relaxation: {detail}"
+            ));
+        }
+        return;
+    }
+    validate_required_conditional_reviewer(label, accepted_roles, reviewers, artifact_dir, issues);
 }
 
 fn validate_required_conditional_reviewer(
@@ -1567,6 +1687,19 @@ fn external_pr_scope_blocks_merge(receipt: &Value) -> bool {
     };
     let kind = value_string(scope, "kind").unwrap_or_else(|| "unknown".to_string());
     kind != "within_scope"
+}
+
+/// artifact_dir の risk_tier.json（F4）を読む。無ければ (None, empty)。
+fn read_risk_tier(artifact_dir: &Path) -> Result<(Option<String>, Vec<String>), String> {
+    let path = artifact_dir.join("risk_tier.json");
+    if !path.exists() {
+        return Ok((None, Vec::new()));
+    }
+    let value = read_json_value(&path)?;
+    Ok((
+        value_string(&value, "tier"),
+        value_string_array(&value, "reasons"),
+    ))
 }
 
 fn risk_classification_from_artifacts(
