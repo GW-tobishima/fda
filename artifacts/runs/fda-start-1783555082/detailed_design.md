@@ -44,8 +44,13 @@ fail-closed 維持（ゲートの種類は減らさず重さだけ比例）/ arc
 
 - F4: 新 artifact `risk_tier.json`（schema `fda.risk_tier.v1`）。implement --dry-run 時に
   Scope In ファイル群を delivery_policy の low_risk_paths / human_required_for と突合し
-  low / standard / high を判定。low は merge gate の forge_reviewer / design_qa を自動
-  not_applicable（理由記録）+ ac_test_mapping 最低件数免除。high は現行フル + 明示。
+  low / standard / high を判定。low は `fda review` が forge_reviewer / design_qa を
+  not_applicable（理由記録必須）として review_agent_gate.json の既存契約で記録し、
+  merge gate は **merge 時再検証**（changed_files を delivery_policy で live 再計算し
+  stored=low かつ live=low のときのみ受理）でその正当性を検証する。さらに
+  governance-critical パス（`.fda/` 配下・gate checker・merge/review/risk_tier 実装等）を
+  含む PR は**ガバナンス・ハードガード**により tier に関係なく forge_reviewer の緩和を
+  適用しない（コードで強制、YAML では上書き不可）。high は現行フル + 明示。
 - F5: 新コマンド `fda gc [--max-age-days 30] [--json]`。stale 未完了 run / validation 欠落 /
   ato sync 失敗放置 / 長期未解決判断を検出し `artifacts/runs/_gc/gc_docket.{json,md}` を生成。
   削除は一切しない（人間には例外だけ）。

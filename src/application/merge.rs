@@ -823,6 +823,7 @@ fn enforce_review_agent_gate_before_merge(
             Ok(gate) => validate_review_agent_gate_json(
                 &gate,
                 artifact_dir,
+                repo_root,
                 actual_pr_url,
                 planned_pr_id,
                 changed_files,
@@ -916,9 +917,11 @@ fn enforce_review_agent_gate_before_merge(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn validate_review_agent_gate_json(
     gate: &Value,
     artifact_dir: &Path,
+    repo_root: &Path,
     actual_pr_url: Option<&str>,
     planned_pr_id: &str,
     changed_files: &[String],
@@ -1010,43 +1013,94 @@ fn validate_review_agent_gate_json(
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
-    // F4 比例ゲート: tier=low の run は forge_reviewer / design_qa の conditional 要求を
-    // auto not_applicable にする（理由を必ず記録）。必須 3 reviewer は不変（fail-closed 維持）。
-    let low_risk_tier = risk_tier == Some("low");
+    // F4 比例ゲート: 緩和は fda review が review_agent_gate.json の既存契約
+    // (status=not_applicable + not_applicable_reason に "risk_tier=low") で表現し、
+    // merge はその正当性を merge 時再検証で「検証」するだけにする（独自スキップ判定を
+    // しない）。stored tier を無検証で信頼せず、changed_files を delivery_policy で
+    // live 再計算し、さらに governance-critical パス（ハードガード、YAML で上書き不可）
+    // を含む場合は forge_reviewer の not_applicable を blocking issue にする。
+    let relaxation = crate::application::risk_tier::proportional_relaxation(
+        &FsArtifactStore,
+        repo_root,
+        risk_tier,
+        changed_files,
+    );
+    proportional_notes.extend(relaxation.notes.iter().cloned());
     if changed_files
         .iter()
         .any(|path| requires_forge_review_for_merge(path))
     {
-        if low_risk_tier {
-            proportional_notes
-                .push("forge_reviewer: auto not_applicable (reason: risk_tier=low)".to_string());
-        } else {
-            validate_required_conditional_reviewer(
-                "forge_reviewer",
-                &["forge_reviewer", "qax2", "orchestrator"],
-                &conditional_reviewers,
-                artifact_dir,
-                issues,
-            );
-        }
+        validate_conditional_reviewer_with_relaxation(
+            "forge_reviewer",
+            &["forge_reviewer", "qax2", "orchestrator"],
+            &conditional_reviewers,
+            artifact_dir,
+            relaxation.forge_reviewer,
+            &relaxation.notes,
+            issues,
+            proportional_notes,
+        );
     }
     if changed_files
         .iter()
         .any(|path| requires_design_qa_for_merge(path))
     {
-        if low_risk_tier {
-            proportional_notes
-                .push("design_qa: auto not_applicable (reason: risk_tier=low)".to_string());
-        } else {
-            validate_required_conditional_reviewer(
-                "design_qa",
-                &["design_qa"],
-                &conditional_reviewers,
-                artifact_dir,
-                issues,
-            );
-        }
+        validate_conditional_reviewer_with_relaxation(
+            "design_qa",
+            &["design_qa"],
+            &conditional_reviewers,
+            artifact_dir,
+            relaxation.design_qa,
+            &relaxation.notes,
+            issues,
+            proportional_notes,
+        );
     }
+}
+
+/// conditional reviewer の検証。review_agent_gate.json が
+/// 「not_applicable + not_applicable_reason に risk_tier=low」を主張している場合は
+/// merge 時再検証（live tier 再計算 + ガバナンス・ハードガード）が成立するときのみ
+/// 受理し、成立しない場合は blocking issue にする。それ以外は従来どおり
+/// required=true + passed の完全な証跡を要求する。
+#[allow(clippy::too_many_arguments)]
+fn validate_conditional_reviewer_with_relaxation(
+    label: &str,
+    accepted_roles: &[&str],
+    reviewers: &[Value],
+    artifact_dir: &Path,
+    relaxation_allowed: bool,
+    relaxation_notes: &[String],
+    issues: &mut Vec<String>,
+    proportional_notes: &mut Vec<String>,
+) {
+    let risk_tier_not_applicable = reviewers.iter().find(|reviewer| {
+        value_string(reviewer, "role")
+            .as_deref()
+            .is_some_and(|role| accepted_roles.contains(&role))
+            && value_string(reviewer, "status").as_deref() == Some("not_applicable")
+            && value_string(reviewer, "not_applicable_reason")
+                .is_some_and(|reason| reason.contains("risk_tier=low"))
+    });
+    if let Some(reviewer) = risk_tier_not_applicable {
+        let reason = value_string(reviewer, "not_applicable_reason").unwrap_or_default();
+        if relaxation_allowed {
+            proportional_notes.push(format!(
+                "{label}: not_applicable ({reason}) を merge 時再検証 (live tier + hard guard) で受理"
+            ));
+        } else {
+            let detail = if relaxation_notes.is_empty() {
+                "risk_tier.json (tier=low) が無いか stale です".to_string()
+            } else {
+                relaxation_notes.join("; ")
+            };
+            issues.push(format!(
+                "review_agent_gate.json conditional reviewer {label} is not_applicable (risk_tier=low) but merge-time revalidation rejected the relaxation: {detail}"
+            ));
+        }
+        return;
+    }
+    validate_required_conditional_reviewer(label, accepted_roles, reviewers, artifact_dir, issues);
 }
 
 fn validate_required_conditional_reviewer(

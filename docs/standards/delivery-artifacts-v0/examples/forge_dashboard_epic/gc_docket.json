@@ -1,0 +1,24 @@
+{
+  "schema_version": "fda.gc_docket.v1",
+  "generated_at_unix": 1783555200,
+  "scanned_runs": 3,
+  "candidates": [
+    {
+      "run": "fda-start-1700000000",
+      "reasons": [
+        "mtime が 30 日を超過（経過 8640000 秒）し、merge_receipt.json / end_to_end_receipt.json が無く未完了です",
+        "validation_report.json が欠落しています"
+      ],
+      "recommendation": "archive",
+      "needs_human": true
+    },
+    {
+      "run": "fda-start-1700000001",
+      "reasons": [
+        "ato_state_receipt.json の status が succeeded 以外です（failed）"
+      ],
+      "recommendation": "resume",
+      "needs_human": false
+    }
+  ]
+}

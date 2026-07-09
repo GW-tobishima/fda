@@ -157,6 +157,27 @@ class ReviewAgentGateTest(unittest.TestCase):
         with self.assertRaisesRegex(check_review_agent_gate.GateError, "design_qa"):
             check_review_agent_gate.validate_gate(section)
 
+    def test_accepts_forge_not_applicable_with_risk_tier_low_line(self):
+        packet = VALID_PACKET.replace(
+            "| qax2 | REVIEW_AGENT_OK | qax2 evidence | ATO gate reviewed |",
+            "| forge_reviewer | not_applicable | - | risk_tier=low: docs のみの変更 |",
+        ).replace(
+            "MERGE_APPROVAL: not_granted",
+            "MERGE_APPROVAL: not_granted\n\n"
+            "RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**) に一致",
+        )
+        section = check_review_agent_gate.extract_gate_section(packet)
+        check_review_agent_gate.validate_gate(section)
+
+    def test_rejects_forge_not_applicable_without_risk_tier_low_line(self):
+        packet = VALID_PACKET.replace(
+            "| qax2 | REVIEW_AGENT_OK | qax2 evidence | ATO gate reviewed |",
+            "| forge_reviewer | not_applicable | - | risk_tier=low: docs のみの変更 |",
+        )
+        section = check_review_agent_gate.extract_gate_section(packet)
+        with self.assertRaisesRegex(check_review_agent_gate.GateError, "RISK_TIER"):
+            check_review_agent_gate.validate_gate(section)
+
     def test_cli_uses_pr_number_packet_path(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

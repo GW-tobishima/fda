@@ -114,14 +114,6 @@ fn implement_dry_run(
         &out_dir.join("implementation_handoff.md"),
     ));
 
-    // F4 比例ゲート: Scope In と delivery_policy から risk tier を判定し risk_tier.json を出力する。
-    artifacts_written.push(crate::application::risk_tier::write_risk_tier_artifact(
-        &store,
-        &repo_root,
-        &artifact_dir,
-        &out_dir,
-    )?);
-
     write_text_file(
         &out_dir.join("codex_prompt.md"),
         &codex_dry_run_prompt_markdown(&target_repo, &context),
@@ -272,6 +264,16 @@ fn implement_dry_run(
     ));
 
     carry_forward_implement_artifacts(&repo_root, &artifact_dir, &out_dir, &mut artifacts_written)?;
+
+    // F4 比例ゲート: Scope In (planned_prs.json の expected_files) と delivery_policy から
+    // risk tier を判定し risk_tier.json を出力する。carry_forward の後に生成することで、
+    // 前回 run の stale な tier に上書きされない（常に最新の判定が残る）。
+    artifacts_written.push(crate::application::risk_tier::write_risk_tier_artifact(
+        &store,
+        &repo_root,
+        &artifact_dir,
+        &out_dir,
+    )?);
 
     write_json_file(
         &out_dir.join("runner_explanation.json"),

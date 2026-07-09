@@ -34,6 +34,8 @@ ALLOWED_APPLICATION_INFRA_USES = {
     },
     "src/application/risk_tier.rs": {
         "use crate::infra::yaml::SerdeYamlValidator;",
+        "use crate::infra::clock::system_unix_seconds;",
+        "use crate::infra::fs_store::FsArtifactStore;",
     },
     "src/application/plan.rs": {
         "use crate::infra::fs_store::FsArtifactStore;",

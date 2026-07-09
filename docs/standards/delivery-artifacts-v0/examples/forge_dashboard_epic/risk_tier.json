@@ -1,0 +1,12 @@
+{
+  "schema_version": "fda.risk_tier.v1",
+  "tier": "low",
+  "reasons": [
+    "全 2 scope パスが delivery_policy.low_risk_paths に一致します"
+  ],
+  "matched_low_risk_paths": [
+    "docs/v1/work_protocol.md",
+    "docs/standards/delivery-artifacts-v0/artifact_catalog.md"
+  ],
+  "policy_source": ".fda/delivery_policy.yaml"
+}

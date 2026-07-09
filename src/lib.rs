@@ -194,6 +194,7 @@ fn carry_forward_implement_artifacts(
         &[
             "risk_register.json",
             "risk_register.md",
+            "risk_tier.json",
             "forge_projection.json",
             "human_decision_packet.json",
             "decision_receipts.json",
@@ -220,6 +221,7 @@ fn carry_forward_review_artifacts(
             "retry_history.json",
             "risk_register.json",
             "risk_register.md",
+            "risk_tier.json",
             "forge_projection.json",
             "human_decision_packet.json",
             "decision_receipts.json",
@@ -247,6 +249,7 @@ fn carry_forward_repair_artifacts(
             "ac_test_mapping.json",
             "risk_register.json",
             "risk_register.md",
+            "risk_tier.json",
             "forge_projection.json",
             "human_decision_packet.json",
             "decision_receipts.json",
@@ -1068,6 +1071,7 @@ mod tests {
             "mcp_agent_invocation_plan.json",
             "mcp_tool_call_receipt.json",
             "dry_run_receipt.json",
+            "risk_tier.json",
             "artifact_inventory.json",
             "runner_explanation.json",
             "validation_report.json",
@@ -1095,6 +1099,70 @@ mod tests {
                 .and_then(Value::as_str),
             Some("pass")
         );
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
+    fn implement_dry_run_emits_low_risk_tier_for_docs_only_scope() {
+        let base = env::temp_dir().join(format!(
+            "fda-implement-dry-run-low-tier-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        // docs のみを変更する planned PR (Scope In = expected_files)。
+        write_json_file(
+            &artifacts.join("planned_prs.json"),
+            &json!({
+                "schema_version": "forge_delivery.planned_prs.v0",
+                "program_id": "FDA-V1",
+                "epic_id": "EPIC-FDA-V1-5",
+                "planned_prs": [
+                    {
+                        "planned_pr_id": "PR-DOCS-001",
+                        "expected_files": [
+                            "docs/v1/work_protocol.md",
+                            "docs/standards/delivery-artifacts-v0/artifact_catalog.md"
+                        ]
+                    }
+                ]
+            }),
+        )
+        .unwrap();
+
+        let result = implement(&ImplementConfig {
+            repo_root: PathBuf::from("."),
+            artifact_dir: artifacts.clone(),
+            out: Some(out.clone()),
+            target_repo: target.clone(),
+            dry_run: true,
+            live: false,
+            live_timeout_seconds: 1800,
+            ato: AtoConfig::default(),
+            print_json: false,
+            tools_list_fixture: Some(vec!["codex".to_string(), "codex-reply".to_string()]),
+            codex_live_fixture: None,
+        })
+        .unwrap();
+
+        assert_eq!(result.verdict, "pass");
+        let risk_tier = read_json_value(&out.join("risk_tier.json")).unwrap();
+        assert_eq!(
+            risk_tier.get("schema_version").and_then(Value::as_str),
+            Some("fda.risk_tier.v1")
+        );
+        assert_eq!(risk_tier.get("tier").and_then(Value::as_str), Some("low"));
+        assert!(risk_tier
+            .get("matched_low_risk_paths")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .any(|path| path.as_str() == Some("docs/v1/work_protocol.md")));
 
         fs::remove_dir_all(&base).unwrap();
     }
@@ -2042,6 +2110,141 @@ MERGE_APPROVAL: not_granted\n\n\
                 text.contains("actual_pr_url must match current PR")
                     || text.contains("reviewed_planned_pr_id must be PR-V1-006")
             })));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    /// review fixture の changed_files と risk_tier.json を tier=low 主張に組み替える。
+    fn apply_low_tier_review_inputs(artifacts: &Path, changed_files: &[&str]) {
+        for file_name in ["implementation_receipt.json", "external_pr_receipt.json"] {
+            let mut receipt = read_json_value(&artifacts.join(file_name)).unwrap();
+            receipt["changed_files"] = json!(changed_files);
+            write_json_file(&artifacts.join(file_name), &receipt).unwrap();
+        }
+        write_json_file(
+            &artifacts.join("risk_tier.json"),
+            &json!({
+                "schema_version": "fda.risk_tier.v1",
+                "tier": "low",
+                "reasons": ["全 scope パスが delivery_policy.low_risk_paths に一致します"],
+                "matched_low_risk_paths": changed_files,
+                "policy_source": ".fda/delivery_policy.yaml"
+            }),
+        )
+        .unwrap();
+    }
+
+    #[test]
+    fn review_relaxes_forge_reviewer_for_low_risk_tier() {
+        let base = env::temp_dir().join(format!(
+            "fda-review-low-tier-forge-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_successful_review_inputs(&artifacts, &target);
+        // forge review を要求する変更だが docs/** のみ + tier=low → not_applicable + 理由。
+        apply_low_tier_review_inputs(
+            &artifacts,
+            &["docs/standards/delivery-artifacts-v0/schemas/risk_tier.schema.json"],
+        );
+
+        let result = review(&ReviewConfig {
+            repo_root: PathBuf::from("."),
+            artifact_dir: artifacts,
+            out: Some(out.clone()),
+            target_repo: target,
+            ato: AtoConfig::default(),
+            print_json: false,
+            functional_qa_fixture: None,
+            security_qa_fixture: None,
+        })
+        .unwrap();
+
+        assert_eq!(result.verdict, "pass");
+        let gate = read_json_value(&out.join("review_agent_gate.json")).unwrap();
+        let forge_row = gate
+            .get("conditional_reviewers")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .find(|reviewer| reviewer.get("role").and_then(Value::as_str) == Some("forge_reviewer"))
+            .unwrap()
+            .clone();
+        assert_eq!(
+            forge_row.get("required").and_then(Value::as_bool),
+            Some(false)
+        );
+        assert_eq!(
+            forge_row.get("status").and_then(Value::as_str),
+            Some("not_applicable")
+        );
+        assert!(forge_row
+            .get("not_applicable_reason")
+            .and_then(Value::as_str)
+            .is_some_and(|reason| reason.contains("risk_tier=low")));
+        let packet = fs::read_to_string(out.join("review_agent_gate_packet.md")).unwrap();
+        assert!(packet.contains("RISK_TIER: low"));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
+    fn review_relaxes_design_qa_for_low_risk_tier() {
+        let base = env::temp_dir().join(format!(
+            "fda-review-low-tier-design-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_successful_review_inputs(&artifacts, &target);
+        // .html 拡張子で design_qa を要求するが docs/** のみ (非 UI アプリ) + tier=low。
+        apply_low_tier_review_inputs(&artifacts, &["docs/preview.html"]);
+
+        let result = review(&ReviewConfig {
+            repo_root: PathBuf::from("."),
+            artifact_dir: artifacts,
+            out: Some(out.clone()),
+            target_repo: target,
+            ato: AtoConfig::default(),
+            print_json: false,
+            functional_qa_fixture: None,
+            security_qa_fixture: None,
+        })
+        .unwrap();
+
+        assert_eq!(result.verdict, "pass");
+        let gate = read_json_value(&out.join("review_agent_gate.json")).unwrap();
+        let design_row = gate
+            .get("conditional_reviewers")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .find(|reviewer| reviewer.get("role").and_then(Value::as_str) == Some("design_qa"))
+            .unwrap()
+            .clone();
+        assert_eq!(
+            design_row.get("required").and_then(Value::as_bool),
+            Some(false)
+        );
+        assert_eq!(
+            design_row.get("status").and_then(Value::as_str),
+            Some("not_applicable")
+        );
+        assert!(design_row
+            .get("not_applicable_reason")
+            .and_then(Value::as_str)
+            .is_some_and(|reason| reason.contains("risk_tier=low")));
+        let packet = fs::read_to_string(out.join("review_agent_gate_packet.md")).unwrap();
+        assert!(packet.contains("RISK_TIER: low"));
 
         fs::remove_dir_all(&base).unwrap();
     }
@@ -3256,6 +3459,46 @@ MERGE_APPROVAL: not_granted\n\n\
         fs::remove_dir_all(&base).unwrap();
     }
 
+    const LOW_TIER_CHANGED_FILE: &str =
+        "docs/standards/delivery-artifacts-v0/schemas/risk_tier.schema.json";
+    const LOW_TIER_REASON: &str =
+        "risk_tier=low: 全 changed files が delivery_policy.low_risk_paths に一致";
+    const LOW_TIER_PACKET: &str = "# FDA Review Agent Gate Packet\n\n\
+## REVIEW_AGENT_GATE\n\n\
+MERGE_APPROVAL: not_granted\n\n\
+RISK_TIER: low — 全 changed files が delivery_policy.low_risk_paths (docs/**) に一致\n\n\
+| role | status | evidence | rationale |\n\
+|---|---|---|---|\n\
+| pr_reviewer | REVIEW_AGENT_OK | `pr_reviewer_receipt.json` | PR review completed read-only. |\n\
+| functional_qa | REVIEW_AGENT_OK | `functional_qa_receipt.json`; `ac_test_mapping.json` | Functional QA receipt. |\n\
+| security_qa | REVIEW_AGENT_OK | `security_qa_receipt.json` | Security QA receipt. |\n\
+| orchestrator | REVIEW_AGENT_OK | `review_agent_gate.json`; `qa_receipt.json` | Review Agent Gate aggregation. |\n\
+| forge_reviewer | not_applicable | - | risk_tier=low: 全 changed files が delivery_policy.low_risk_paths に一致 |\n\
+| design_qa | not_applicable | - | UI / frontend / browser surface change was not detected. |\n";
+
+    /// merge fixture を「tier=low の非ガバナンス docs-only 変更」に組み替える。
+    /// review_agent_gate.json は既存契約 (not_applicable + reason に risk_tier=low)
+    /// で緩和を主張し、merge 側の再検証対象になる。
+    fn apply_low_tier_claim(artifacts: &Path, changed_files: &[&str]) {
+        let mut external_pr = read_json_value(&artifacts.join("external_pr_receipt.json")).unwrap();
+        external_pr["changed_files"] = json!(changed_files);
+        write_json_file(&artifacts.join("external_pr_receipt.json"), &external_pr).unwrap();
+        write_json_file(
+            &artifacts.join("risk_tier.json"),
+            &json!({
+                "schema_version": "fda.risk_tier.v1",
+                "tier": "low",
+                "reasons": ["全 scope パスが delivery_policy.low_risk_paths に一致します"],
+                "matched_low_risk_paths": changed_files,
+                "policy_source": ".fda/delivery_policy.yaml"
+            }),
+        )
+        .unwrap();
+        let mut gate = read_json_value(&artifacts.join("review_agent_gate.json")).unwrap();
+        gate["conditional_reviewers"][0]["not_applicable_reason"] = json!(LOW_TIER_REASON);
+        write_json_file(&artifacts.join("review_agent_gate.json"), &gate).unwrap();
+    }
+
     #[test]
     fn merge_low_risk_tier_relaxes_conditional_reviewers() {
         let base = env::temp_dir().join(format!(
@@ -3269,21 +3512,15 @@ MERGE_APPROVAL: not_granted\n\n\
         fs::create_dir_all(&artifacts).unwrap();
         fs::create_dir_all(&target).unwrap();
         write_merge_inputs(&artifacts, "passed", "delivery");
-        // forge_reviewer を要求する変更 (.fda/gates.yaml)。tier 無しなら blocked になる。
-        let mut external_pr = read_json_value(&artifacts.join("external_pr_receipt.json")).unwrap();
-        external_pr["changed_files"] = json!([".fda/gates.yaml"]);
-        write_json_file(&artifacts.join("external_pr_receipt.json"), &external_pr).unwrap();
-        write_json_file(
-            &artifacts.join("risk_tier.json"),
-            &json!({
-                "schema_version": "fda.risk_tier.v1",
-                "tier": "low",
-                "reasons": ["全 scope パスが delivery_policy.low_risk_paths に一致します"],
-                "matched_low_risk_paths": [".fda/gates.yaml"],
-                "policy_source": ".fda/delivery_policy.yaml"
-            }),
+        // forge_reviewer を要求するが低リスク (docs/**) かつ非ガバナンスの変更。
+        apply_low_tier_claim(&artifacts, &[LOW_TIER_CHANGED_FILE]);
+        // 反映先 packet は committed fixture pr-124.md と一致させる。
+        write_text_file(
+            &artifacts.join("review_agent_gate_packet.md"),
+            LOW_TIER_PACKET,
         )
         .unwrap();
+        retarget_merge_artifacts_to_pr(&artifacts, "124");
 
         let result = merge_run(&merge_config(artifacts, out.clone(), target)).unwrap();
 
@@ -3293,7 +3530,7 @@ MERGE_APPROVAL: not_granted\n\n\
         assert!(result
             .proportional_gate_notes
             .iter()
-            .any(|note| note.contains("forge_reviewer") && note.contains("not_applicable")));
+            .any(|note| note.contains("forge_reviewer") && note.contains("merge 時再検証")));
         let summary = read_json_value(&out.join("merge_gate_summary.json")).unwrap();
         assert_eq!(
             summary.get("risk_tier").and_then(Value::as_str),
@@ -3307,6 +3544,75 @@ MERGE_APPROVAL: not_granted\n\n\
             .any(|issue| issue
                 .as_str()
                 .is_some_and(|text| text.contains("forge_reviewer must be marked required"))));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
+    fn merge_governance_hard_guard_blocks_low_tier_forge_relaxation() {
+        let base = env::temp_dir().join(format!(
+            "fda-merge-hard-guard-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_merge_inputs(&artifacts, "passed", "delivery");
+        // governance-critical な .fda/gates.yaml を含む変更に tier=low 緩和を主張しても、
+        // merge 時再検証 (ハードガード + live 再計算) が却下する。
+        apply_low_tier_claim(&artifacts, &[".fda/gates.yaml"]);
+
+        let result = merge_run(&merge_config(artifacts, out.clone(), target)).unwrap();
+
+        assert_eq!(result.verdict, "blocked");
+        assert_eq!(result.merge_gate_status, "blocked");
+        let summary = read_json_value(&out.join("merge_gate_summary.json")).unwrap();
+        assert!(summary
+            .get("issues")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .any(|issue| issue.as_str().is_some_and(|text| {
+                text.contains("merge-time revalidation rejected")
+                    && text.contains("governance-critical")
+            })));
+
+        fs::remove_dir_all(&base).unwrap();
+    }
+
+    #[test]
+    fn merge_stale_low_tier_claim_is_rejected_when_live_recalc_is_standard() {
+        let base = env::temp_dir().join(format!(
+            "fda-merge-stale-tier-test-{}-{}",
+            std::process::id(),
+            now_unix_seconds()
+        ));
+        let artifacts = base.join("artifacts");
+        let out = base.join("out");
+        let target = base.join("target");
+        fs::create_dir_all(&artifacts).unwrap();
+        fs::create_dir_all(&target).unwrap();
+        write_merge_inputs(&artifacts, "passed", "delivery");
+        // 保存 tier は low だが、merge 時の changed_files に範囲外 (src/lib.rs) が混入。
+        apply_low_tier_claim(&artifacts, &[LOW_TIER_CHANGED_FILE, "src/lib.rs"]);
+
+        let result = merge_run(&merge_config(artifacts, out.clone(), target)).unwrap();
+
+        assert_eq!(result.verdict, "blocked");
+        assert_eq!(result.merge_gate_status, "blocked");
+        let summary = read_json_value(&out.join("merge_gate_summary.json")).unwrap();
+        assert!(summary
+            .get("issues")
+            .and_then(Value::as_array)
+            .unwrap()
+            .iter()
+            .any(|issue| issue.as_str().is_some_and(|text| {
+                text.contains("merge-time revalidation rejected")
+                    && text.contains("stored/live tier mismatch")
+            })));
 
         fs::remove_dir_all(&base).unwrap();
     }
