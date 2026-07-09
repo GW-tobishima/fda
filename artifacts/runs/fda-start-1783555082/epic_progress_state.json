@@ -1,0 +1,77 @@
+{
+  "advisory": "この判定は非権威の提案であり、実装開始許可・merge 承認・merge の証明ではない",
+  "epic_id": "EPIC-FDA-V1-5",
+  "generated_at_unix": 1783572741,
+  "prs": [
+    {
+      "evidence": [
+        "v15-merge-receipts-pr-v15-001/github_merge_receipt.json (status=succeeded)"
+      ],
+      "planned_pr_id": "PR-V15-001",
+      "reasons": [
+        "merge receipt があり merged です"
+      ],
+      "sequence": 1,
+      "status": "merged",
+      "title": "F6 表層分け + work protocol 単一ソース化"
+    },
+    {
+      "evidence": [
+        "v15-merge-receipts-pr-v15-002/github_merge_receipt.json (status=succeeded)"
+      ],
+      "planned_pr_id": "PR-V15-002",
+      "reasons": [
+        "merge receipt があり merged です"
+      ],
+      "sequence": 2,
+      "status": "merged",
+      "title": "F4 比例ゲート + F5 庭師 (fda gc)"
+    },
+    {
+      "evidence": [
+        "v15-merge-receipts-pr-v15-003/github_merge_receipt.json (status=succeeded)"
+      ],
+      "planned_pr_id": "PR-V15-003",
+      "reasons": [
+        "merge receipt があり merged です"
+      ],
+      "sequence": 3,
+      "status": "merged",
+      "title": "F1 判断の立法化 (delegation contract)"
+    },
+    {
+      "evidence": [
+        "v15-merge-receipts-pr-v15-004/github_merge_receipt.json (status=succeeded)"
+      ],
+      "planned_pr_id": "PR-V15-004",
+      "reasons": [
+        "merge receipt があり merged です"
+      ],
+      "sequence": 4,
+      "status": "merged",
+      "title": "F2 Epic 継続ループ (continue --epic)"
+    },
+    {
+      "evidence": [
+        "v15-merge-receipts-pr-v15-005/github_merge_receipt.json (status=succeeded)"
+      ],
+      "planned_pr_id": "PR-V15-005",
+      "reasons": [
+        "merge receipt があり merged です"
+      ],
+      "sequence": 5,
+      "status": "merged",
+      "title": "F3 道場 UI (decision journal + precedent)"
+    }
+  ],
+  "scan_errors": [],
+  "scan_notes": [],
+  "schema_version": "fda.epic_progress_state.v1",
+  "summary": {
+    "blocked": 0,
+    "merged": 5,
+    "not_started": 0,
+    "open": 0,
+    "waiting_human": 0
+  }
+}

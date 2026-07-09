@@ -1,0 +1,28 @@
+{
+  "schema_version": "fda.github_merge_receipt.v0",
+  "receipt_id": "GHMERGE-FDA-V15-001-001",
+  "program_id": "FDA-V1",
+  "epic_id": "EPIC-FDA-V1-5",
+  "planned_pr_id": "PR-V15-001",
+  "actual_pr_url": "https://github.com/GW-tobishima/fda/pull/1",
+  "status": "succeeded",
+  "merge_executed": true,
+  "merge_method": "merge",
+  "expected_head_sha": "aa29b9982eb7c819c4a44c5f54eef0a9f14663fc",
+  "merge_sha": "416c48ee86c7c067f1871672979b38adae0b8602",
+  "merged_at": "2026-07-09T01:09:57Z",
+  "actor": "human:GW-tobishima (gh pr merge)",
+  "started_at": "2026-07-09T01:09:57Z",
+  "completed_at": "2026-07-09T01:09:57Z",
+  "failure_reason": null,
+  "resume_command": null,
+  "receipt_collection_command": null,
+  "evidence_links": [
+    "https://github.com/GW-tobishima/fda/pull/1",
+    "artifacts/runs/fda-start-1783555082/pr_reviewer_receipt.json",
+    "artifacts/runs/fda-start-1783555082/functional_qa_receipt.json",
+    "artifacts/runs/fda-start-1783555082/security_qa_receipt.json"
+  ],
+  "rollback_plan": "PR #1 の merge を取り消す場合は、main 上で GitHub merge commit 416c48ee86c7c067f1871672979b38adae0b8602 を revert する（2 parent の merge commit のため revert 時は -m 1 を指定する）。PR close や branch 削除は merged 状態の rollback ではない。",
+  "collected_at_unix_seconds": 1783572514
+}
